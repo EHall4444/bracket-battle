@@ -578,7 +578,7 @@ function clearOnly(gameId){
 function deadlineBanner(){
   if(past())return'<div class="deadline-banner expired"><div class="deadline-icon">🚫</div><div class="deadline-text"><strong>Submissions Closed</strong>The May 9 · 12:00 PM ET deadline has passed. Picks can no longer be saved.</div></div>';
   var d=DEADLINE-new Date(),h=Math.floor(d/3600000),m=Math.floor((d%3600000)/60000),s=Math.floor((d%60000)/1000);
-  return'<div class="deadline-banner live"><div class="deadline-icon">⏰</div><div class="deadline-text"><strong>Saved brackets will be locked on Friday, May 9 at 12PM EST. Save your bracket now!</strong></div><div class="deadline-cd"><span id="cd-val">'+h+'h '+String(m).padStart(2,'0')+'m '+String(s).padStart(2,'0')+'s</span></div></div>';
+  return'<div class="deadline-banner live"><div class="deadline-icon">⏰</div><div class="deadline-text"><strong>Saved brackets will be locked on Saturday, May 9 at 12PM EST. Save your bracket now!</strong></div><div class="deadline-cd"><span id="cd-val">'+h+'h '+String(m).padStart(2,'0')+'m '+String(s).padStart(2,'0')+'s</span></div></div>';
 }
 
 // ── ROUND TABS ──
