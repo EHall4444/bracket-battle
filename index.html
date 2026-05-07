@@ -617,7 +617,7 @@ function redraw(ro, vu){
   var lk=ro||past();
   var c=document.getElementById('apptab-bracket');
 
-  var bannerH=vu?'<div class="viewing-banner">👤 Viewing <strong style="margin:0 4px">'+vu+'</strong>\'s bracket<span class="back-link" onclick="backToMine()">← Back to mine</span></div>':'';
+  var bannerH=vu?'<div class="viewing-banner"><span>👤 Viewing <strong>'+vu+'</strong>\'s Bracket</span><span class="back-link" onclick="backToMine()">← Back to Mine</span></div>':'';
   var dlH=!vu?deadlineBanner():'';
   var tabsH=roundTabsHTML(p,lk);
 
