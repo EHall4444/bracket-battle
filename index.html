@@ -55,7 +55,7 @@ body{font-family:var(--fb);color:var(--text);font-size:13px;min-height:100vh;bac
 .hero-photos{display:flex;height:100%;gap:2px}
 .hero-photo{flex:1;background-size:cover;background-position:center 30%;background-color:var(--navy2);transition:transform .4s}
 .hero-photo:hover{transform:scale(1.04)}
-.hero-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(13,31,60,.3) 0%,rgba(13,31,60,.75) 70%,rgba(13,31,60,.95) 100%)}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(13,31,60,.25) 0%,rgba(13,31,60,.65) 65%,rgba(13,31,60,.95) 100%)}
 .hero-content{position:absolute;inset:0;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-end;padding:18px 22px;border-bottom:3px solid var(--blue2)}
 .hero-eyebrow{font-family:var(--fh);font-size:10px;letter-spacing:.2em;color:var(--blue2);text-transform:uppercase;margin-bottom:6px}
 .hero-title{font-family:var(--fh);font-size:32px;font-weight:700;color:var(--white);text-transform:uppercase;letter-spacing:.03em;line-height:1}
@@ -91,7 +91,9 @@ body{font-family:var(--fb);color:var(--text);font-size:13px;min-height:100vh;bac
 .round-tab.active .tab-badge{background:rgba(255,255,255,.2);color:rgba(255,255,255,.8)}
 .round-tab .tab-lock{font-size:11px;opacity:.6}
 .round-progress{font-size:10px;color:var(--muted);margin-bottom:6px;font-family:var(--fh);letter-spacing:.04em;text-transform:uppercase}
-.pick-help{font-size:11px;color:var(--blue);margin-bottom:14px;font-family:var(--fb);font-weight:500}
+.pick-help{background:var(--navy);border-radius:var(--r);padding:10px 14px;margin-bottom:14px;border-left:4px solid var(--blue2)}
+.pick-help-line{font-size:12px;color:var(--white);font-family:var(--fb);font-weight:500;line-height:1.7}
+.pick-help-line:first-child{font-weight:600;color:var(--blue2)}
 
 /* ── MATCHUP GRID ── */
 .matchup-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
@@ -100,7 +102,7 @@ body{font-family:var(--fb);color:var(--text);font-size:13px;min-height:100vh;bac
 
 /* ── MATCHUP CARD ── */
 .card{background:var(--white);border:1.5px solid var(--gray);border-radius:var(--rl);overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.07);transition:border-color .15s,box-shadow .15s}
-.card.has-pick{border-color:var(--blue2);box-shadow:0 4px 16px rgba(37,99,168,.15)}
+.card.has-pick{border-color:#C9A227;border-width:2px;box-shadow:0 4px 20px rgba(201,162,39,.25)}
 .card.needs-pick{border:1.5px dashed var(--amber)}
 .card.unavailable{opacity:.5;pointer-events:none}
 
@@ -111,11 +113,15 @@ body{font-family:var(--fb);color:var(--text);font-size:13px;min-height:100vh;bac
 /* ── TEAM ROW ── */
 .team-row{display:flex;align-items:center;gap:10px;padding:12px 14px;cursor:pointer;transition:background .12s,border-left-color .12s;border-left:4px solid transparent;position:relative;min-height:48px}
 .team-row:first-of-type{border-bottom:1px solid var(--gray)}
-.team-row.pickable:hover{background:rgba(74,144,217,.07)}
+.team-row.pickable:hover{background:rgba(74,144,217,.09)}
 .team-row.pickable:hover .t-name{color:var(--blue)}
-.team-row.is-pick{border-left-color:var(--blue2);background:rgba(74,144,217,.06)}
-.team-row.is-pick .t-name{color:var(--blue);font-weight:600}
-.team-row.is-winner .t-name{color:var(--green);font-weight:600}
+/* PICKED — solid gold, unmissable */
+.team-row.is-pick{border-left-color:#9a7000;background:#C9A227;cursor:default}
+.team-row.is-pick .t-name{color:#1a1100;font-weight:700}
+.team-row.is-pick .t-seed{color:rgba(0,0,0,.55)}
+.team-row.is-pick .t-rec{color:rgba(0,0,0,.5)}
+.team-row.is-pick:hover{background:#C9A227}
+.team-row.is-winner .t-name{color:var(--green);font-weight:700}
 .team-row.is-elim{opacity:.28;pointer-events:none}
 .team-row.is-locked{cursor:default}
 .team-row.is-empty{cursor:default;background:var(--amber-l)}
@@ -134,8 +140,8 @@ body{font-family:var(--fb);color:var(--text);font-size:13px;min-height:100vh;bac
 .t-empty-hint{font-size:9px;color:rgba(217,119,6,.6);margin-top:1px}
 
 /* ✕ clear — ONLY clears this slot, no cascade */
-.t-clear{position:absolute;right:9px;top:50%;transform:translateY(-50%);width:20px;height:20px;border-radius:50%;background:rgba(0,0,0,.08);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;color:rgba(0,0,0,.4);transition:all .15s;z-index:5;padding:0;line-height:1}
-.t-clear:hover{background:var(--red);color:var(--white)}
+.t-clear{position:absolute;right:9px;top:50%;transform:translateY(-50%);width:22px;height:22px;border-radius:50%;background:rgba(0,0,0,.18);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;color:#1a1100;transition:all .15s;z-index:5;padding:0;line-height:1;font-weight:700}
+.t-clear:hover{background:var(--red);color:var(--white);transform:translateY(-50%) scale(1.1)}
 
 /* odds */
 .card-odds{padding:5px 12px 6px;background:rgba(240,244,248,.7);border-top:1px solid var(--gray)}
@@ -213,18 +219,7 @@ body{font-family:var(--fb);color:var(--text);font-size:13px;min-height:100vh;bac
 </head>
 <body>
 
-<!-- MODAL -->
-<div class="modal-overlay" id="modal" style="display:none">
-  <div class="modal">
-    <div class="modal-icon">🔒</div>
-    <div class="modal-title">Lock Your Bracket?</div>
-    <div class="modal-body">Are you sure? Your selections will be <strong>permanently locked</strong> until the tournament concludes. No changes can be made after saving.</div>
-    <div class="modal-btns">
-      <button class="modal-cancel" onclick="closeModal()">Cancel</button>
-      <button class="modal-confirm" onclick="confirmSave()">Yes, Lock It In</button>
-    </div>
-  </div>
-</div>
+<!-- save is now direct, no confirmation modal needed -->
 
 <!-- AUTH -->
 <div class="auth-screen" id="auth-screen">
@@ -300,7 +295,7 @@ body{font-family:var(--fb);color:var(--text);font-size:13px;min-height:100vh;bac
 var SURL='https://swjajduyuaxsucfligwo.supabase.co';
 var SKEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN3amFqZHV5dWF4c3VjZmxpZ3dvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxMzQzNTAsImV4cCI6MjA5MzcxMDM1MH0.ej8PyrfUSFN9Mj516XfjX3dI3UQEuOFuSHsGcKDkjEc';
 var DEADLINE=new Date('2026-05-09T16:00:00Z');
-var CU=null,VU=null,LOCKED=false,cdTimer=null;
+var CU=null,VU=null,SAVED=false,cdTimer=null;
 var ACTIVE_ROUND='fr'; // which round tab is active
 
 function blank(){return{fr1:null,fr2:null,fr3:null,fr4:null,fr5:null,fr6:null,fr7:null,fr8:null,qf1:null,qf2:null,qf3:null,qf4:null,sf1:null,sf2:null,fin:null};}
@@ -327,21 +322,21 @@ var T={
     mascot:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Cornell_Big_Red_Athletics_logo.svg/120px-Cornell_Big_Red_Athletics_logo.svg.png'},
   pennstate:    {n:'Penn State', r:'12–4',s:'#8',o:9, url:'https://gopsusports.com/sports/mens-lacrosse',
     mascot:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/Penn_State_Nittany_Lions_logo.svg/120px-Penn_State_Nittany_Lions_logo.svg.png'},
-  marist:       {n:'Marist',     r:'—',s:'',o:1,url:'https://goredfoxes.com/sports/mens-lacrosse',
+  marist:       {n:'Marist',     r:'12–4',s:'',o:1,url:'https://goredfoxes.com/sports/mens-lacrosse',
     mascot:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Marist_Red_Foxes_logo.svg/120px-Marist_Red_Foxes_logo.svg.png'},
-  jacksonville: {n:'Jacksonville',r:'—',s:'',o:1,url:'https://judolphins.com/sports/mens-lacrosse',
+  jacksonville: {n:'Jacksonville',r:'11–5',s:'',o:1,url:'https://judolphins.com/sports/mens-lacrosse',
     mascot:null},
-  albany:       {n:'Albany',     r:'—',s:'',o:1,url:'https://ualbanyathletics.com/sports/mens-lacrosse',
+  albany:       {n:'Albany',     r:'11–5',s:'',o:1,url:'https://ualbanyathletics.com/sports/mens-lacrosse',
     mascot:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Albany_Great_Danes_logo.svg/120px-Albany_Great_Danes_logo.svg.png'},
-  army:         {n:'Army',       r:'—',s:'',o:1,url:'https://goarmywestpoint.com/sports/mens-lacrosse',
+  army:         {n:'Army',       r:'13–3',s:'',o:1,url:'https://goarmywestpoint.com/sports/mens-lacrosse',
     mascot:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Army_Black_Knights_logo.svg/120px-Army_Black_Knights_logo.svg.png'},
-  johnshopkins: {n:'Johns Hopkins',r:'—',s:'',o:2,url:'https://hopkinssports.com/sports/mens-lacrosse',
+  johnshopkins: {n:'Johns Hopkins',r:'9–5',s:'',o:2,url:'https://hopkinssports.com/sports/mens-lacrosse',
     mascot:'https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Johns_Hopkins_Blue_Jays_logo.svg/120px-Johns_Hopkins_Blue_Jays_logo.svg.png'},
-  duke:         {n:'Duke',       r:'—',s:'',o:2,url:'https://goduke.com/sports/mens-lacrosse',
+  duke:         {n:'Duke',       r:'9–4',s:'',o:2,url:'https://goduke.com/sports/mens-lacrosse',
     mascot:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Duke_Blue_Devils_logo.svg/120px-Duke_Blue_Devils_logo.svg.png'},
-  georgetown:   {n:'Georgetown', r:'—',s:'',o:1,url:'https://guhoyas.com/sports/mens-lacrosse',
+  georgetown:   {n:'Georgetown', r:'10–4',s:'',o:1,url:'https://guhoyas.com/sports/mens-lacrosse',
     mascot:'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Georgetown_Hoyas_logo.svg/120px-Georgetown_Hoyas_logo.svg.png'},
-  yale:         {n:'Yale',       r:'—',s:'',o:1,url:'https://yalebulldogs.com/sports/mens-lacrosse',
+  yale:         {n:'Yale',       r:'9–5',s:'',o:1,url:'https://yalebulldogs.com/sports/mens-lacrosse',
     mascot:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Yale_Bulldogs_logo.svg/120px-Yale_Bulldogs_logo.svg.png'}
 };
 
@@ -415,13 +410,33 @@ function startCD(){
   },1000);
 }
 
+// ── SANITIZE PICKS ──
+// Clear QF/SF/Final picks that are no longer valid given current FR picks.
+// This fixes stale DB picks from before the FR round was added.
+function sanitizePicks(p){
+  QF.forEach(function(g){
+    if(p[g.id]){
+      var vA=p[g.frA],vB=p[g.frB];
+      if(p[g.id]!==vA&&p[g.id]!==vB)p[g.id]=null;
+    }
+  });
+  SF.forEach(function(g){
+    if(p[g.id]){
+      var vA=p[g.qfA],vB=p[g.qfB];
+      if(p[g.id]!==vA&&p[g.id]!==vB)p[g.id]=null;
+    }
+  });
+  if(p.fin&&p.fin!==p.sf1&&p.fin!==p.sf2)p.fin=null;
+  return p;
+}
+
 // ── SUPABASE ──
 async function h256(s){try{var b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('');}catch(e){var h=0;for(var i=0;i<s.length;i++){h=((h<<5)-h)+s.charCodeAt(i);h|=0;}return 'f'+Math.abs(h).toString(16);}}
 async function sb(path,method,body){var o={method:method||'GET',headers:{'apikey':SKEY,'Authorization':'Bearer '+SKEY,'Content-Type':'application/json','Prefer':'return=representation'}};if(body)o.body=JSON.stringify(body);var r=await fetch(SURL+'/rest/v1/'+path,o);var j=await r.json().catch(function(){return null;});return{ok:r.ok,data:j};}
 async function dbUser(u){var r=await sb('users?username=eq.'+encodeURIComponent(u)+'&select=username,password_hash');return(r.ok&&r.data&&r.data.length)?r.data[0]:null;}
 async function dbCreate(u,h){return(await sb('users','POST',{username:u,password_hash:h})).ok;}
 async function dbGetPicks(u){var r=await sb('picks?username=eq.'+encodeURIComponent(u)+'&select=picks,locked');return(r.ok&&r.data&&r.data.length)?r.data[0]:null;}
-async function dbSave(u,p,lock){var c=await sb('picks?username=eq.'+encodeURIComponent(u),'GET');var pl={picks:p,updated_at:new Date().toISOString()};if(lock)pl.locked=true;if(c.ok&&c.data&&c.data.length){return(await sb('picks?username=eq.'+encodeURIComponent(u),'PATCH',pl)).ok;}else{pl.username=u;return(await sb('picks','POST',pl)).ok;}}
+async function dbSave(u,p){var c=await sb('picks?username=eq.'+encodeURIComponent(u),'GET');var pl={picks:p,updated_at:new Date().toISOString(),locked:false};if(c.ok&&c.data&&c.data.length){return(await sb('picks?username=eq.'+encodeURIComponent(u),'PATCH',pl)).ok;}else{pl.username=u;return(await sb('picks','POST',pl)).ok;}}
 async function dbAll(){var r=await sb('picks?select=username,picks,locked');return(r.ok&&r.data)?r.data:[];}
 
 // ── AUTH ──
@@ -432,7 +447,16 @@ async function doLogin(){
   var u=document.getElementById('li-u').value.trim().toLowerCase(),p=document.getElementById('li-p').value,err=document.getElementById('li-err');
   err.textContent='';if(!u||!p){err.textContent='Please fill in both fields.';return;}
   busy('li-btn',true,'Sign In');
-  try{var user=await dbUser(u);if(!user){err.textContent='Username not found.';return;}var h=await h256(p);if(user.password_hash!==h){err.textContent='Incorrect password.';return;}CU=u;var sv=await dbGetPicks(u);LOCKED=!!(sv&&sv.locked);picks=sv&&sv.picks?Object.assign(blank(),sv.picks):blank();launch();}
+  try{
+    var user=await dbUser(u);if(!user){err.textContent='Username not found.';return;}
+    var h=await h256(p);if(user.password_hash!==h){err.textContent='Incorrect password.';return;}
+    CU=u;
+    var sv=await dbGetPicks(u);
+    var loaded=sv&&sv.picks?Object.assign(blank(),sv.picks):blank();
+    picks=sanitizePicks(loaded);
+    SAVED=!!(sv&&sv.picks); // track whether bracket has been saved to DB
+    launch();
+  }
   catch(e){err.textContent='Connection error: '+e.message;}
   finally{busy('li-btn',false,'Sign In');}
 }
@@ -442,14 +466,14 @@ async function doRegister(){
   var err=document.getElementById('re-err'),info=document.getElementById('re-info');err.textContent='';info.textContent='';
   if(u.length<3){err.textContent='Username needs 3+ characters.';return;}if(p.length<6){err.textContent='Password must be 6+ characters.';return;}if(p!==p2){err.textContent='Passwords do not match.';return;}
   busy('re-btn',true,'Create Account');info.textContent='Creating your account…';
-  try{var ex=await dbUser(u);if(ex){err.textContent='Username taken — try another.';info.textContent='';return;}var h=await h256(p);var ok=await dbCreate(u,h);if(!ok){err.textContent='Could not create account.';info.textContent='';return;}info.textContent='Account created! Signing you in…';CU=u;LOCKED=false;picks=blank();setTimeout(launch,600);}
+  try{var ex=await dbUser(u);if(ex){err.textContent='Username taken — try another.';info.textContent='';return;}var h=await h256(p);var ok=await dbCreate(u,h);if(!ok){err.textContent='Could not create account.';info.textContent='';return;}info.textContent='Account created! Signing you in…';CU=u;SAVED=false;picks=blank();setTimeout(launch,600);}
   catch(e){err.textContent='Connection error: '+e.message;info.textContent='';}
   finally{busy('re-btn',false,'Create Account');}
 }
 
-function doLogout(){CU=null;VU=null;LOCKED=false;picks=blank();viewPicks=null;clearInterval(cdTimer);ACTIVE_ROUND='fr';document.getElementById('auth-screen').style.display='flex';document.getElementById('shell').style.display='none';document.getElementById('li-err').textContent='';document.getElementById('li-u').value='';document.getElementById('li-p').value='';}
+function doLogout(){CU=null;VU=null;SAVED=false;picks=blank();viewPicks=null;clearInterval(cdTimer);ACTIVE_ROUND='fr';document.getElementById('auth-screen').style.display='flex';document.getElementById('shell').style.display='none';document.getElementById('li-err').textContent='';document.getElementById('li-u').value='';document.getElementById('li-p').value='';}
 
-function launch(){document.getElementById('auth-screen').style.display='none';document.getElementById('shell').style.display='flex';document.getElementById('hdr-user').textContent=CU+(LOCKED?' 🔒':'');ACTIVE_ROUND='fr';showAppTab('bracket');}
+function launch(){document.getElementById('auth-screen').style.display='none';document.getElementById('shell').style.display='flex';document.getElementById('hdr-user').textContent=CU+(SAVED?' ✓':'');ACTIVE_ROUND='fr';showAppTab('bracket');}
 
 function showAppTab(t){
   document.getElementById('apptab-bracket').style.display=t==='bracket'?'':'none';
@@ -484,17 +508,17 @@ function teamRow(gameId, teamKey, myPick, result, lk){
   var isPick=myPick===teamKey;
   var td=T[teamKey];
   var cls='team-row';
-  if(!lk)cls+=' pickable';
+  if(!lk&&!isPick)cls+=' pickable';
   if(isPick)cls+=' is-pick';
   if(isW)cls+=' is-winner';
   if(isE)cls+=' is-elim';
   if(lk)cls+=' is-locked';
-  var oc=lk?'':'onclick="doPick(\''+gameId+'\',\''+teamKey+'\')"';
-  return'<div class="'+cls+'" '+oc+' title="'+(lk?'Picks are locked':'Select '+td.n)+'">'
+  var oc=(!lk&&!isPick)?'onclick="doPick(\''+gameId+'\',\''+teamKey+'\')"':'';
+  return'<div class="'+cls+'" '+oc+' title="'+(lk?'Picks are locked':isPick?'Selected — click ✕ to remove':'Select '+td.n)+'">'
     +(td.s?'<span class="t-seed">'+td.s+'</span>':'<span class="t-seed"></span>')
     +'<div class="t-info"><span class="t-name">'+td.n+'</span><div class="t-rec">'+td.r+'</div></div>'
-    +(isW?'<div class="t-adv">Adv</div>':'')
-    +(lk&&!isE?'<div class="t-lock-icon">🔒</div>':'')
+    +(isW&&!isPick?'<div class="t-adv">Adv</div>':'')
+    +(lk&&!isE&&!isPick?'<div class="t-lock-icon">🔒</div>':'')
     +(isPick&&!lk?'<button class="t-clear" onclick="event.stopPropagation();clearOnly(\''+gameId+'\')" title="Remove this pick">✕</button>':'')
     +'</div>';
 }
@@ -534,14 +558,14 @@ function buildCard(gameId, teamA, teamB, loc, time, myPick, result, lk, advLabel
 
 // ── PICK / CLEAR ──
 function doPick(gameId, teamKey){
-  if(VU||LOCKED||past())return;
+  if(VU||past())return;
   picks[gameId]=teamKey;
   redraw();
 }
 
 // Clear ONLY this slot — no cascade
 function clearOnly(gameId){
-  if(VU||LOCKED||past())return;
+  if(VU||past())return;
   picks[gameId]=null;
   redraw();
 }
@@ -550,7 +574,7 @@ function clearOnly(gameId){
 function deadlineBanner(){
   if(past())return'<div class="deadline-banner expired"><div class="deadline-icon">🚫</div><div class="deadline-text"><strong>Submissions Closed</strong>The May 9 · 12:00 PM ET deadline has passed. Picks can no longer be saved.</div></div>';
   var d=DEADLINE-new Date(),h=Math.floor(d/3600000),m=Math.floor((d%3600000)/60000),s=Math.floor((d%60000)/1000);
-  return'<div class="deadline-banner live"><div class="deadline-icon">⏰</div><div class="deadline-text"><strong>Picks Lock Friday May 9 at 12:00 PM ET</strong>Submit your bracket before the first game faces off.</div><div class="deadline-cd"><span id="cd-val">'+h+'h '+String(m).padStart(2,'0')+'m '+String(s).padStart(2,'0')+'s</span></div></div>';
+  return'<div class="deadline-banner live"><div class="deadline-icon">⏰</div><div class="deadline-text"><strong>Saved brackets will be locked on Friday, May 9 at 12PM EST. Save your bracket now!</strong></div><div class="deadline-cd"><span id="cd-val">'+h+'h '+String(m).padStart(2,'0')+'m '+String(s).padStart(2,'0')+'s</span></div></div>';
 }
 
 // ── ROUND TABS ──
@@ -565,7 +589,7 @@ function roundTabsHTML(p, lk){
     else if(unlocked||id==='fr')cls+=' unlocked';
     else cls+=' locked';
     var badge=count>0&&count<total?'<span class="tab-badge">'+count+'/'+total+'</span>':'';
-    if(count===total&&total>0)badge='<span class="tab-badge">✓ Done</span>';
+    if(count===total&&total>0)badge='<span class="tab-badge">✓</span>';
     var lockIcon=(!unlocked&&id!=='fr')?'<span class="tab-lock">🔒</span>':'';
     var onclick=(unlocked||id==='fr')&&!isActive?'onclick="switchRound(\''+id+'\')"':'';
     return'<div class="'+cls+'" '+onclick+'>'+label+badge+lockIcon+'</div>';
@@ -586,23 +610,18 @@ function redraw(ro, vu){
   ro=ro||false;vu=vu||null;
   var p=vu?viewPicks:picks;
   if(!p)p=blank();
-  var lk=ro||LOCKED||past();
+  var lk=ro||past();
   var c=document.getElementById('apptab-bracket');
 
   var bannerH=vu?'<div class="viewing-banner">👤 Viewing <strong style="margin:0 4px">'+vu+'</strong>\'s bracket<span class="back-link" onclick="backToMine()">← Back to mine</span></div>':'';
-
   var dlH=!vu?deadlineBanner():'';
   var tabsH=roundTabsHTML(p,lk);
 
-  var helpText='<div class="pick-help">Click a team to make your selection.</div>';
-  // Progress hint
-  var progressH='';
-  if(!lk&&!vu){
-    if(ACTIVE_ROUND==='fr')progressH='<div class="round-progress">First Round · '+frCount(p)+' of 8 picks made'+(frComplete(p)?' · Quarterfinals now unlocked ✓':'')+'</div>'+helpText;
-    else if(ACTIVE_ROUND==='qf')progressH='<div class="round-progress">Quarterfinals · '+qfCount(p)+' of 4 picks made'+(qfComplete(p)?' · Semifinals now unlocked ✓':'')+'</div>'+helpText;
-    else if(ACTIVE_ROUND==='sf')progressH='<div class="round-progress">Semifinals · '+sfCount(p)+' of 2 picks made'+(sfComplete(p)?' · Championship now unlocked ✓':'')+'</div>'+helpText;
-    else if(ACTIVE_ROUND==='fin')progressH='<div class="round-progress">Championship · '+(p.fin?'Champion selected ✓':'Pick your champion')+'</div>'+helpText;
-  }
+  var helpH=(!lk&&!vu)?'<div class="pick-help">'
+    +'<div class="pick-help-line">Click a team to make your selection.</div>'
+    +'<div class="pick-help-line">Complete selections on this tab to access the other tabs.</div>'
+    +'<div class="pick-help-line">De-selecting a team will remove it from subsequent rounds.</div>'
+    +'</div>':'';
 
   var gamesH='';
 
@@ -637,25 +656,34 @@ function redraw(ro, vu){
   // Action bar
   var actionH='';
   if(!vu){
-    if(LOCKED||ro){
-      actionH='<div class="locked-banner"><div class="locked-icon">🔒</div><div class="locked-text"><strong>Your bracket is locked</strong>Results update automatically as games are played. Check the leaderboard to track your score!</div></div>';
-    }else if(past()){
-      actionH='<div class="closed-banner"><div class="closed-icon">🚫</div><div class="closed-text"><strong>Submissions Closed</strong>The May 9 · 12pm ET deadline has passed. Picks can no longer be saved.</div></div>';
+    if(past()){
+      if(SAVED){
+        actionH='<div class="locked-banner"><div class="locked-icon">🔒</div><div class="locked-text"><strong>Your bracket is locked</strong>The May 9 deadline has passed. Results update automatically as games are played. Check the leaderboard to track your score!</div></div>';
+      }else{
+        actionH='<div class="closed-banner"><div class="closed-icon">🚫</div><div class="closed-text"><strong>Submissions Closed</strong>The May 9 · 12pm ET deadline has passed. Picks can no longer be saved.</div></div>';
+      }
     }else{
-      actionH='<div class="save-bar"><button class="btn-save" id="save-btn" onclick="promptSave()">🔒 Save &amp; Lock My Bracket</button><span class="save-hint">Permanent — cannot be undone</span><span class="save-msg" id="save-msg"></span></div>';
+      var allDone=frComplete(p)&&qfComplete(p)&&sfComplete(p)&&p.fin;
+      var saveLabel=SAVED?'💾 Update My Bracket':'💾 Save My Bracket';
+      var saveHint=allDone?'':'Complete all picks before saving';
+      actionH='<div class="save-bar">'
+        +'<button class="btn-save" id="save-btn" onclick="doSave()" '+(allDone?'':'disabled title="Complete all 15 picks to save"')+'>'
+        +saveLabel+'</button>'
+        +(SAVED?'<span class="save-hint" style="color:var(--green)">✓ Bracket saved — you can update picks before the deadline</span>':'<span class="save-hint">'+saveHint+'</span>')
+        +'<span class="save-msg" id="save-msg"></span>'
+        +'</div>';
     }
   }
 
   var legH='<div class="legend">'
     +'<div class="li"><div class="ls" style="border:1.5px dashed var(--amber);background:var(--amber-l)"></div>Needs pick</div>'
-    +'<div class="li"><div class="ls" style="border-left:4px solid var(--blue2);background:var(--blue-l)"></div>Your pick</div>'
+    +'<div class="li"><div class="ls" style="background:#C9A227;border:1px solid #9a7000"></div>Your pick</div>'
     +'<div class="li"><div class="ls" style="background:var(--green-l);border:1px solid var(--green)"></div>Advanced</div>'
     +'<div class="li"><div class="ls" style="opacity:.28;background:var(--muted)"></div>Eliminated</div>'
     +'<div class="li">✕ removes pick from this round only</div>'
-    +'<div class="li">🔗 Team name = official site</div>'
     +'</div>';
 
-  c.innerHTML=bannerH+dlH+tabsH+progressH+gamesH+actionH+legH;
+  c.innerHTML=bannerH+dlH+tabsH+helpH+gamesH+actionH+legH;
 
   loadLogos();
   if(!past()&&!vu)startCD();
@@ -663,15 +691,28 @@ function redraw(ro, vu){
 
 function loadLogos(){/* logos removed — team names are the pick targets */}
 
-// ── SAVE ──
-function promptSave(){if(past()||LOCKED)return;document.getElementById('modal').style.display='flex';}
-function closeModal(){document.getElementById('modal').style.display='none';}
-async function confirmSave(){
-  closeModal();if(past()){alert('The submission deadline has passed.');return;}
+// ── SAVE (no lock — re-saveable until deadline) ──
+async function doSave(){
+  if(past()){alert('The submission deadline has passed.');return;}
+  var allDone=frComplete(picks)&&qfComplete(picks)&&sfComplete(picks)&&picks.fin;
+  if(!allDone){alert('Please complete all picks before saving.');return;}
   var btn=document.getElementById('save-btn'),msg=document.getElementById('save-msg');
-  if(btn)btn.disabled=true;if(msg){msg.textContent='Locking…';msg.style.color='var(--muted)';}
-  try{var ok=await dbSave(CU,picks,true);if(ok){LOCKED=true;clearInterval(cdTimer);document.getElementById('hdr-user').textContent=CU+' 🔒';if(msg)msg.textContent='';redraw();}else{if(msg){msg.textContent='Error — please try again.';msg.style.color='var(--red)';}if(btn)btn.disabled=false;}}
-  catch(e){if(msg){msg.textContent='Error: '+e.message;msg.style.color='var(--red)';}if(btn)btn.disabled=false;}
+  if(btn)btn.disabled=true;if(msg){msg.textContent='Saving…';msg.style.color='var(--muted)';}
+  try{
+    var ok=await dbSave(CU,picks);
+    if(ok){
+      SAVED=true;
+      document.getElementById('hdr-user').textContent=CU+' ✓';
+      if(msg)msg.textContent='';
+      redraw();
+    }else{
+      if(msg){msg.textContent='Error — please try again.';msg.style.color='var(--red)';}
+      if(btn)btn.disabled=false;
+    }
+  }catch(e){
+    if(msg){msg.textContent='Error: '+e.message;msg.style.color='var(--red)';}
+    if(btn)btn.disabled=false;
+  }
 }
 
 function backToMine(){VU=null;viewPicks=null;ACTIVE_ROUND='fr';redraw();}
@@ -689,7 +730,12 @@ async function renderLB(){
   c.innerHTML='<div style="padding:40px;text-align:center;color:var(--muted);font-family:var(--fh);letter-spacing:.06em">LOADING…</div>';
   try{
     var all=await dbAll();
-    var entries=all.filter(function(r){return r.locked;}).map(function(r){var sc=calcScore(r.picks||{});var ch=(r.picks||{}).fin;return{u:r.username,p:r.picks||{},wins:sc.wins,upsets:sc.upsets,score:sc.score,champ:ch&&T[ch]?T[ch].n:'—'};});
+    // Show all brackets that have been saved (have a picks row), not filtered by locked
+    var entries=all.filter(function(r){
+      var p=r.picks||{};
+      // Must have at least one pick to show (means they've saved something)
+      return Object.keys(p).some(function(k){return p[k]!==null;});
+    }).map(function(r){var sc=calcScore(r.picks||{});var ch=(r.picks||{}).fin;return{u:r.username,p:r.picks||{},wins:sc.wins,upsets:sc.upsets,score:sc.score,champ:ch&&T[ch]?T[ch].n:'—'};});
     entries.sort(function(a,b){if(b.wins!==a.wins)return b.wins-a.wins;if(b.upsets!==a.upsets)return b.upsets-a.upsets;return a.u.localeCompare(b.u);});
     var rows=entries.map(function(e,i){var me=e.u===CU;var rc='lbrank'+(i===0?' gold':i===1?' silver':i===2?' bronze':'');var md=i===0?'🥇 ':i===1?'🥈 ':i===2?'🥉 ':'';
       return'<div class="lbrow'+(me?' lbme':'')+'" onclick="viewBracket(\''+e.u+'\')">'
@@ -699,10 +745,10 @@ async function renderLB(){
         +'<div class="lbups">'+e.upsets+'</div>'
         +'<div class="lbact"><button class="vbtn" onclick="event.stopPropagation();viewBracket(\''+e.u+'\')">View</button></div></div>';
     }).join('');
-    c.innerHTML='<div class="lb-wrap"><div class="lb-hdr"><div class="lb-title">🏆 Leaderboard</div><div class="lb-count">'+entries.length+' locked bracket'+(entries.length!==1?'s':'')+' · 10 pts per correct pick</div></div>'
+    c.innerHTML='<div class="lb-wrap"><div class="lb-hdr"><div class="lb-title">🏆 Leaderboard</div><div class="lb-count">'+entries.length+' saved bracket'+(entries.length!==1?'s':'')+' · 10 pts per correct pick</div></div>'
       +'<div class="lb-table"><div class="lbrow lbhdr"><div class="lbrank">#</div><div class="lbname">Player</div><div class="lbpick">Champion Pick</div><div class="lbpts">Score</div><div class="lbups">Upsets</div><div class="lbact"></div></div>'
-      +(entries.length?rows:'<div class="lb-empty">No locked brackets yet — be the first!</div>')
-      +'</div></div><div class="lb-note">Tiebreaker: most correct upset picks. Only locked brackets ranked.</div>';
+      +(entries.length?rows:'<div class="lb-empty">No saved brackets yet — make your picks and save to appear here!</div>')
+      +'</div></div><div class="lb-note">Tiebreaker: most correct upset picks. Brackets lock automatically on May 9 at 12pm ET.</div>';
   }catch(e){c.innerHTML='<div style="padding:30px;text-align:center;color:var(--red)">Error: '+e.message+'</div>';}
 }
 
