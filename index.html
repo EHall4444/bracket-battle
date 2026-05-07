@@ -90,7 +90,8 @@ body{font-family:var(--fb);color:var(--text);font-size:13px;min-height:100vh;bac
 .round-tab .tab-badge{font-size:9px;background:var(--green-l);color:var(--green);border-radius:10px;padding:1px 6px;font-family:var(--fb);font-weight:600;letter-spacing:.02em}
 .round-tab.active .tab-badge{background:rgba(255,255,255,.2);color:rgba(255,255,255,.8)}
 .round-tab .tab-lock{font-size:11px;opacity:.6}
-.round-progress{font-size:10px;color:var(--muted);margin-bottom:14px;font-family:var(--fh);letter-spacing:.04em;text-transform:uppercase}
+.round-progress{font-size:10px;color:var(--muted);margin-bottom:6px;font-family:var(--fh);letter-spacing:.04em;text-transform:uppercase}
+.pick-help{font-size:11px;color:var(--blue);margin-bottom:14px;font-family:var(--fb);font-weight:500}
 
 /* ── MATCHUP GRID ── */
 .matchup-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
@@ -108,30 +109,27 @@ body{font-family:var(--fb);color:var(--text);font-size:13px;min-height:100vh;bac
 .card-time{font-size:8px;color:var(--blue2);font-weight:600;font-family:var(--fh);letter-spacing:.04em;white-space:nowrap}
 
 /* ── TEAM ROW ── */
-.team-row{display:flex;align-items:center;gap:8px;padding:10px 12px;cursor:pointer;transition:background .12s;border-left:4px solid transparent;position:relative;min-height:52px}
+.team-row{display:flex;align-items:center;gap:10px;padding:12px 14px;cursor:pointer;transition:background .12s,border-left-color .12s;border-left:4px solid transparent;position:relative;min-height:48px}
 .team-row:first-of-type{border-bottom:1px solid var(--gray)}
 .team-row.pickable:hover{background:rgba(74,144,217,.07)}
-.team-row.is-pick{border-left-color:var(--blue2);background:rgba(74,144,217,.05)}
+.team-row.pickable:hover .t-name{color:var(--blue)}
+.team-row.is-pick{border-left-color:var(--blue2);background:rgba(74,144,217,.06)}
+.team-row.is-pick .t-name{color:var(--blue);font-weight:600}
 .team-row.is-winner .t-name{color:var(--green);font-weight:600}
 .team-row.is-elim{opacity:.28;pointer-events:none}
 .team-row.is-locked{cursor:default}
 .team-row.is-empty{cursor:default;background:var(--amber-l)}
 .team-row.is-empty-locked{cursor:default;background:var(--off)}
 
-/* mascot image */
-.t-mascot{width:36px;height:36px;border-radius:6px;object-fit:contain;flex-shrink:0;background:var(--off)}
-.t-mascot-ph{width:36px;height:36px;border-radius:6px;background:var(--off);border:1px solid var(--gray);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:var(--fh);font-size:9px;font-weight:700;color:var(--muted)}
-
-.t-seed{font-size:9px;color:var(--muted);width:16px;text-align:right;flex-shrink:0;font-weight:700;font-family:var(--fh)}
+.t-seed{font-family:var(--fh);font-size:11px;font-weight:700;color:var(--muted);width:22px;flex-shrink:0;text-align:center}
 .t-info{flex:1;min-width:0}
-.t-name{font-family:var(--fh);font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-decoration:none;color:inherit;display:block;letter-spacing:.02em}
-.t-name:hover{color:var(--blue);text-decoration:underline}
-.t-rec{font-size:9px;color:var(--muted);margin-top:1px}
+.t-name{font-family:var(--fh);font-size:14px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block;letter-spacing:.02em;color:inherit;transition:color .12s}
+.t-rec{font-size:9px;color:var(--muted);margin-top:2px}
 .t-adv{font-family:var(--fh);font-size:8px;background:var(--green-l);color:var(--green);border-radius:3px;padding:2px 6px;letter-spacing:.04em;flex-shrink:0}
 .t-lock-icon{font-size:10px;opacity:.2;flex-shrink:0}
 
 /* empty row */
-.t-empty-icon{width:36px;height:36px;border-radius:6px;background:rgba(245,158,11,.15);border:1px dashed var(--amber);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:16px}
+.t-empty-icon{width:28px;height:28px;border-radius:4px;background:rgba(245,158,11,.15);border:1px dashed var(--amber);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:14px}
 .t-empty-label{font-family:var(--fh);font-size:11px;color:var(--amber);letter-spacing:.04em}
 .t-empty-hint{font-size:9px;color:rgba(217,119,6,.6);margin-top:1px}
 
@@ -266,9 +264,14 @@ body{font-family:var(--fb);color:var(--text);font-size:13px;min-height:100vh;bac
 <!-- SHELL -->
 <div class="shell" id="shell">
   <!-- HERO -->
+  <!-- HERO — local lacrosse photos uploaded to repo -->
   <div class="hero">
     <div class="hero-photos" id="heroPhotos">
-      <!-- filled by JS as background-image divs -->
+      <div class="hero-photo" style="background-image:url('lax1.jpg')"></div>
+      <div class="hero-photo" style="background-image:url('lax2.jpg')"></div>
+      <div class="hero-photo" style="background-image:url('lax3.jpg')"></div>
+      <div class="hero-photo" style="background-image:url('lax5.jpg')"></div>
+      <div class="hero-photo" style="background-image:url('lax6.jpg')"></div>
     </div>
     <div class="hero-overlay"></div>
     <div class="hero-content">
@@ -368,14 +371,8 @@ var SF=[
 var FIN={id:'fin',sfA:'sf1',sfB:'sf2',loc:'Scott Stadium, Charlottesville VA',time:'May 25 · 1pm ET · ESPN',result:null};
 
 // ── PHOTOS ──
-var HERO_PHOTOS=[
-  'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/2019_Patriot_League_men%27s_lacrosse_tournament_-_final.jpg/800px-2019_Patriot_League_men%27s_lacrosse_tournament_-_final.jpg',
-  'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Lacrosse_at_the_2010_World_Lacrosse_Championship_14.jpg/800px-Lacrosse_at_the_2010_World_Lacrosse_Championship_14.jpg',
-  'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Lacrosse_at_the_2010_World_Lacrosse_Championship_07.jpg/800px-Lacrosse_at_the_2010_World_Lacrosse_Championship_07.jpg',
-  'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Lacrosse_at_the_2010_World_Lacrosse_Championship_09.jpg/800px-Lacrosse_at_the_2010_World_Lacrosse_Championship_09.jpg',
-  'https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Lacrosse_4_bg_042106.jpg/800px-Lacrosse_4_bg_042106.jpg',
-  'https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Lacrosse_game_2.jpg/800px-Lacrosse_game_2.jpg'
-];
+// Hero photos are served as local files (lax1.jpg–lax6.jpg) from the GitHub repo
+// Auth bg uses Wikimedia images with referrerpolicy=no-referrer to bypass hotlink blocking
 var BG_PHOTOS=[
   'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Lacrosse_at_the_2010_World_Lacrosse_Championship_06.jpg/400px-Lacrosse_at_the_2010_World_Lacrosse_Championship_06.jpg',
   'https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Lacrosse_at_the_2010_World_Lacrosse_Championship_05.jpg/400px-Lacrosse_at_the_2010_World_Lacrosse_Championship_05.jpg',
@@ -395,20 +392,7 @@ var BG_PHOTOS=[
 ];
 
 (function(){
-  // Hero — CSS background-image divs, preloaded with referrerpolicy="no-referrer"
-  // Wikimedia blocks hotlinking via Referer header; suppressing it allows images to load
-  var hp=document.getElementById('heroPhotos');
-  HERO_PHOTOS.forEach(function(url){
-    var d=document.createElement('div');
-    d.className='hero-photo';
-    var img=new Image();
-    img.referrerPolicy='no-referrer';
-    img.onload=function(){d.style.backgroundImage='url("'+url+'")';};
-    img.onerror=function(){d.style.background='var(--navy2)';};
-    img.src=url;
-    hp.appendChild(d);
-  });
-  // Auth bg — img tags with referrerpolicy
+  // Auth bg — img tags with referrerpolicy to suppress Referer header
   var ab=document.getElementById('authBg');
   BG_PHOTOS.slice(0,15).forEach(function(url){
     var i=document.createElement('img');
@@ -506,16 +490,11 @@ function teamRow(gameId, teamKey, myPick, result, lk){
   if(isE)cls+=' is-elim';
   if(lk)cls+=' is-locked';
   var oc=lk?'':'onclick="doPick(\''+gameId+'\',\''+teamKey+'\')"';
-  var mascotEl=td.mascot
-    ?'<img class="t-mascot" src="'+td.mascot+'" referrerpolicy="no-referrer" alt="'+td.n+' mascot" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">'
-     +'<div class="t-mascot-ph" style="display:none">'+td.n.substring(0,3).toUpperCase()+'</div>'
-    :'<div class="t-mascot-ph">'+td.n.substring(0,3).toUpperCase()+'</div>';
-  return'<div class="'+cls+'" '+oc+' title="'+(lk?'Picks are locked':'Pick '+td.n+'  to advance')+'">'
-    +mascotEl
-    +(td.s?'<span class="t-seed">'+td.s+'</span>':'')
-    +'<div class="t-info"><a class="t-name" href="'+td.url+'" target="_blank" rel="noopener" onclick="event.stopPropagation()">'+td.n+'</a><div class="t-rec">'+td.r+'</div></div>'
+  return'<div class="'+cls+'" '+oc+' title="'+(lk?'Picks are locked':'Select '+td.n)+'">'
+    +(td.s?'<span class="t-seed">'+td.s+'</span>':'<span class="t-seed"></span>')
+    +'<div class="t-info"><span class="t-name">'+td.n+'</span><div class="t-rec">'+td.r+'</div></div>'
     +(isW?'<div class="t-adv">Adv</div>':'')
-    +(lk?'<div class="t-lock-icon">🔒</div>':'')
+    +(lk&&!isE?'<div class="t-lock-icon">🔒</div>':'')
     +(isPick&&!lk?'<button class="t-clear" onclick="event.stopPropagation();clearOnly(\''+gameId+'\')" title="Remove this pick">✕</button>':'')
     +'</div>';
 }
@@ -615,13 +594,14 @@ function redraw(ro, vu){
   var dlH=!vu?deadlineBanner():'';
   var tabsH=roundTabsHTML(p,lk);
 
+  var helpText='<div class="pick-help">Click a team to make your selection.</div>';
   // Progress hint
   var progressH='';
   if(!lk&&!vu){
-    if(ACTIVE_ROUND==='fr')progressH='<div class="round-progress">First Round · '+frCount(p)+' of 8 picks made'+(frComplete(p)?' · Quarterfinals now unlocked ✓':'')+'</div>';
-    else if(ACTIVE_ROUND==='qf')progressH='<div class="round-progress">Quarterfinals · '+qfCount(p)+' of 4 picks made'+(qfComplete(p)?' · Semifinals now unlocked ✓':'')+'</div>';
-    else if(ACTIVE_ROUND==='sf')progressH='<div class="round-progress">Semifinals · '+sfCount(p)+' of 2 picks made'+(sfComplete(p)?' · Championship now unlocked ✓':'')+'</div>';
-    else if(ACTIVE_ROUND==='fin')progressH='<div class="round-progress">Championship · '+(p.fin?'Champion selected ✓':'Pick your champion')+'</div>';
+    if(ACTIVE_ROUND==='fr')progressH='<div class="round-progress">First Round · '+frCount(p)+' of 8 picks made'+(frComplete(p)?' · Quarterfinals now unlocked ✓':'')+'</div>'+helpText;
+    else if(ACTIVE_ROUND==='qf')progressH='<div class="round-progress">Quarterfinals · '+qfCount(p)+' of 4 picks made'+(qfComplete(p)?' · Semifinals now unlocked ✓':'')+'</div>'+helpText;
+    else if(ACTIVE_ROUND==='sf')progressH='<div class="round-progress">Semifinals · '+sfCount(p)+' of 2 picks made'+(sfComplete(p)?' · Championship now unlocked ✓':'')+'</div>'+helpText;
+    else if(ACTIVE_ROUND==='fin')progressH='<div class="round-progress">Championship · '+(p.fin?'Champion selected ✓':'Pick your champion')+'</div>'+helpText;
   }
 
   var gamesH='';
@@ -677,18 +657,11 @@ function redraw(ro, vu){
 
   c.innerHTML=bannerH+dlH+tabsH+progressH+gamesH+actionH+legH;
 
-  loadMascots(p);
+  loadLogos();
   if(!past()&&!vu)startCD();
 }
 
-function loadMascots(p){
-  Object.keys(T).forEach(function(k){
-    var td=T[k];if(!td.mascot)return;
-    document.querySelectorAll('img.t-mascot[alt="'+td.n+' mascot"]').forEach(function(el){
-      if(!el.complete||el.naturalWidth===0){var img=new Image();img.onload=function(){el.src=td.mascot;};img.src=td.mascot;}
-    });
-  });
-}
+function loadLogos(){/* logos removed — team names are the pick targets */}
 
 // ── SAVE ──
 function promptSave(){if(past()||LOCKED)return;document.getElementById('modal').style.display='flex';}
