@@ -53,8 +53,9 @@ body{font-family:var(--fb);color:var(--text);font-size:13px;min-height:100vh;bac
 /* ── HERO BANNER ── */
 .hero{position:relative;height:200px;overflow:hidden;background:var(--navy)}
 .hero-photos{display:flex;height:100%;gap:2px}
-.hero-photo{flex:1;background-size:cover;background-position:center 30%;background-color:var(--navy2);transition:transform .4s}
-.hero-photo:hover{transform:scale(1.04)}
+.hero-photo{flex:1;position:relative;overflow:hidden;background:var(--navy2)}
+.hero-photo img{width:100%;height:100%;object-fit:cover;object-position:center 30%;display:block;transition:transform .4s}
+.hero-photo:hover img{transform:scale(1.04)}
 .hero-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(13,31,60,.25) 0%,rgba(13,31,60,.65) 65%,rgba(13,31,60,.95) 100%)}
 .hero-content{position:absolute;inset:0;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-end;padding:18px 22px;border-bottom:3px solid var(--blue2)}
 .hero-eyebrow{font-family:var(--fh);font-size:10px;letter-spacing:.2em;color:var(--blue2);text-transform:uppercase;margin-bottom:6px}
@@ -93,7 +94,6 @@ body{font-family:var(--fb);color:var(--text);font-size:13px;min-height:100vh;bac
 .round-progress{font-size:10px;color:var(--muted);margin-bottom:6px;font-family:var(--fh);letter-spacing:.04em;text-transform:uppercase}
 .pick-help{background:var(--navy);border-radius:var(--r);padding:10px 14px;margin-bottom:14px;border-left:4px solid var(--blue2)}
 .pick-help-line{font-size:12px;color:var(--white);font-family:var(--fb);font-weight:500;line-height:1.7}
-.pick-help-line:first-child{font-weight:600;color:var(--blue2)}
 
 /* ── MATCHUP GRID ── */
 .matchup-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
@@ -262,11 +262,11 @@ body{font-family:var(--fb);color:var(--text);font-size:13px;min-height:100vh;bac
   <!-- HERO — local lacrosse photos uploaded to repo -->
   <div class="hero">
     <div class="hero-photos" id="heroPhotos">
-      <div class="hero-photo" style="background-image:url('lax1.jpg')"></div>
-      <div class="hero-photo" style="background-image:url('lax2.jpg')"></div>
-      <div class="hero-photo" style="background-image:url('lax3.jpg')"></div>
-      <div class="hero-photo" style="background-image:url('lax5.jpg')"></div>
-      <div class="hero-photo" style="background-image:url('lax6.jpg')"></div>
+      <div class="hero-photo"><img src="lax1.jpg" alt="Lacrosse gameplay"/></div>
+      <div class="hero-photo"><img src="lax2.jpg" alt="Lacrosse gameplay"/></div>
+      <div class="hero-photo"><img src="lax3.jpg" alt="Lacrosse gameplay"/></div>
+      <div class="hero-photo"><img src="lax5.jpg" alt="Lacrosse gameplay"/></div>
+      <div class="hero-photo"><img src="lax6.jpg" alt="Lacrosse gameplay"/></div>
     </div>
     <div class="hero-overlay"></div>
     <div class="hero-content">
