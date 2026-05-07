@@ -5,730 +5,742 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Bracket Battle — 2026 NCAA Men's Lacrosse</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <style>
 :root{
-  --navy:#1a3a6b;--navy2:#122d56;--navy3:#0e2243;
-  --blue:#35669d;--blue2:#5b9bd5;--blue-l:#e8f0f9;
-  --white:#fff;--off:#f4f6f9;--gray:#e8eaed;--gray2:#c8cdd6;
-  --text:#1a1a1a;--muted:#6b7280;--green:#1e7e34;--green-l:#eaf5ec;
-  --red:#c0392b;--gold:#c99700;--r:4px;--rl:6px;
+  --navy:#0d1f3c;--navy2:#162847;--navy3:#1e3560;
+  --blue:#2563a8;--blue2:#4a90d9;--blue-l:#dbeafe;
+  --white:#fff;--off:#f0f4f8;--gray:#dde3ea;--gray2:#b0bac6;
+  --text:#111827;--muted:#64748b;--green:#15803d;--green-l:#dcfce7;
+  --red:#b91c1c;--red-l:#fee2e2;--gold:#d97706;--gold-l:#fef3c7;
+  --amber:#f59e0b;--amber-l:#fffbeb;
+  --r:4px;--rl:8px;
+  --fh:'Oswald',sans-serif;--fb:'Inter',sans-serif;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Roboto',sans-serif;color:var(--text);font-size:13px;min-height:100vh;background:#0e2243}
-
-/* ── MOSAIC BACKGROUND ── */
-.bg-mosaic{position:fixed;inset:0;z-index:0;display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(3,1fr);gap:2px;opacity:.13;pointer-events:none}
-.bg-mosaic img{width:100%;height:100%;object-fit:cover;filter:saturate(.6)}
-.bg-overlay{position:fixed;inset:0;z-index:1;background:linear-gradient(135deg,rgba(14,34,67,.92) 0%,rgba(26,58,107,.88) 100%);pointer-events:none}
-
-/* everything sits above overlay */
-#auth-screen,#shell{position:relative;z-index:2}
+body{font-family:var(--fb);color:var(--text);font-size:13px;min-height:100vh;background:var(--off)}
 
 /* ── AUTH ── */
-#auth-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:24px}
-.auth-wordmark{font-family:'Roboto Condensed',sans-serif;font-size:42px;font-weight:700;color:var(--white);text-transform:uppercase;letter-spacing:.03em;text-shadow:0 2px 12px rgba(0,0,0,.4)}
+.auth-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:24px;background:var(--navy);position:relative;overflow:hidden}
+.auth-bg{position:absolute;inset:0;display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(3,1fr);gap:2px;opacity:.18}
+.auth-bg img{width:100%;height:100%;object-fit:cover;filter:saturate(.6)}
+.auth-bg-overlay{position:absolute;inset:0;background:linear-gradient(155deg,rgba(13,31,60,.97) 0%,rgba(13,31,60,.85) 100%)}
+.auth-inner{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;width:100%}
+.auth-eyebrow{font-family:var(--fh);font-size:11px;letter-spacing:.22em;color:var(--blue2);text-transform:uppercase;margin-bottom:10px}
+.auth-wordmark{font-family:var(--fh);font-size:60px;font-weight:700;color:var(--white);text-transform:uppercase;letter-spacing:.01em;line-height:.9;text-shadow:0 4px 24px rgba(0,0,0,.5);text-align:center}
 .auth-wordmark span{color:var(--blue2)}
-.auth-sub{font-size:11px;color:rgba(255,255,255,.6);letter-spacing:.12em;text-transform:uppercase;margin-top:4px}
-.auth-divider{width:44px;height:3px;background:var(--blue2);margin:14px auto 26px}
-.auth-card{background:rgba(255,255,255,.97);border:1px solid var(--gray);border-radius:var(--rl);width:100%;max-width:380px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.4)}
-.auth-card-hdr{background:var(--navy);padding:13px 20px;border-bottom:3px solid var(--blue2)}
-.auth-card-hdr-title{font-family:'Roboto Condensed',sans-serif;font-size:15px;font-weight:700;color:var(--white);text-transform:uppercase;letter-spacing:.05em}
+.auth-tag{font-size:11px;color:rgba(255,255,255,.45);letter-spacing:.1em;text-transform:uppercase;margin-top:14px;text-align:center}
+.auth-rule{width:56px;height:3px;background:linear-gradient(90deg,var(--blue2),var(--blue));margin:18px auto 28px;border-radius:2px}
+.auth-card{background:rgba(255,255,255,.98);border-radius:var(--rl);width:100%;max-width:400px;overflow:hidden;box-shadow:0 40px 100px rgba(0,0,0,.6)}
+.auth-card-hdr{background:var(--navy);padding:14px 22px;border-bottom:3px solid var(--blue2)}
+.auth-card-title{font-family:var(--fh);font-size:16px;font-weight:600;color:var(--white);text-transform:uppercase;letter-spacing:.08em}
 .auth-tabs{display:flex;background:var(--navy2)}
-.auth-tab{flex:1;padding:10px;text-align:center;font-size:11px;font-weight:700;cursor:pointer;color:rgba(255,255,255,.45);border-bottom:3px solid transparent;transition:all .15s;text-transform:uppercase;letter-spacing:.05em;font-family:'Roboto Condensed',sans-serif}
+.auth-tab{flex:1;padding:11px;text-align:center;font-family:var(--fh);font-size:12px;font-weight:500;cursor:pointer;color:rgba(255,255,255,.38);border-bottom:3px solid transparent;transition:all .15s;text-transform:uppercase;letter-spacing:.08em}
 .auth-tab.active{color:var(--white);border-bottom-color:var(--blue2)}
-.auth-body{padding:20px;background:var(--white)}
-.fl{font-size:10px;font-weight:700;color:var(--navy);display:block;margin-bottom:5px;text-transform:uppercase;letter-spacing:.05em}
-.fi{width:100%;padding:10px 12px;border:1px solid var(--gray2);border-radius:var(--r);background:var(--white);color:var(--text);font-size:13px;font-family:'Roboto',sans-serif;outline:none;transition:border .15s;margin-bottom:14px;display:block}
-.fi:focus{border-color:var(--blue2);box-shadow:0 0 0 3px rgba(91,155,213,.12)}
-.btn-primary{width:100%;padding:12px;background:var(--blue);color:var(--white);border:none;border-radius:var(--r);font-size:13px;font-weight:700;font-family:'Roboto Condensed',sans-serif;cursor:pointer;text-transform:uppercase;letter-spacing:.06em;transition:background .15s}
+.auth-body{padding:22px}
+.fl{font-family:var(--fh);font-size:10px;font-weight:500;color:var(--navy);display:block;margin-bottom:5px;text-transform:uppercase;letter-spacing:.08em}
+.fi{width:100%;padding:10px 13px;border:1.5px solid var(--gray);border-radius:var(--r);background:var(--white);color:var(--text);font-size:13px;font-family:var(--fb);outline:none;transition:border .15s;margin-bottom:14px;display:block}
+.fi:focus{border-color:var(--blue2);box-shadow:0 0 0 3px rgba(74,144,217,.15)}
+.btn-primary{width:100%;padding:13px;background:var(--blue);color:var(--white);border:none;border-radius:var(--r);font-family:var(--fh);font-size:14px;font-weight:600;cursor:pointer;text-transform:uppercase;letter-spacing:.1em;transition:background .15s}
 .btn-primary:hover{background:var(--navy)}
-.btn-primary:disabled{opacity:.55;cursor:not-allowed}
+.btn-primary:disabled{opacity:.5;cursor:not-allowed}
 .form-err{font-size:11px;color:var(--red);margin-top:9px;min-height:16px;line-height:1.4}
 .form-info{font-size:11px;color:var(--blue2);margin-top:6px;min-height:16px}
 
 /* ── SHELL ── */
-#shell{display:none;flex-direction:column;min-height:100vh}
-.topbar{background:rgba(14,34,67,.95);padding:5px 16px;display:flex;align-items:center;justify-content:space-between;backdrop-filter:blur(4px)}
-.topbar-l{font-size:10px;color:rgba(255,255,255,.4);letter-spacing:.04em;text-transform:uppercase}
-.topbar-r{font-size:10px;color:var(--blue2);font-weight:500}
-.header{background:rgba(26,58,107,.97);padding:11px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:3px solid var(--blue2);backdrop-filter:blur(4px)}
-.brand-name{font-family:'Roboto Condensed',sans-serif;font-size:26px;font-weight:700;color:var(--white);text-transform:uppercase;letter-spacing:.03em}
-.brand-name span{color:var(--blue2)}
-.brand-sub{font-size:10px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.06em;margin-top:1px}
-.btn-outline{padding:6px 14px;border:1px solid rgba(255,255,255,.3);border-radius:var(--r);background:transparent;color:rgba(255,255,255,.8);font-size:11px;font-weight:700;font-family:'Roboto Condensed',sans-serif;cursor:pointer;text-transform:uppercase;letter-spacing:.04em;transition:all .15s}
-.btn-outline:hover{background:rgba(255,255,255,.1)}
-.nav{background:rgba(18,45,86,.97);display:flex;padding:0 16px;border-bottom:1px solid rgba(255,255,255,.08);backdrop-filter:blur(4px)}
-.nav-tab{padding:11px 18px;font-size:12px;font-weight:700;cursor:pointer;color:rgba(255,255,255,.45);border-bottom:3px solid transparent;transition:all .15s;text-transform:uppercase;letter-spacing:.05em;margin-bottom:-1px;font-family:'Roboto Condensed',sans-serif}
-.nav-tab:hover{color:rgba(255,255,255,.8)}
-.nav-tab.active{color:var(--white);border-bottom-color:var(--blue2)}
-.main{padding:16px;flex:1;max-width:980px;margin:0 auto;width:100%}
+.shell{display:none;flex-direction:column;min-height:100vh}
 
-/* ── BRACKET ── */
-.bracket-grid{display:grid;grid-template-columns:1fr 48px 1fr 48px 1fr;gap:0;align-items:start}
-.rcol{}
-.rh{font-family:'Roboto Condensed',sans-serif;font-size:13px;font-weight:700;color:var(--white);background:var(--navy);padding:7px 10px;text-align:center;letter-spacing:.05em;text-transform:uppercase;border-bottom:2px solid var(--blue2)}
-.rs{font-size:9px;color:var(--muted);text-align:center;padding:4px 6px 7px;background:rgba(244,246,249,.95);border-bottom:1px solid var(--gray)}
+/* ── HERO BANNER ── */
+.hero{position:relative;height:200px;overflow:hidden;background:var(--navy)}
+.hero-photos{display:flex;height:100%;gap:2px}
+.hero-photo{flex:1;background-size:cover;background-position:center 30%;background-color:var(--navy2);transition:transform .4s}
+.hero-photo:hover{transform:scale(1.04)}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(13,31,60,.3) 0%,rgba(13,31,60,.75) 70%,rgba(13,31,60,.95) 100%)}
+.hero-content{position:absolute;inset:0;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-end;padding:18px 22px;border-bottom:3px solid var(--blue2)}
+.hero-eyebrow{font-family:var(--fh);font-size:10px;letter-spacing:.2em;color:var(--blue2);text-transform:uppercase;margin-bottom:6px}
+.hero-title{font-family:var(--fh);font-size:32px;font-weight:700;color:var(--white);text-transform:uppercase;letter-spacing:.03em;line-height:1}
+.hero-title span{color:var(--blue2)}
+.hero-right{position:absolute;bottom:18px;right:22px;display:flex;align-items:center;gap:12px}
+.hero-user{font-family:var(--fh);font-size:11px;color:var(--blue2);letter-spacing:.05em}
+.btn-so{padding:6px 16px;border:1.5px solid rgba(255,255,255,.28);border-radius:var(--r);background:transparent;color:rgba(255,255,255,.75);font-family:var(--fh);font-size:11px;cursor:pointer;text-transform:uppercase;letter-spacing:.08em;transition:all .15s}
+.btn-so:hover{border-color:rgba(255,255,255,.6);color:var(--white)}
 
-.matchup{background:rgba(255,255,255,.97);border:1px solid var(--gray);border-radius:var(--rl);overflow:hidden;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.1);transition:border .15s}
-.matchup.picked{border:2px solid var(--blue2);box-shadow:0 4px 16px rgba(53,102,157,.25)}
-.matchup.locked{border:1px solid var(--gray2)}
+/* ── APP NAV ── */
+.app-nav{background:var(--navy2);display:flex;padding:0 18px;border-bottom:1px solid rgba(255,255,255,.07)}
+.app-nav-tab{padding:12px 18px;font-family:var(--fh);font-size:12px;font-weight:500;cursor:pointer;color:rgba(255,255,255,.4);border-bottom:3px solid transparent;transition:all .15s;text-transform:uppercase;letter-spacing:.08em;margin-bottom:-1px}
+.app-nav-tab:hover{color:rgba(255,255,255,.8)}
+.app-nav-tab.active{color:var(--white);border-bottom-color:var(--blue2)}
+.main{padding:16px;flex:1;max-width:1100px;margin:0 auto;width:100%}
 
-.game-bar{display:flex;justify-content:space-between;align-items:center;padding:4px 10px;background:var(--navy)}
-.game-loc{font-size:8px;color:rgba(255,255,255,.55);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:58%}
-.game-time{font-size:8px;color:var(--blue2);font-weight:700;white-space:nowrap}
+/* ── DEADLINE BANNER ── */
+.deadline-banner{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:var(--rl);margin-bottom:14px;font-size:12px}
+.deadline-banner.live{background:var(--navy);border:1.5px solid var(--blue2);color:var(--white)}
+.deadline-banner.expired{background:var(--red-l);border:1.5px solid var(--red);color:var(--red)}
+.deadline-icon{font-size:20px;flex-shrink:0}
+.deadline-text strong{display:block;font-family:var(--fh);font-size:13px;letter-spacing:.04em;text-transform:uppercase;margin-bottom:2px}
+.deadline-cd{font-family:'Courier New',monospace;font-size:14px;font-weight:700;color:var(--gold);margin-left:auto;white-space:nowrap;background:rgba(0,0,0,.25);padding:4px 10px;border-radius:4px}
 
-/* team row */
-.team{display:flex;align-items:center;gap:7px;padding:8px 10px;cursor:pointer;transition:filter .15s;border-left:4px solid transparent;position:relative}
-.team:first-of-type{border-bottom:1px solid rgba(0,0,0,.07)}
-.team:hover:not(.elim):not(.nopick):not(.locked-team){filter:brightness(.93)}
-.team.elim{opacity:.32;cursor:default;pointer-events:none}
-.team.mypick{border-left-color:var(--blue)}
-.team.winner .tn{color:var(--green);font-weight:700}
-.nopick,.locked-team{cursor:default}
+/* ── ROUND TABS ── */
+.round-tabs{display:flex;gap:4px;margin-bottom:16px;flex-wrap:wrap}
+.round-tab{display:flex;align-items:center;gap:6px;padding:9px 18px;border-radius:var(--rl);font-family:var(--fh);font-size:12px;font-weight:600;cursor:pointer;text-transform:uppercase;letter-spacing:.08em;border:2px solid var(--gray);background:var(--white);color:var(--muted);transition:all .15s;user-select:none}
+.round-tab.active{background:var(--navy);border-color:var(--navy);color:var(--white);box-shadow:0 4px 14px rgba(13,31,60,.25)}
+.round-tab.unlocked:not(.active){background:var(--white);border-color:var(--blue2);color:var(--blue);cursor:pointer}
+.round-tab.unlocked:not(.active):hover{background:var(--blue-l)}
+.round-tab.locked{opacity:.45;cursor:not-allowed;pointer-events:none}
+.round-tab .tab-badge{font-size:9px;background:var(--green-l);color:var(--green);border-radius:10px;padding:1px 6px;font-family:var(--fb);font-weight:600;letter-spacing:.02em}
+.round-tab.active .tab-badge{background:rgba(255,255,255,.2);color:rgba(255,255,255,.8)}
+.round-tab .tab-lock{font-size:11px;opacity:.6}
+.round-progress{font-size:10px;color:var(--muted);margin-bottom:14px;font-family:var(--fh);letter-spacing:.04em;text-transform:uppercase}
 
-.tlogo{width:26px;height:26px;border-radius:3px;background:var(--off);border:1px solid var(--gray);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:6px;font-weight:700;color:var(--muted);overflow:hidden;font-family:'Roboto Condensed',sans-serif}
-.tlogo img{width:100%;height:100%;object-fit:contain}
-.tseed{font-size:9px;color:rgba(0,0,0,.4);width:16px;text-align:right;flex-shrink:0;font-weight:700}
-.tn-wrap{flex:1;min-width:0}
-.tn{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-decoration:none;color:inherit;transition:color .15s}
-.tn:hover{color:var(--blue);text-decoration:underline}
-.tr{font-size:9px;color:rgba(0,0,0,.45);white-space:nowrap}
-.pdot{width:5px;height:5px;border-radius:50%;background:var(--blue);flex-shrink:0}
-.chip{font-size:8px;background:rgba(0,0,0,.06);border-radius:3px;padding:1px 5px;color:rgba(0,0,0,.5)}
-.lock-icon{font-size:10px;position:absolute;right:8px;top:50%;transform:translateY(-50%);opacity:.3}
+/* ── MATCHUP GRID ── */
+.matchup-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+.matchup-grid.single{grid-template-columns:minmax(280px,480px);justify-content:center}
+.matchup-grid.double{grid-template-columns:repeat(2,1fr)}
 
-/* tooltip */
-.tip-wrap{position:relative;display:inline-flex;align-items:center}
-.tip{position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:var(--navy);color:var(--white);font-size:10px;padding:5px 9px;border-radius:var(--r);white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .15s;z-index:99;font-family:'Roboto',sans-serif;font-weight:400;box-shadow:0 4px 12px rgba(0,0,0,.3)}
-.tip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:4px solid transparent;border-top-color:var(--navy)}
-.team:hover .tip{opacity:1}
+/* ── MATCHUP CARD ── */
+.card{background:var(--white);border:1.5px solid var(--gray);border-radius:var(--rl);overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.07);transition:border-color .15s,box-shadow .15s}
+.card.has-pick{border-color:var(--blue2);box-shadow:0 4px 16px rgba(37,99,168,.15)}
+.card.needs-pick{border:1.5px dashed var(--amber)}
+.card.unavailable{opacity:.5;pointer-events:none}
 
-.odds-wrap{padding:5px 10px 6px;background:rgba(244,246,249,.8);border-top:1px solid var(--gray)}
+.card-header{background:var(--navy);padding:6px 12px;display:flex;justify-content:space-between;align-items:center}
+.card-loc{font-size:8px;color:rgba(255,255,255,.5);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:60%}
+.card-time{font-size:8px;color:var(--blue2);font-weight:600;font-family:var(--fh);letter-spacing:.04em;white-space:nowrap}
+
+/* ── TEAM ROW ── */
+.team-row{display:flex;align-items:center;gap:8px;padding:10px 12px;cursor:pointer;transition:background .12s;border-left:4px solid transparent;position:relative;min-height:52px}
+.team-row:first-of-type{border-bottom:1px solid var(--gray)}
+.team-row.pickable:hover{background:rgba(74,144,217,.07)}
+.team-row.is-pick{border-left-color:var(--blue2);background:rgba(74,144,217,.05)}
+.team-row.is-winner .t-name{color:var(--green);font-weight:600}
+.team-row.is-elim{opacity:.28;pointer-events:none}
+.team-row.is-locked{cursor:default}
+.team-row.is-empty{cursor:default;background:var(--amber-l)}
+.team-row.is-empty-locked{cursor:default;background:var(--off)}
+
+/* mascot image */
+.t-mascot{width:36px;height:36px;border-radius:6px;object-fit:contain;flex-shrink:0;background:var(--off)}
+.t-mascot-ph{width:36px;height:36px;border-radius:6px;background:var(--off);border:1px solid var(--gray);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:var(--fh);font-size:9px;font-weight:700;color:var(--muted)}
+
+.t-seed{font-size:9px;color:var(--muted);width:16px;text-align:right;flex-shrink:0;font-weight:700;font-family:var(--fh)}
+.t-info{flex:1;min-width:0}
+.t-name{font-family:var(--fh);font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-decoration:none;color:inherit;display:block;letter-spacing:.02em}
+.t-name:hover{color:var(--blue);text-decoration:underline}
+.t-rec{font-size:9px;color:var(--muted);margin-top:1px}
+.t-adv{font-family:var(--fh);font-size:8px;background:var(--green-l);color:var(--green);border-radius:3px;padding:2px 6px;letter-spacing:.04em;flex-shrink:0}
+.t-lock-icon{font-size:10px;opacity:.2;flex-shrink:0}
+
+/* empty row */
+.t-empty-icon{width:36px;height:36px;border-radius:6px;background:rgba(245,158,11,.15);border:1px dashed var(--amber);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:16px}
+.t-empty-label{font-family:var(--fh);font-size:11px;color:var(--amber);letter-spacing:.04em}
+.t-empty-hint{font-size:9px;color:rgba(217,119,6,.6);margin-top:1px}
+
+/* ✕ clear — ONLY clears this slot, no cascade */
+.t-clear{position:absolute;right:9px;top:50%;transform:translateY(-50%);width:20px;height:20px;border-radius:50%;background:rgba(0,0,0,.08);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;color:rgba(0,0,0,.4);transition:all .15s;z-index:5;padding:0;line-height:1}
+.t-clear:hover{background:var(--red);color:var(--white)}
+
+/* odds */
+.card-odds{padding:5px 12px 6px;background:rgba(240,244,248,.7);border-top:1px solid var(--gray)}
 .odds-row{display:flex;justify-content:space-between;margin-bottom:3px}
-.odds-lbl{font-size:8px;color:var(--muted);font-weight:500}
-.odds-bar{height:3px;border-radius:2px;background:var(--gray);overflow:hidden;display:flex}
-.odds-a{height:100%;background:var(--blue);transition:width .3s}
-.odds-b{height:100%;background:var(--gray2);transition:width .3s}
-.odds-src{font-size:7.5px;color:var(--muted);margin-top:2px;opacity:.7}
+.odds-lbl{font-size:8px;color:var(--muted);font-family:var(--fh);letter-spacing:.04em}
+.odds-track{height:3px;border-radius:2px;background:var(--gray);overflow:hidden;display:flex}
+.odds-a{height:100%;background:var(--blue2)}
+.odds-b{height:100%;background:var(--gray2)}
+.odds-src{font-size:7.5px;color:var(--muted);margin-top:2px;opacity:.75}
 
-/* connector */
-.conn{padding-top:50px;display:flex;align-items:flex-start;justify-content:center}
-.conn svg{overflow:visible}
+/* adv strip */
+.card-adv{font-family:var(--fh);font-size:8px;color:rgba(74,144,217,.8);text-align:center;padding:4px;background:rgba(37,99,168,.05);border-top:1px solid rgba(37,99,168,.1);letter-spacing:.06em;text-transform:uppercase}
 
-/* ── EARLY PANEL ── */
-.early-panel{background:rgba(255,255,255,.95);border:1px solid var(--gray);border-radius:var(--rl);overflow:hidden;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
-.early-hdr{display:flex;align-items:center;justify-content:space-between;cursor:pointer;padding:9px 13px;background:var(--navy)}
-.early-title{font-family:'Roboto Condensed',sans-serif;font-size:12px;font-weight:700;color:var(--white);text-transform:uppercase;letter-spacing:.04em}
-.early-chev{font-size:10px;color:var(--blue2)}
-.early-body{padding:11px 13px;display:grid;grid-template-columns:1fr 1fr;gap:6px}
-.elabel{font-size:9px;color:var(--muted);letter-spacing:.05em;grid-column:1/-1;margin-top:4px;text-transform:uppercase;font-weight:700;border-top:1px solid var(--gray);padding-top:7px}
-.elabel:first-child{border-top:none;padding-top:0}
-.erow{display:flex;align-items:center;gap:5px;padding:5px 8px;background:var(--off);border:1px solid var(--gray);border-radius:var(--r)}
-.ew{font-size:10px;font-weight:700;color:var(--navy)}
-.el2{font-size:9px;color:var(--muted)}
-.esc{margin-left:auto;font-size:9px;color:var(--text);white-space:nowrap;font-weight:500}
-.adv{font-size:7.5px;background:var(--green-l);color:var(--green);border-radius:2px;padding:1px 4px;margin-left:3px;font-weight:700;text-transform:uppercase}
-
-/* ── SUMMARY ── */
-.summary{background:rgba(255,255,255,.95);border:1px solid var(--gray);border-radius:var(--rl);overflow:hidden;margin-top:14px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
-.sum-hdr{background:var(--navy);padding:9px 13px;border-bottom:2px solid var(--blue2)}
-.sum-title{font-family:'Roboto Condensed',sans-serif;font-size:15px;font-weight:700;color:var(--white);text-transform:uppercase;letter-spacing:.04em}
-.sum-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;padding:13px}
-.scard{background:var(--off);border:1px solid var(--gray);border-radius:var(--r);padding:8px 10px}
-.scard.champ{grid-column:1/-1;background:var(--navy);border-color:var(--navy)}
-.sround{font-size:8.5px;color:var(--muted);margin-bottom:3px;text-transform:uppercase;font-weight:700;letter-spacing:.04em}
-.scard.champ .sround{color:var(--blue2)}
-.steam{font-size:12px;font-weight:700;color:var(--text);font-family:'Roboto Condensed',sans-serif}
-.steam.empty{color:var(--muted);font-weight:400;font-style:italic;font-family:'Roboto',sans-serif;font-size:11px}
-.scard.champ .steam{color:var(--white);font-size:16px}
-.scard.champ .steam.empty{color:rgba(255,255,255,.3)}
-.ssub{font-size:8.5px;color:var(--blue2);margin-top:2px}
-.save-row{padding:11px 13px;border-top:1px solid var(--gray);display:flex;align-items:center;gap:12px;background:rgba(244,246,249,.8)}
-.btn-save{padding:9px 22px;background:var(--blue);color:var(--white);border:none;border-radius:var(--r);font-size:12px;font-weight:700;font-family:'Roboto Condensed',sans-serif;cursor:pointer;text-transform:uppercase;letter-spacing:.05em;transition:background .15s}
+/* ── SAVE BAR ── */
+.save-bar{margin-top:16px;padding:14px 16px;background:var(--white);border:1.5px solid var(--gray);border-radius:var(--rl);display:flex;align-items:center;gap:14px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.btn-save{padding:10px 24px;background:var(--blue);color:var(--white);border:none;border-radius:var(--r);font-family:var(--fh);font-size:13px;font-weight:600;cursor:pointer;text-transform:uppercase;letter-spacing:.08em;transition:background .15s}
 .btn-save:hover{background:var(--navy)}
-.btn-save:disabled{opacity:.55;cursor:not-allowed}
+.btn-save:disabled{opacity:.5;cursor:not-allowed}
+.save-hint{font-size:11px;color:var(--muted)}
 .save-msg{font-size:11px;font-weight:500}
 
-/* locked banner */
-.locked-banner{background:var(--navy2);border:1px solid var(--blue);border-radius:var(--r);padding:10px 14px;display:flex;align-items:center;gap:10px;margin-top:14px}
-.locked-banner-icon{font-size:18px}
-.locked-banner-text{font-size:12px;color:var(--white)}
-.locked-banner-text strong{color:var(--blue2)}
+.locked-banner{background:var(--navy);border:1.5px solid var(--blue2);border-radius:var(--r);padding:13px 16px;display:flex;align-items:center;gap:12px;margin-top:16px}
+.locked-icon{font-size:22px}
+.locked-text{font-size:12px;color:var(--white);line-height:1.5}
+.locked-text strong{font-family:var(--fh);color:var(--blue2);font-size:14px;display:block;margin-bottom:2px;letter-spacing:.03em}
+.closed-banner{background:var(--red-l);border:1.5px solid var(--red);border-radius:var(--r);padding:13px 16px;display:flex;align-items:center;gap:12px;margin-top:16px}
+.closed-text{font-size:12px;color:var(--red);line-height:1.5}
+.closed-text strong{font-family:var(--fh);font-size:14px;display:block;margin-bottom:2px}
 
-/* ── CONFIRM MODAL ── */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px)}
-.modal{background:var(--white);border-radius:var(--rl);padding:28px 24px;max-width:360px;width:100%;box-shadow:0 24px 64px rgba(0,0,0,.4)}
-.modal-icon{font-size:32px;text-align:center;margin-bottom:12px}
-.modal-title{font-family:'Roboto Condensed',sans-serif;font-size:18px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.04em;text-align:center;margin-bottom:8px}
-.modal-body{font-size:12px;color:var(--text2,#4a5568);text-align:center;line-height:1.6;margin-bottom:20px}
+/* legend */
+.legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:12px;padding:9px 12px;background:var(--white);border:1px solid var(--gray);border-radius:var(--r)}
+.li{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--muted);font-family:var(--fh);letter-spacing:.03em}
+.ls{width:10px;height:10px;border-radius:2px}
+
+/* modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(6px)}
+.modal{background:var(--white);border-radius:var(--rl);padding:30px 26px;max-width:380px;width:100%;box-shadow:0 32px 80px rgba(0,0,0,.5)}
+.modal-icon{font-size:36px;text-align:center;margin-bottom:14px}
+.modal-title{font-family:var(--fh);font-size:20px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.06em;text-align:center;margin-bottom:10px}
+.modal-body{font-size:12px;color:#4a5568;text-align:center;line-height:1.7;margin-bottom:22px}
 .modal-body strong{color:var(--red)}
 .modal-btns{display:flex;gap:10px}
-.modal-cancel{flex:1;padding:10px;border:1px solid var(--gray2);border-radius:var(--r);background:transparent;color:var(--muted);font-size:12px;font-weight:700;font-family:'Roboto Condensed',sans-serif;cursor:pointer;text-transform:uppercase;letter-spacing:.05em;transition:all .15s}
+.modal-cancel{flex:1;padding:11px;border:1.5px solid var(--gray2);border-radius:var(--r);background:transparent;color:var(--muted);font-family:var(--fh);font-size:12px;font-weight:500;cursor:pointer;text-transform:uppercase;letter-spacing:.06em}
 .modal-cancel:hover{background:var(--off)}
-.modal-confirm{flex:1;padding:10px;border:none;border-radius:var(--r);background:var(--red);color:var(--white);font-size:12px;font-weight:700;font-family:'Roboto Condensed',sans-serif;cursor:pointer;text-transform:uppercase;letter-spacing:.05em;transition:background .15s}
-.modal-confirm:hover{background:#a93226}
+.modal-confirm{flex:1;padding:11px;border:none;border-radius:var(--r);background:var(--red);color:var(--white);font-family:var(--fh);font-size:12px;font-weight:600;cursor:pointer;text-transform:uppercase;letter-spacing:.06em}
+.modal-confirm:hover{background:#991b1b}
 
-/* ── LEADERBOARD ── */
-.lb-hdr{background:var(--navy);padding:9px 13px;border-bottom:2px solid var(--blue2);border-radius:var(--rl) var(--rl) 0 0;display:flex;align-items:center;justify-content:space-between}
-.lb-title{font-family:'Roboto Condensed',sans-serif;font-size:18px;font-weight:700;color:var(--white);text-transform:uppercase;letter-spacing:.04em}
-.lb-count{font-size:10px;color:var(--blue2);font-weight:500}
-.lb-table{background:rgba(255,255,255,.97);border:1px solid var(--gray);border-top:none;border-radius:0 0 var(--rl) var(--rl);overflow:hidden;box-shadow:0 4px 16px rgba(0,0,0,.12)}
-.lbrow{display:grid;grid-template-columns:32px 1fr 100px 60px 80px 60px;align-items:center;padding:10px 13px;border-bottom:1px solid var(--gray);cursor:pointer;transition:background .12s}
+/* leaderboard */
+.lb-wrap{border-radius:var(--rl);overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.1)}
+.lb-hdr{background:var(--navy);padding:11px 16px;border-bottom:2px solid var(--blue2);display:flex;align-items:center;justify-content:space-between}
+.lb-title{font-family:var(--fh);font-size:20px;font-weight:700;color:var(--white);text-transform:uppercase;letter-spacing:.06em}
+.lb-count{font-size:10px;color:var(--blue2);font-family:var(--fh)}
+.lb-table{background:var(--white);border:1px solid var(--gray);border-top:none}
+.lbrow{display:grid;grid-template-columns:36px 1fr 110px 65px 70px 65px;align-items:center;padding:10px 14px;border-bottom:1px solid var(--gray);cursor:pointer;transition:background .12s}
 .lbrow:last-child{border-bottom:none}
 .lbrow:hover:not(.lbhdr){background:var(--blue-l)}
-.lbrow.lbhdr{background:var(--navy2);cursor:default;padding:7px 13px}
-.lbrow.lbme{background:#eef3ff;border-left:3px solid var(--blue)}
-.lbrank{font-family:'Roboto Condensed',sans-serif;font-size:16px;font-weight:700;color:var(--gray2)}
-.lbrank.top1{color:#c99700}
-.lbrank.top2{color:#9aa0a8}
-.lbrank.top3{color:#a0522d}
-.lbhdr .lbrank,.lbhdr .lbname,.lbhdr .lbpick,.lbhdr .lbpts,.lbhdr .lbupset,.lbhdr .lbact2{font-size:9px;color:rgba(255,255,255,.5);font-weight:700;text-transform:uppercase;letter-spacing:.05em;font-family:'Roboto',sans-serif}
+.lbrow.lbhdr{background:var(--navy2);cursor:default;padding:7px 14px}
+.lbrow.lbme{background:#eff6ff;border-left:4px solid var(--blue2)}
+.lbrank{font-family:var(--fh);font-size:18px;font-weight:700;color:var(--gray2)}
+.gold{color:#d97706}.silver{color:#94a3b8}.bronze{color:#92400e}
+.lbhdr .lbrank,.lbhdr .lbname,.lbhdr .lbpick,.lbhdr .lbpts,.lbhdr .lbups,.lbhdr .lbact{font-size:9px;color:rgba(255,255,255,.45);font-weight:600;text-transform:uppercase;letter-spacing:.07em;font-family:var(--fh)}
 .lbname{font-size:12px;font-weight:500}
 .lbpick{font-size:10px;color:var(--muted)}
-.lbpts{font-size:13px;font-weight:700;text-align:right;color:var(--navy);font-family:'Roboto Condensed',sans-serif}
-.lbupset{font-size:10px;color:var(--muted);text-align:center}
-.lbhdr .lbpts,.lbhdr .lbupset{text-align:right}
-.lbact2{text-align:right}
-.vbtn{font-size:9px;padding:4px 9px;border:1px solid var(--blue);border-radius:3px;background:transparent;color:var(--blue);cursor:pointer;font-family:'Roboto Condensed',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.04em;transition:all .15s}
+.lbpts{font-family:var(--fh);font-size:15px;font-weight:700;text-align:right;color:var(--navy)}
+.lbups{font-size:10px;color:var(--muted);text-align:center}
+.lbhdr .lbpts,.lbhdr .lbups{text-align:right}
+.lbact{text-align:right}
+.vbtn{font-family:var(--fh);font-size:9px;padding:4px 10px;border:1.5px solid var(--blue);border-radius:3px;background:transparent;color:var(--blue);cursor:pointer;text-transform:uppercase;letter-spacing:.05em;transition:all .15s}
 .vbtn:hover{background:var(--blue);color:var(--white)}
-.lb-empty{padding:40px;text-align:center;color:var(--muted)}
-.viewing-banner{background:var(--blue);padding:8px 13px;font-size:11px;display:flex;align-items:center;justify-content:space-between;color:var(--white);border-radius:var(--rl) var(--rl) 0 0;font-weight:500}
-.back-link{color:var(--white);cursor:pointer;text-decoration:underline;font-weight:700}
-.status-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;padding:7px 11px;background:rgba(255,255,255,.95);border:1px solid var(--gray);border-radius:var(--r);box-shadow:0 1px 4px rgba(0,0,0,.06)}
-.status-txt{font-size:10px;color:var(--muted)}
-.refresh-btn{font-size:10px;padding:4px 11px;border:1px solid var(--blue);border-radius:3px;background:transparent;color:var(--blue);cursor:pointer;font-family:'Roboto Condensed',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.04em;transition:all .15s}
-.refresh-btn:hover{background:var(--blue);color:var(--white)}
-.legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:12px;padding:9px 12px;background:rgba(255,255,255,.95);border:1px solid var(--gray);border-radius:var(--r)}
-.li{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--muted);font-weight:500}
-.ls{width:10px;height:10px;border-radius:2px}
-.loading{padding:40px;text-align:center;color:var(--muted)}
+.lb-empty{padding:48px;text-align:center;color:var(--muted)}
+.lb-note{font-size:10px;color:var(--muted);margin-top:8px;padding:0 4px;font-family:var(--fh);letter-spacing:.04em}
+.viewing-banner{background:var(--blue);padding:9px 14px;font-size:11px;display:flex;align-items:center;justify-content:space-between;color:var(--white);border-radius:var(--rl) var(--rl) 0 0;font-weight:500;font-family:var(--fh);letter-spacing:.04em;text-transform:uppercase;margin-bottom:14px}
+.back-link{color:var(--white);cursor:pointer;text-decoration:underline;font-weight:600}
 </style>
 </head>
 <body>
 
-<!-- MOSAIC BG -->
-<div class="bg-mosaic" id="bgMosaic"></div>
-<div class="bg-overlay"></div>
-
-<!-- CONFIRM MODAL -->
+<!-- MODAL -->
 <div class="modal-overlay" id="modal" style="display:none">
   <div class="modal">
     <div class="modal-icon">🔒</div>
     <div class="modal-title">Lock Your Bracket?</div>
-    <div class="modal-body">Are you sure? Your selections will be <strong>permanently locked</strong> until the tournament concludes. You will not be able to make changes after this.</div>
+    <div class="modal-body">Are you sure? Your selections will be <strong>permanently locked</strong> until the tournament concludes. No changes can be made after saving.</div>
     <div class="modal-btns">
       <button class="modal-cancel" onclick="closeModal()">Cancel</button>
-      <button class="modal-confirm" onclick="confirmSave()">Yes, Lock It</button>
+      <button class="modal-confirm" onclick="confirmSave()">Yes, Lock It In</button>
     </div>
   </div>
 </div>
 
 <!-- AUTH -->
-<div id="auth-screen">
-  <div style="text-align:center">
-    <div class="auth-wordmark">Bracket <span>Battle</span></div>
-    <div class="auth-sub">2026 NCAA Men's Lacrosse Championship</div>
-    <div class="auth-divider"></div>
-  </div>
-  <div class="auth-card">
-    <div class="auth-card-hdr"><div class="auth-card-hdr-title">Player Access</div></div>
-    <div class="auth-tabs">
-      <div class="auth-tab active" id="tab-li" onclick="switchTab('login')">Sign In</div>
-      <div class="auth-tab" id="tab-re" onclick="switchTab('register')">Register</div>
-    </div>
-    <div class="auth-body">
-      <div id="login-form">
-        <label class="fl">Username</label>
-        <input class="fi" id="li-u" placeholder="your username" autocomplete="username"/>
-        <label class="fl">Password</label>
-        <input class="fi" id="li-p" type="password" placeholder="••••••••" autocomplete="current-password" style="margin-bottom:2px"/>
-        <button class="btn-primary" id="li-btn" onclick="doLogin()">Sign In</button>
-        <div class="form-err" id="li-err"></div>
+<div class="auth-screen" id="auth-screen">
+  <div class="auth-bg" id="authBg"></div>
+  <div class="auth-bg-overlay"></div>
+  <div class="auth-inner">
+    <div class="auth-eyebrow">2026 NCAA Men's Lacrosse Championship</div>
+    <div class="auth-wordmark">Bracket<br/><span>Battle</span></div>
+    <div class="auth-tag">Make your picks · Track results · Win bragging rights</div>
+    <div class="auth-rule"></div>
+    <div class="auth-card">
+      <div class="auth-card-hdr"><div class="auth-card-title">Player Access</div></div>
+      <div class="auth-tabs">
+        <div class="auth-tab active" id="tab-li" onclick="switchAuthTab('login')">Sign In</div>
+        <div class="auth-tab" id="tab-re" onclick="switchAuthTab('register')">Register</div>
       </div>
-      <div id="reg-form" style="display:none">
-        <label class="fl">Username</label>
-        <input class="fi" id="re-u" placeholder="letters, numbers, underscores"/>
-        <label class="fl">Password</label>
-        <input class="fi" id="re-p" type="password" placeholder="at least 6 characters"/>
-        <label class="fl">Confirm Password</label>
-        <input class="fi" id="re-p2" type="password" placeholder="same again" style="margin-bottom:2px"/>
-        <button class="btn-primary" id="re-btn" onclick="doRegister()">Create Account</button>
-        <div class="form-err" id="re-err"></div>
-        <div class="form-info" id="re-info"></div>
+      <div class="auth-body">
+        <div id="login-form">
+          <label class="fl">Username</label><input class="fi" id="li-u" placeholder="your username" autocomplete="username"/>
+          <label class="fl">Password</label><input class="fi" id="li-p" type="password" placeholder="••••••••" autocomplete="current-password" style="margin-bottom:2px"/>
+          <button class="btn-primary" id="li-btn" onclick="doLogin()">Sign In</button>
+          <div class="form-err" id="li-err"></div>
+        </div>
+        <div id="reg-form" style="display:none">
+          <label class="fl">Username</label><input class="fi" id="re-u" placeholder="letters, numbers, underscores"/>
+          <label class="fl">Password</label><input class="fi" id="re-p" type="password" placeholder="at least 6 characters"/>
+          <label class="fl">Confirm Password</label><input class="fi" id="re-p2" type="password" placeholder="same again" style="margin-bottom:2px"/>
+          <button class="btn-primary" id="re-btn" onclick="doRegister()">Create Account</button>
+          <div class="form-err" id="re-err"></div>
+          <div class="form-info" id="re-info"></div>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- MAIN APP -->
-<div id="shell" style="display:none;flex-direction:column">
-  <div class="topbar">
-    <span class="topbar-l">2026 NCAA DI Men's Lacrosse Championship</span>
-    <span class="topbar-r" id="hdr-user"></span>
-  </div>
-  <div class="header">
-    <div>
-      <div class="brand-name">Bracket <span>Battle</span></div>
-      <div class="brand-sub">Men's Lacrosse 2026</div>
+<!-- SHELL -->
+<div class="shell" id="shell">
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-photos" id="heroPhotos">
+      <!-- filled by JS as background-image divs -->
     </div>
-    <button class="btn-outline" onclick="doLogout()">Sign Out</button>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <div class="hero-eyebrow">2026 NCAA DI Men's Lacrosse Championship</div>
+      <div class="hero-title">Bracket <span>Battle</span></div>
+    </div>
+    <div class="hero-right">
+      <span class="hero-user" id="hdr-user"></span>
+      <button class="btn-so" onclick="doLogout()">Sign Out</button>
+    </div>
   </div>
-  <div class="nav">
-    <div class="nav-tab active" id="nav-my" onclick="showTab('bracket')">My Bracket</div>
-    <div class="nav-tab" id="nav-lb" onclick="showTab('leaderboard')">Leaderboard</div>
+
+  <!-- APP NAV -->
+  <div class="app-nav">
+    <div class="app-nav-tab active" id="anav-bracket" onclick="showAppTab('bracket')">My Bracket</div>
+    <div class="app-nav-tab" id="anav-leaderboard" onclick="showAppTab('leaderboard')">Leaderboard</div>
   </div>
+
   <div class="main">
-    <div id="tab-bracket"></div>
-    <div id="tab-leaderboard" style="display:none"></div>
+    <div id="apptab-bracket"></div>
+    <div id="apptab-leaderboard" style="display:none"></div>
   </div>
 </div>
 
 <script>
-var SUPA_URL='https://swjajduyuaxsucfligwo.supabase.co';
-var SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN3amFqZHV5dWF4c3VjZmxpZ3dvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxMzQzNTAsImV4cCI6MjA5MzcxMDM1MH0.ej8PyrfUSFN9Mj516XfjX3dI3UQEuOFuSHsGcKDkjEc';
+var SURL='https://swjajduyuaxsucfligwo.supabase.co';
+var SKEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN3amFqZHV5dWF4c3VjZmxpZ3dvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxMzQzNTAsImV4cCI6MjA5MzcxMDM1MH0.ej8PyrfUSFN9Mj516XfjX3dI3UQEuOFuSHsGcKDkjEc';
+var DEADLINE=new Date('2026-05-09T16:00:00Z');
+var CU=null,VU=null,LOCKED=false,cdTimer=null;
+var ACTIVE_ROUND='fr'; // which round tab is active
 
-var CU=null,VU=null,IS_LOCKED=false;
-var picks={qf1:null,qf2:null,qf3:null,qf4:null,sf1:null,sf2:null,fin:null};
+function blank(){return{fr1:null,fr2:null,fr3:null,fr4:null,fr5:null,fr6:null,fr7:null,fr8:null,qf1:null,qf2:null,qf3:null,qf4:null,sf1:null,sf2:null,fin:null};}
+var picks=blank();
+var viewPicks=null; // picks we're viewing (other user)
 
-// Team data: colors [primary bg hex, text hex], website, odds
+function past(){return new Date()>=DEADLINE;}
+
+// ── TEAM DATA ── mascot logo URLs from Wikimedia
 var T={
-  princeton:    {n:'Princeton',r:'13–1',s:'#1',i:'PRI',o:26,bg:'#FF6000',tc:'#fff',url:'https://goprincetontigers.com/sports/mens-lacrosse',logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Princeton_Tigers_logo.svg/80px-Princeton_Tigers_logo.svg.png'},
-  notredame:    {n:'Notre Dame',r:'12–2',s:'#2',i:'ND',o:18,bg:'#0C2340',tc:'#C99700',url:'https://und.com/sports/mens-lacrosse',logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Notre_Dame_Fighting_Irish_logo.svg/80px-Notre_Dame_Fighting_Irish_logo.svg.png'},
-  northcarolina:{n:'N. Carolina',r:'12–3',s:'#3',i:'UNC',o:15,bg:'#4B9CD3',tc:'#fff',url:'https://goheels.com/sports/mens-lacrosse',logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/North_Carolina_Tar_Heels_logo.svg/80px-North_Carolina_Tar_Heels_logo.svg.png'},
-  pennstate:    {n:'Penn State',r:'10–5',s:'#8',i:'PSU',o:9,bg:'#001E44',tc:'#fff',url:'https://gopsusports.com/sports/mens-lacrosse',logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/Penn_State_Nittany_Lions_logo.svg/80px-Penn_State_Nittany_Lions_logo.svg.png'},
-  cornell:      {n:'Cornell',r:'11–3',s:'#7',i:'COR',o:13,bg:'#B31B1B',tc:'#fff',url:'https://cornellbigred.com/sports/mens-lacrosse',logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Cornell_Big_Red_Athletics_logo.svg/80px-Cornell_Big_Red_Athletics_logo.svg.png'},
-  richmond:     {n:'Richmond',r:'13–2',s:'#4',i:'RIC',o:12,bg:'#002D6D',tc:'#CE1126',url:'https://richmondspiders.com/sports/mens-lacrosse',logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Richmond_Spiders_logo.svg/80px-Richmond_Spiders_logo.svg.png'},
-  virginia:     {n:'Virginia',r:'10–5',s:'#5',i:'UVA',o:11,bg:'#232D4B',tc:'#F84C1E',url:'https://virginiasports.com/sports/mens-lacrosse',logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Virginia_Cavaliers_sabre_logo.svg/80px-Virginia_Cavaliers_sabre_logo.svg.png'},
-  syracuse:     {n:'Syracuse',r:'11–4',s:'#6',i:'SYR',o:6,bg:'#F76900',tc:'#fff',url:'https://cuse.com/sports/mens-lacrosse',logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Syracuse_Orange_logo.svg/80px-Syracuse_Orange_logo.svg.png'}
+  princeton:    {n:'Princeton',  r:'13–1',s:'#1',o:26,url:'https://goprincetontigers.com/sports/mens-lacrosse',
+    mascot:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Princeton_Tigers_logo.svg/120px-Princeton_Tigers_logo.svg.png'},
+  notredame:    {n:'Notre Dame', r:'12–2',s:'#2',o:18,url:'https://und.com/sports/mens-lacrosse',
+    mascot:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Notre_Dame_Fighting_Irish_logo.svg/120px-Notre_Dame_Fighting_Irish_logo.svg.png'},
+  northcarolina:{n:'N. Carolina',r:'14–2',s:'#3',o:15,url:'https://goheels.com/sports/mens-lacrosse',
+    mascot:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/North_Carolina_Tar_Heels_logo.svg/120px-North_Carolina_Tar_Heels_logo.svg.png'},
+  richmond:     {n:'Richmond',   r:'14–2',s:'#4',o:12,url:'https://richmondspiders.com/sports/mens-lacrosse',
+    mascot:'https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Richmond_Spiders_logo.svg/120px-Richmond_Spiders_logo.svg.png'},
+  virginia:     {n:'Virginia',   r:'11–5',s:'#5',o:11,url:'https://virginiasports.com/sports/mlax',
+    mascot:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Virginia_Cavaliers_sabre_logo.svg/120px-Virginia_Cavaliers_sabre_logo.svg.png'},
+  syracuse:     {n:'Syracuse',   r:'12–4',s:'#6',o:6, url:'https://cuse.com/sports/mens-lacrosse',
+    mascot:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Syracuse_Orange_logo.svg/120px-Syracuse_Orange_logo.svg.png'},
+  cornell:      {n:'Cornell',    r:'13–2',s:'#7',o:13,url:'https://cornellbigred.com/sports/mens-lacrosse',
+    mascot:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Cornell_Big_Red_Athletics_logo.svg/120px-Cornell_Big_Red_Athletics_logo.svg.png'},
+  pennstate:    {n:'Penn State', r:'12–4',s:'#8',o:9, url:'https://gopsusports.com/sports/mens-lacrosse',
+    mascot:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/Penn_State_Nittany_Lions_logo.svg/120px-Penn_State_Nittany_Lions_logo.svg.png'},
+  marist:       {n:'Marist',     r:'—',s:'',o:1,url:'https://goredfoxes.com/sports/mens-lacrosse',
+    mascot:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Marist_Red_Foxes_logo.svg/120px-Marist_Red_Foxes_logo.svg.png'},
+  jacksonville: {n:'Jacksonville',r:'—',s:'',o:1,url:'https://judolphins.com/sports/mens-lacrosse',
+    mascot:null},
+  albany:       {n:'Albany',     r:'—',s:'',o:1,url:'https://ualbanyathletics.com/sports/mens-lacrosse',
+    mascot:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Albany_Great_Danes_logo.svg/120px-Albany_Great_Danes_logo.svg.png'},
+  army:         {n:'Army',       r:'—',s:'',o:1,url:'https://goarmywestpoint.com/sports/mens-lacrosse',
+    mascot:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Army_Black_Knights_logo.svg/120px-Army_Black_Knights_logo.svg.png'},
+  johnshopkins: {n:'Johns Hopkins',r:'—',s:'',o:2,url:'https://hopkinssports.com/sports/mens-lacrosse',
+    mascot:'https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Johns_Hopkins_Blue_Jays_logo.svg/120px-Johns_Hopkins_Blue_Jays_logo.svg.png'},
+  duke:         {n:'Duke',       r:'—',s:'',o:2,url:'https://goduke.com/sports/mens-lacrosse',
+    mascot:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Duke_Blue_Devils_logo.svg/120px-Duke_Blue_Devils_logo.svg.png'},
+  georgetown:   {n:'Georgetown', r:'—',s:'',o:1,url:'https://guhoyas.com/sports/mens-lacrosse',
+    mascot:'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Georgetown_Hoyas_logo.svg/120px-Georgetown_Hoyas_logo.svg.png'},
+  yale:         {n:'Yale',       r:'—',s:'',o:1,url:'https://yalebulldogs.com/sports/mens-lacrosse',
+    mascot:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Yale_Bulldogs_logo.svg/120px-Yale_Bulldogs_logo.svg.png'}
 };
 
-var QF=[
-  {id:'qf1',a:'princeton',b:'notredame',loc:'Hofstra, Hempstead NY',time:'Sat May 16 · 12pm ET',result:'princeton'},
-  {id:'qf2',a:'northcarolina',b:'pennstate',loc:'Hofstra, Hempstead NY',time:'Sat May 16 · 3pm ET',result:null},
-  {id:'qf3',a:'cornell',b:'richmond',loc:'Delaware, Newark DE',time:'Sun May 17 · 12pm ET',result:null},
-  {id:'qf4',a:'virginia',b:'syracuse',loc:'Delaware, Newark DE',time:'Sun May 17 · 3pm ET',result:null}
+var FR=[
+  {id:'fr1',a:'princeton',    b:'marist',       loc:'Princeton, NJ',        time:'Sun May 10 · 2:30pm',result:null},
+  {id:'fr2',a:'notredame',    b:'jacksonville', loc:'Notre Dame, IN',        time:'Sun May 10 · 12pm',  result:null},
+  {id:'fr3',a:'northcarolina',b:'albany',       loc:'Chapel Hill, NC',      time:'Sat May 9 · 12pm',   result:null},
+  {id:'fr4',a:'pennstate',    b:'army',         loc:'University Park, PA',  time:'Sat May 9 · 2:30pm', result:null},
+  {id:'fr5',a:'cornell',      b:'johnshopkins', loc:'Ithaca, NY',            time:'Sat May 9 · 5pm',    result:null},
+  {id:'fr6',a:'richmond',     b:'duke',         loc:'Richmond, VA',         time:'Sat May 9 · 7:30pm', result:null},
+  {id:'fr7',a:'virginia',     b:'georgetown',   loc:'Charlottesville, VA',  time:'Sun May 10 · 7:30pm',result:null},
+  {id:'fr8',a:'syracuse',     b:'yale',         loc:'Syracuse, NY',         time:'Sun May 10 · 5pm',   result:null}
 ];
 
-// Mosaic background images — free-use lacrosse action from Wikimedia
-var BG_IMGS=[
-  'https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Lacrosse_player.jpg/400px-Lacrosse_player.jpg',
-  'https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/US_Navy_050416-N-3093M-001_U.S._Naval_Academy_midfielder_Brad_Levy_%28left%29_goes_one-on-one_with_an_opponent_from_the_United_States_Military_Academy_in_a_lacrosse_match.jpg/400px-thumbnail.jpg',
+var QF=[
+  {id:'qf1',frA:'fr1',frB:'fr2',loc:'Hofstra Univ., Hempstead NY',   time:'Sat May 16 · ESPNU',result:null},
+  {id:'qf2',frA:'fr3',frB:'fr4',loc:'Hofstra Univ., Hempstead NY',   time:'Sat May 16 · ESPNU',result:null},
+  {id:'qf3',frA:'fr5',frB:'fr6',loc:'Univ. of Delaware, Newark DE',  time:'Sun May 17 · ESPNU',result:null},
+  {id:'qf4',frA:'fr7',frB:'fr8',loc:'Univ. of Delaware, Newark DE',  time:'Sun May 17 · ESPNU',result:null}
+];
+
+var SF=[
+  {id:'sf1',qfA:'qf1',qfB:'qf2',loc:'Scott Stadium, Charlottesville VA',time:'May 23 · 12pm ET · ESPN2',result:null},
+  {id:'sf2',qfA:'qf3',qfB:'qf4',loc:'Scott Stadium, Charlottesville VA',time:'May 23 · 3pm ET · ESPN2', result:null}
+];
+
+var FIN={id:'fin',sfA:'sf1',sfB:'sf2',loc:'Scott Stadium, Charlottesville VA',time:'May 25 · 1pm ET · ESPN',result:null};
+
+// ── PHOTOS ──
+var HERO_PHOTOS=[
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/2019_Patriot_League_men%27s_lacrosse_tournament_-_final.jpg/800px-2019_Patriot_League_men%27s_lacrosse_tournament_-_final.jpg',
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Lacrosse_at_the_2010_World_Lacrosse_Championship_14.jpg/800px-Lacrosse_at_the_2010_World_Lacrosse_Championship_14.jpg',
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Lacrosse_at_the_2010_World_Lacrosse_Championship_07.jpg/800px-Lacrosse_at_the_2010_World_Lacrosse_Championship_07.jpg',
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Lacrosse_at_the_2010_World_Lacrosse_Championship_09.jpg/800px-Lacrosse_at_the_2010_World_Lacrosse_Championship_09.jpg',
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Lacrosse_4_bg_042106.jpg/800px-Lacrosse_4_bg_042106.jpg',
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Lacrosse_game_2.jpg/800px-Lacrosse_game_2.jpg'
+];
+var BG_PHOTOS=[
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Lacrosse_at_the_2010_World_Lacrosse_Championship_06.jpg/400px-Lacrosse_at_the_2010_World_Lacrosse_Championship_06.jpg',
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Lacrosse_at_the_2010_World_Lacrosse_Championship_05.jpg/400px-Lacrosse_at_the_2010_World_Lacrosse_Championship_05.jpg',
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/Lacrosse_at_the_2010_World_Lacrosse_Championship_03.jpg/400px-Lacrosse_at_the_2010_World_Lacrosse_Championship_03.jpg',
   'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Lacrosseplay.JPG/400px-Lacrosseplay.JPG',
-  'https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Lacrosse_4_bg_042106.jpg/400px-Lacrosse_4_bg_042106.jpg',
-  'https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Lacrosse_game_2.jpg/400px-Lacrosse_game_2.jpg',
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Lacrosse_player.jpg/400px-Lacrosse_player.jpg',
   'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/2019_Patriot_League_men%27s_lacrosse_tournament_-_final.jpg/400px-2019_Patriot_League_men%27s_lacrosse_tournament_-_final.jpg',
   'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Lacrosse_at_the_2010_World_Lacrosse_Championship_14.jpg/400px-Lacrosse_at_the_2010_World_Lacrosse_Championship_14.jpg',
   'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Lacrosse_at_the_2010_World_Lacrosse_Championship_07.jpg/400px-Lacrosse_at_the_2010_World_Lacrosse_Championship_07.jpg',
   'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Lacrosse_at_the_2010_World_Lacrosse_Championship_09.jpg/400px-Lacrosse_at_the_2010_World_Lacrosse_Championship_09.jpg',
-  'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Lacrosse_at_the_2010_World_Lacrosse_Championship_06.jpg/400px-Lacrosse_at_the_2010_World_Lacrosse_Championship_06.jpg',
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Lacrosse_4_bg_042106.jpg/400px-Lacrosse_4_bg_042106.jpg',
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/US_Navy_050416-N-3093M-001_U.S._Naval_Academy_midfielder_Brad_Levy_%28left%29_goes_one-on-one_with_an_opponent_from_the_United_States_Military_Academy_in_a_lacrosse_match.jpg/400px-thumbnail.jpg',
   'https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Lacrosse_at_the_2010_World_Lacrosse_Championship_05.jpg/400px-Lacrosse_at_the_2010_World_Lacrosse_Championship_05.jpg',
-  'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/Lacrosse_at_the_2010_World_Lacrosse_Championship_03.jpg/400px-Lacrosse_at_the_2010_World_Lacrosse_Championship_03.jpg'
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Lacrosse_game_2.jpg/400px-Lacrosse_game_2.jpg',
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/Lacrosse_at_the_2010_World_Lacrosse_Championship_03.jpg/400px-Lacrosse_at_the_2010_World_Lacrosse_Championship_03.jpg',
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Lacrosse_player.jpg/400px-Lacrosse_player.jpg'
 ];
 
-function buildMosaic(){
-  var m=document.getElementById('bgMosaic');
-  BG_IMGS.forEach(function(src){
-    var img=document.createElement('img');
-    img.src=src;img.alt='';img.loading='lazy';
-    img.onerror=function(){this.style.display='none';};
-    m.appendChild(img);
+(function(){
+  // Hero — CSS background-image divs, preloaded with referrerpolicy="no-referrer"
+  // Wikimedia blocks hotlinking via Referer header; suppressing it allows images to load
+  var hp=document.getElementById('heroPhotos');
+  HERO_PHOTOS.forEach(function(url){
+    var d=document.createElement('div');
+    d.className='hero-photo';
+    var img=new Image();
+    img.referrerPolicy='no-referrer';
+    img.onload=function(){d.style.backgroundImage='url("'+url+'")';};
+    img.onerror=function(){d.style.background='var(--navy2)';};
+    img.src=url;
+    hp.appendChild(d);
   });
-}
-buildMosaic();
+  // Auth bg — img tags with referrerpolicy
+  var ab=document.getElementById('authBg');
+  BG_PHOTOS.slice(0,15).forEach(function(url){
+    var i=document.createElement('img');
+    i.referrerPolicy='no-referrer';
+    i.src=url;i.alt='';i.loading='lazy';
+    i.onerror=function(){this.style.background='#1e3560';};
+    ab.appendChild(i);
+  });
+})();
 
-async function h256(s){
-  try{var b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('');}
-  catch(e){var h=0;for(var i=0;i<s.length;i++){h=((h<<5)-h)+s.charCodeAt(i);h|=0;}return 'f'+Math.abs(h).toString(16);}
+// ── COUNTDOWN ──
+function startCD(){
+  clearInterval(cdTimer);
+  if(past())return;
+  cdTimer=setInterval(function(){
+    var el=document.getElementById('cd-val');if(!el){clearInterval(cdTimer);return;}
+    var d=DEADLINE-new Date();if(d<=0){clearInterval(cdTimer);redraw();return;}
+    var h=Math.floor(d/3600000),m=Math.floor((d%3600000)/60000),s=Math.floor((d%60000)/1000);
+    el.textContent=h+'h '+String(m).padStart(2,'0')+'m '+String(s).padStart(2,'0')+'s';
+  },1000);
 }
 
-async function sbFetch(path,method,body){
-  var opts={method:method||'GET',headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Content-Type':'application/json','Prefer':'return=representation'}};
-  if(body)opts.body=JSON.stringify(body);
-  var res=await fetch(SUPA_URL+'/rest/v1/'+path,opts);
-  var json=await res.json().catch(function(){return null;});
-  return{ok:res.ok,status:res.status,data:json};
-}
+// ── SUPABASE ──
+async function h256(s){try{var b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('');}catch(e){var h=0;for(var i=0;i<s.length;i++){h=((h<<5)-h)+s.charCodeAt(i);h|=0;}return 'f'+Math.abs(h).toString(16);}}
+async function sb(path,method,body){var o={method:method||'GET',headers:{'apikey':SKEY,'Authorization':'Bearer '+SKEY,'Content-Type':'application/json','Prefer':'return=representation'}};if(body)o.body=JSON.stringify(body);var r=await fetch(SURL+'/rest/v1/'+path,o);var j=await r.json().catch(function(){return null;});return{ok:r.ok,data:j};}
+async function dbUser(u){var r=await sb('users?username=eq.'+encodeURIComponent(u)+'&select=username,password_hash');return(r.ok&&r.data&&r.data.length)?r.data[0]:null;}
+async function dbCreate(u,h){return(await sb('users','POST',{username:u,password_hash:h})).ok;}
+async function dbGetPicks(u){var r=await sb('picks?username=eq.'+encodeURIComponent(u)+'&select=picks,locked');return(r.ok&&r.data&&r.data.length)?r.data[0]:null;}
+async function dbSave(u,p,lock){var c=await sb('picks?username=eq.'+encodeURIComponent(u),'GET');var pl={picks:p,updated_at:new Date().toISOString()};if(lock)pl.locked=true;if(c.ok&&c.data&&c.data.length){return(await sb('picks?username=eq.'+encodeURIComponent(u),'PATCH',pl)).ok;}else{pl.username=u;return(await sb('picks','POST',pl)).ok;}}
+async function dbAll(){var r=await sb('picks?select=username,picks,locked');return(r.ok&&r.data)?r.data:[];}
 
-async function dbGetUser(u){var r=await sbFetch('users?username=eq.'+encodeURIComponent(u)+'&select=username,password_hash');return(r.ok&&r.data&&r.data.length)?r.data[0]:null;}
-async function dbCreateUser(u,h){var r=await sbFetch('users','POST',{username:u,password_hash:h});return r.ok;}
-async function dbGetPicks(u){var r=await sbFetch('picks?username=eq.'+encodeURIComponent(u)+'&select=picks,locked');return(r.ok&&r.data&&r.data.length)?r.data[0]:null;}
-async function dbSavePicks(u,p,locked){
-  var check=await sbFetch('picks?username=eq.'+encodeURIComponent(u),'GET');
-  var payload={picks:p,updated_at:new Date().toISOString()};
-  if(locked)payload.locked=true;
-  if(check.ok&&check.data&&check.data.length){
-    var up=await sbFetch('picks?username=eq.'+encodeURIComponent(u),'PATCH',payload);return up.ok;
-  }else{
-    payload.username=u;
-    var ins=await sbFetch('picks','POST',payload);return ins.ok;
-  }
-}
-async function dbGetAllPicks(){var r=await sbFetch('picks?select=username,picks,locked');return(r.ok&&r.data)?r.data:[];}
-
-function switchTab(t){
-  var li=t==='login';
-  document.getElementById('login-form').style.display=li?'':'none';
-  document.getElementById('reg-form').style.display=li?'none':'';
-  document.getElementById('tab-li').classList.toggle('active',li);
-  document.getElementById('tab-re').classList.toggle('active',!li);
-}
-function setBusy(id,busy,label){var b=document.getElementById(id);if(b){b.disabled=busy;b.textContent=busy?'Please wait…':label;}}
+// ── AUTH ──
+function switchAuthTab(t){var li=t==='login';document.getElementById('login-form').style.display=li?'':'none';document.getElementById('reg-form').style.display=li?'none':'';document.getElementById('tab-li').classList.toggle('active',li);document.getElementById('tab-re').classList.toggle('active',!li);}
+function busy(id,b,lbl){var el=document.getElementById(id);if(el){el.disabled=b;el.textContent=b?'Please wait…':lbl;}}
 
 async function doLogin(){
-  var u=document.getElementById('li-u').value.trim().toLowerCase();
-  var p=document.getElementById('li-p').value;
-  var err=document.getElementById('li-err');err.textContent='';
-  if(!u||!p){err.textContent='Please fill in both fields.';return;}
-  setBusy('li-btn',true,'Sign In');
-  try{
-    var user=await dbGetUser(u);
-    if(!user){err.textContent='Username not found.';return;}
-    var h=await h256(p);
-    if(user.password_hash!==h){err.textContent='Incorrect password.';return;}
-    CU=u;
-    var saved=await dbGetPicks(u);
-    if(saved&&saved.picks)picks=Object.assign({qf1:null,qf2:null,qf3:null,qf4:null,sf1:null,sf2:null,fin:null},saved.picks);
-    IS_LOCKED=!!(saved&&saved.locked);
-    launch();
-  }catch(e){err.textContent='Connection error: '+e.message;}
-  finally{setBusy('li-btn',false,'Sign In');}
+  var u=document.getElementById('li-u').value.trim().toLowerCase(),p=document.getElementById('li-p').value,err=document.getElementById('li-err');
+  err.textContent='';if(!u||!p){err.textContent='Please fill in both fields.';return;}
+  busy('li-btn',true,'Sign In');
+  try{var user=await dbUser(u);if(!user){err.textContent='Username not found.';return;}var h=await h256(p);if(user.password_hash!==h){err.textContent='Incorrect password.';return;}CU=u;var sv=await dbGetPicks(u);LOCKED=!!(sv&&sv.locked);picks=sv&&sv.picks?Object.assign(blank(),sv.picks):blank();launch();}
+  catch(e){err.textContent='Connection error: '+e.message;}
+  finally{busy('li-btn',false,'Sign In');}
 }
 
 async function doRegister(){
-  var u=document.getElementById('re-u').value.trim().toLowerCase().replace(/[^a-z0-9_]/g,'');
-  var p=document.getElementById('re-p').value;
-  var p2=document.getElementById('re-p2').value;
-  var err=document.getElementById('re-err');var info=document.getElementById('re-info');
-  err.textContent='';info.textContent='';
-  if(u.length<3){err.textContent='Username needs 3+ characters (letters, numbers, underscores).';return;}
-  if(p.length<6){err.textContent='Password must be at least 6 characters.';return;}
-  if(p!==p2){err.textContent='Passwords do not match.';return;}
-  setBusy('re-btn',true,'Create Account');info.textContent='Creating your account…';
-  try{
-    var existing=await dbGetUser(u);
-    if(existing){err.textContent='Username already taken — try another.';info.textContent='';return;}
-    var h=await h256(p);
-    var ok=await dbCreateUser(u,h);
-    if(!ok){err.textContent='Could not create account. Please try again.';info.textContent='';return;}
-    info.textContent='Account created! Signing you in…';
-    CU=u;IS_LOCKED=false;
-    picks={qf1:null,qf2:null,qf3:null,qf4:null,sf1:null,sf2:null,fin:null};
-    setTimeout(launch,600);
-  }catch(e){err.textContent='Connection error: '+e.message;info.textContent='';}
-  finally{setBusy('re-btn',false,'Create Account');}
+  var u=document.getElementById('re-u').value.trim().toLowerCase().replace(/[^a-z0-9_]/g,''),p=document.getElementById('re-p').value,p2=document.getElementById('re-p2').value;
+  var err=document.getElementById('re-err'),info=document.getElementById('re-info');err.textContent='';info.textContent='';
+  if(u.length<3){err.textContent='Username needs 3+ characters.';return;}if(p.length<6){err.textContent='Password must be 6+ characters.';return;}if(p!==p2){err.textContent='Passwords do not match.';return;}
+  busy('re-btn',true,'Create Account');info.textContent='Creating your account…';
+  try{var ex=await dbUser(u);if(ex){err.textContent='Username taken — try another.';info.textContent='';return;}var h=await h256(p);var ok=await dbCreate(u,h);if(!ok){err.textContent='Could not create account.';info.textContent='';return;}info.textContent='Account created! Signing you in…';CU=u;LOCKED=false;picks=blank();setTimeout(launch,600);}
+  catch(e){err.textContent='Connection error: '+e.message;info.textContent='';}
+  finally{busy('re-btn',false,'Create Account');}
 }
 
-function doLogout(){
-  CU=null;VU=null;IS_LOCKED=false;
-  picks={qf1:null,qf2:null,qf3:null,qf4:null,sf1:null,sf2:null,fin:null};
-  document.getElementById('auth-screen').style.display='flex';
-  document.getElementById('shell').style.display='none';
-  document.getElementById('li-err').textContent='';
-  document.getElementById('li-u').value='';document.getElementById('li-p').value='';
+function doLogout(){CU=null;VU=null;LOCKED=false;picks=blank();viewPicks=null;clearInterval(cdTimer);ACTIVE_ROUND='fr';document.getElementById('auth-screen').style.display='flex';document.getElementById('shell').style.display='none';document.getElementById('li-err').textContent='';document.getElementById('li-u').value='';document.getElementById('li-p').value='';}
+
+function launch(){document.getElementById('auth-screen').style.display='none';document.getElementById('shell').style.display='flex';document.getElementById('hdr-user').textContent=CU+(LOCKED?' 🔒':'');ACTIVE_ROUND='fr';showAppTab('bracket');}
+
+function showAppTab(t){
+  document.getElementById('apptab-bracket').style.display=t==='bracket'?'':'none';
+  document.getElementById('apptab-leaderboard').style.display=t==='leaderboard'?'':'none';
+  document.getElementById('anav-bracket').classList.toggle('active',t==='bracket');
+  document.getElementById('anav-leaderboard').classList.toggle('active',t==='leaderboard');
+  if(t==='bracket')redraw();
+  if(t==='leaderboard')renderLB();
 }
 
-function launch(){
-  document.getElementById('auth-screen').style.display='none';
-  document.getElementById('shell').style.display='flex';
-  document.getElementById('hdr-user').textContent=CU+(IS_LOCKED?' 🔒':'');
-  showTab('bracket');
-}
+// ── UNLOCK LOGIC ──
+// FR always open. QF unlocks when all 8 FR picks made. SF when all 4 QF. Final when both SF.
+function frComplete(p){return FR.every(function(g){return p[g.id]!==null;});}
+function qfComplete(p){return QF.every(function(g){return p[g.id]!==null;});}
+function sfComplete(p){return SF.every(function(g){return p[g.id]!==null;});}
+function frCount(p){return FR.filter(function(g){return p[g.id]!==null;}).length;}
+function qfCount(p){return QF.filter(function(g){return p[g.id]!==null;}).length;}
+function sfCount(p){return SF.filter(function(g){return p[g.id]!==null;}).length;}
 
-function showTab(t){
-  document.getElementById('tab-bracket').style.display=t==='bracket'?'':'none';
-  document.getElementById('tab-leaderboard').style.display=t==='leaderboard'?'':'none';
-  document.getElementById('nav-my').classList.toggle('active',t==='bracket');
-  document.getElementById('nav-lb').classList.toggle('active',t==='leaderboard');
-  if(t==='bracket')renderBracket(picks,IS_LOCKED||false,null);
-  if(t==='leaderboard')renderLeaderboard();
-}
-
+// ── ODDS BAR ──
 function oddsBar(k1,k2){
   if(!k1||!k2||!T[k1]||!T[k2])return'';
   var o1=T[k1].o,o2=T[k2].o,tot=o1+o2,p1=Math.round(o1/tot*100),p2=100-p1;
   var n1=T[k1].n.split(' ').slice(-1)[0],n2=T[k2].n.split(' ').slice(-1)[0];
-  return'<div class="odds-wrap"><div class="odds-row"><span class="odds-lbl">'+n1+' '+p1+'%</span><span class="odds-lbl">'+n2+' '+p2+'%</span></div><div class="odds-bar"><div class="odds-a" style="width:'+p1+'%"></div><div class="odds-b" style="width:'+p2+'%"></div></div><div class="odds-src">Championship futures · implied win probability</div></div>';
+  return'<div class="card-odds"><div class="odds-row"><span class="odds-lbl">'+n1+' '+p1+'%</span><span class="odds-lbl">'+n2+' '+p2+'%</span></div><div class="odds-track"><div class="odds-a" style="width:'+p1+'%"></div><div class="odds-b" style="width:'+p2+'%"></div></div><div class="odds-src">Championship futures · implied win probability</div></div>';
 }
 
-function teamSlot(gid,key,result,myPick,ro){
-  if(!key){
-    return'<div class="team nopick" style="background:#f8f9fa"><div class="tlogo" style="font-size:6px;opacity:.5">TBD</div><span class="tseed"></span><div class="tn-wrap"><span class="tn" style="color:#aaa;font-weight:400">To be determined</span></div></div>';
+// ── TEAM ROW ──
+function teamRow(gameId, teamKey, myPick, result, lk){
+  var isW=result===teamKey;
+  var isE=result&&result!==teamKey;
+  var isPick=myPick===teamKey;
+  var td=T[teamKey];
+  var cls='team-row';
+  if(!lk)cls+=' pickable';
+  if(isPick)cls+=' is-pick';
+  if(isW)cls+=' is-winner';
+  if(isE)cls+=' is-elim';
+  if(lk)cls+=' is-locked';
+  var oc=lk?'':'onclick="doPick(\''+gameId+'\',\''+teamKey+'\')"';
+  var mascotEl=td.mascot
+    ?'<img class="t-mascot" src="'+td.mascot+'" referrerpolicy="no-referrer" alt="'+td.n+' mascot" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">'
+     +'<div class="t-mascot-ph" style="display:none">'+td.n.substring(0,3).toUpperCase()+'</div>'
+    :'<div class="t-mascot-ph">'+td.n.substring(0,3).toUpperCase()+'</div>';
+  return'<div class="'+cls+'" '+oc+' title="'+(lk?'Picks are locked':'Pick '+td.n+'  to advance')+'">'
+    +mascotEl
+    +(td.s?'<span class="t-seed">'+td.s+'</span>':'')
+    +'<div class="t-info"><a class="t-name" href="'+td.url+'" target="_blank" rel="noopener" onclick="event.stopPropagation()">'+td.n+'</a><div class="t-rec">'+td.r+'</div></div>'
+    +(isW?'<div class="t-adv">Adv</div>':'')
+    +(lk?'<div class="t-lock-icon">🔒</div>':'')
+    +(isPick&&!lk?'<button class="t-clear" onclick="event.stopPropagation();clearOnly(\''+gameId+'\')" title="Remove this pick">✕</button>':'')
+    +'</div>';
+}
+
+// Empty slot row
+function emptyRow(hint){
+  return'<div class="team-row is-empty">'
+    +'<div class="t-empty-icon">⬡</div>'
+    +'<div class="t-info"><div class="t-empty-label">Pick a winner</div><div class="t-empty-hint">'+(hint||'Select a team above')+'</div></div>'
+    +'</div>';
+}
+function emptyLockedRow(){
+  return'<div class="team-row is-empty-locked">'
+    +'<div class="t-mascot-ph" style="opacity:.3">TBD</div>'
+    +'<div class="t-info"><div class="t-name" style="color:#aaa;font-size:11px;font-family:var(--fb)">To be determined</div></div>'
+    +'</div>';
+}
+
+// ── BUILD CARD ──
+function buildCard(gameId, teamA, teamB, loc, time, myPick, result, lk, advLabel){
+  var hasPick=myPick&&(myPick===teamA||myPick===teamB);
+  var needsPick=!lk&&teamA&&teamB&&!myPick;
+  var unavail=!teamA||!teamB;
+  var cls='card';
+  if(hasPick)cls+=' has-pick';
+  else if(needsPick)cls+=' needs-pick';
+  else if(unavail&&!lk)cls+=' unavailable';
+  var showOdds=teamA&&teamB&&T[teamA]&&T[teamB];
+  return'<div class="'+cls+'">'
+    +'<div class="card-header"><span class="card-loc">📍 '+loc+'</span><span class="card-time">'+time+'</span></div>'
+    +(teamA?teamRow(gameId,teamA,myPick,result,lk||unavail):lk?emptyLockedRow():emptyRow(''))
+    +(teamB?teamRow(gameId,teamB,myPick,result,lk||unavail):lk?emptyLockedRow():emptyRow(''))
+    +(showOdds?oddsBar(teamA,teamB):'')
+    +(advLabel?'<div class="card-adv">→ Winner advances to '+advLabel+'</div>':'')
+    +'</div>';
+}
+
+// ── PICK / CLEAR ──
+function doPick(gameId, teamKey){
+  if(VU||LOCKED||past())return;
+  picks[gameId]=teamKey;
+  redraw();
+}
+
+// Clear ONLY this slot — no cascade
+function clearOnly(gameId){
+  if(VU||LOCKED||past())return;
+  picks[gameId]=null;
+  redraw();
+}
+
+// ── DEADLINE BANNER ──
+function deadlineBanner(){
+  if(past())return'<div class="deadline-banner expired"><div class="deadline-icon">🚫</div><div class="deadline-text"><strong>Submissions Closed</strong>The May 9 · 12:00 PM ET deadline has passed. Picks can no longer be saved.</div></div>';
+  var d=DEADLINE-new Date(),h=Math.floor(d/3600000),m=Math.floor((d%3600000)/60000),s=Math.floor((d%60000)/1000);
+  return'<div class="deadline-banner live"><div class="deadline-icon">⏰</div><div class="deadline-text"><strong>Picks Lock Friday May 9 at 12:00 PM ET</strong>Submit your bracket before the first game faces off.</div><div class="deadline-cd"><span id="cd-val">'+h+'h '+String(m).padStart(2,'0')+'m '+String(s).padStart(2,'0')+'s</span></div></div>';
+}
+
+// ── ROUND TABS ──
+function roundTabsHTML(p, lk){
+  var frDone=frComplete(p),qfDone=qfComplete(p),sfDone=sfComplete(p);
+  var qfUnlocked=frDone,sfUnlocked=frDone&&qfDone,finUnlocked=frDone&&qfDone&&sfDone;
+
+  function tab(id,label,unlocked,count,total){
+    var isActive=ACTIVE_ROUND===id;
+    var cls='round-tab';
+    if(isActive)cls+=' active';
+    else if(unlocked||id==='fr')cls+=' unlocked';
+    else cls+=' locked';
+    var badge=count>0&&count<total?'<span class="tab-badge">'+count+'/'+total+'</span>':'';
+    if(count===total&&total>0)badge='<span class="tab-badge">✓ Done</span>';
+    var lockIcon=(!unlocked&&id!=='fr')?'<span class="tab-lock">🔒</span>':'';
+    var onclick=(unlocked||id==='fr')&&!isActive?'onclick="switchRound(\''+id+'\')"':'';
+    return'<div class="'+cls+'" '+onclick+'>'+label+badge+lockIcon+'</div>';
   }
-  var td=T[key];if(!td)return'';
-  var isW=result===key,isE=result&&result!==key,isP=myPick===key;
-  var cls=['team'];
-  if(isW)cls.push('winner');if(isE)cls.push('elim');if(isP)cls.push('mypick');
-  if(ro)cls.push('locked-team');
-  var oc=ro?'':'onclick="doPick(\''+gid+'\',\''+key+'\')"';
 
-  // team color background (subtle tint)
-  var bgColor=td.bg;
-  var bgStyle='background:'+bgColor+'22'; // ~13% opacity tint
-
-  // tooltip: click to pick, or locked
-  var tipText=ro?'Bracket locked':'Click to pick '+td.n+' to advance';
-
-  return'<div class="'+cls.join(' ')+'" '+oc+' style="'+bgStyle+'" title="'+tipText+'">'
-    +'<div class="tlogo" id="lg-'+gid+'-'+key+'">'+td.i+'</div>'
-    +'<span class="tseed">'+td.s+'</span>'
-    +'<div class="tn-wrap">'
-    +'<a class="tn" href="'+td.url+'" target="_blank" rel="noopener" onclick="event.stopPropagation()">'+td.n+'</a>'
-    +'<div class="tr">'+td.r+'</div>'
-    +'</div>'
-    +(isW&&result?'<div class="chip">Final</div>':'')
-    +(isP&&!ro?'<div class="pdot"></div>':'')
-    +(ro?'<div class="lock-icon">🔒</div>':'')
+  return'<div class="round-tabs">'
+    +tab('fr','First Round',true,frCount(p),8)
+    +tab('qf','Quarterfinals',qfUnlocked,qfCount(p),4)
+    +tab('sf','Semifinals',sfUnlocked,sfCount(p),2)
+    +tab('fin','Championship',finUnlocked,p.fin?1:0,1)
     +'</div>';
 }
 
-function matchCard(gid,k1,k2,loc,time,result,myPick,ro,sfLabel){
-  var hp=myPick&&(myPick===k1||myPick===k2);
-  var sfHint=sfLabel?'<div style="font-size:8px;color:var(--blue2);text-align:center;padding:3px;background:var(--navy2);font-family:\'Roboto Condensed\',sans-serif;font-weight:700;letter-spacing:.04em;text-transform:uppercase">→ Winner advances to '+sfLabel+'</div>':'';
-  return'<div class="matchup'+(hp?' picked':'')+(ro?' locked':'')+'">'
-    +'<div class="game-bar"><span class="game-loc">📍 '+loc+'</span><span class="game-time">🕐 '+time+'</span></div>'
-    +teamSlot(gid,k1,result,myPick,ro)
-    +teamSlot(gid,k2,result,myPick,ro)
-    +oddsBar(k1,k2)
-    +sfHint
-    +'</div>';
-}
+function switchRound(r){ACTIVE_ROUND=r;redraw();}
 
-function getSF(sfId,p){var m={sf1:['qf1','qf2'],sf2:['qf3','qf4']};return m[sfId].map(function(q){return p[q]||null;});}
+// ── MAIN RENDER ──
+function redraw(ro, vu){
+  ro=ro||false;vu=vu||null;
+  var p=vu?viewPicks:picks;
+  if(!p)p=blank();
+  var lk=ro||LOCKED||past();
+  var c=document.getElementById('apptab-bracket');
 
-function renderBracket(p,ro,vu){
-  var c=document.getElementById('tab-bracket');
-  var sf1t=getSF('sf1',p),sf2t=getSF('sf2',p),ft=[p.sf1||null,p.sf2||null];
+  var bannerH=vu?'<div class="viewing-banner">👤 Viewing <strong style="margin:0 4px">'+vu+'</strong>\'s bracket<span class="back-link" onclick="backToMine()">← Back to mine</span></div>':'';
 
-  var earlyHTML='<div class="early-panel">'
-    +'<div class="early-hdr" onclick="toggleEarly()"><span class="early-title">📋 Opening &amp; First Round — Who Advanced</span><span class="early-chev" id="ech">▾ Show</span></div>'
-    +'<div class="early-body" id="ebody" style="display:none">'
-    +'<div class="elabel" style="border-top:none;padding-top:0">Opening Round · May 6</div>'
-    +'<div class="erow"><span class="ew">Stony Brook<span class="adv">Adv</span></span><span class="el2">def. Marist</span><span class="esc">11–8</span></div>'
-    +'<div class="erow"><span class="ew">Jacksonville<span class="adv">Adv</span></span><span class="el2">def. Robert Morris</span><span class="esc">9–7</span></div>'
-    +'<div class="elabel">First Round · May 9–10</div>'
-    +'<div class="erow"><span class="ew">Princeton<span class="adv">Adv</span></span><span class="el2">def. Marist</span><span class="esc">14–5</span></div>'
-    +'<div class="erow"><span class="ew">Notre Dame<span class="adv">Adv</span></span><span class="el2">def. Jacksonville</span><span class="esc">18–5</span></div>'
-    +'<div class="erow"><span class="ew">N. Carolina<span class="adv">Adv</span></span><span class="el2">def. Albany</span><span class="esc">13–8</span></div>'
-    +'<div class="erow"><span class="ew">Penn State<span class="adv">Adv</span></span><span class="el2">def. Army</span><span class="esc">12–6</span></div>'
-    +'<div class="erow"><span class="ew">Cornell<span class="adv">Adv</span></span><span class="el2">def. Johns Hopkins</span><span class="esc">11–9</span></div>'
-    +'<div class="erow"><span class="ew">Richmond<span class="adv">Adv</span></span><span class="el2">def. Duke</span><span class="esc">10–7</span></div>'
-    +'<div class="erow"><span class="ew">Virginia<span class="adv">Adv</span></span><span class="el2">def. Georgetown</span><span class="esc">9–8 OT</span></div>'
-    +'<div class="erow"><span class="ew">Syracuse<span class="adv">Adv</span></span><span class="el2">def. Yale</span><span class="esc">12–10</span></div>'
-    +'</div></div>';
+  var dlH=!vu?deadlineBanner():'';
+  var tabsH=roundTabsHTML(p,lk);
 
-  var bannerHTML=vu?'<div class="viewing-banner">👤 Viewing <strong>'+vu+'</strong>\'s bracket<span class="back-link" onclick="backToMine()">← Back to mine</span></div>':'';
-  var statusHTML=!ro&&!vu?'<div class="status-bar"><span class="status-txt" id="status-txt">Updated: '+new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})+'</span><button class="refresh-btn" onclick="doRefresh()">↻ Refresh Scores</button></div>':'';
+  // Progress hint
+  var progressH='';
+  if(!lk&&!vu){
+    if(ACTIVE_ROUND==='fr')progressH='<div class="round-progress">First Round · '+frCount(p)+' of 8 picks made'+(frComplete(p)?' · Quarterfinals now unlocked ✓':'')+'</div>';
+    else if(ACTIVE_ROUND==='qf')progressH='<div class="round-progress">Quarterfinals · '+qfCount(p)+' of 4 picks made'+(qfComplete(p)?' · Semifinals now unlocked ✓':'')+'</div>';
+    else if(ACTIVE_ROUND==='sf')progressH='<div class="round-progress">Semifinals · '+sfCount(p)+' of 2 picks made'+(sfComplete(p)?' · Championship now unlocked ✓':'')+'</div>';
+    else if(ACTIVE_ROUND==='fin')progressH='<div class="round-progress">Championship · '+(p.fin?'Champion selected ✓':'Pick your champion')+'</div>';
+  }
 
-  // QF → SF connector label hints
-  var qfCol='<div><div class="rh">Quarterfinals</div><div class="rs">May 16–17 · Hofstra &amp; Delaware · ESPNU</div>'
-    +matchCard('qf1',QF[0].a,QF[0].b,QF[0].loc,QF[0].time,QF[0].result,p.qf1,ro,'Semifinal 1')
-    +matchCard('qf2',QF[1].a,QF[1].b,QF[1].loc,QF[1].time,QF[1].result,p.qf2,ro,'Semifinal 1')
-    +matchCard('qf3',QF[2].a,QF[2].b,QF[2].loc,QF[2].time,QF[2].result,p.qf3,ro,'Semifinal 2')
-    +matchCard('qf4',QF[3].a,QF[3].b,QF[3].loc,QF[3].time,QF[3].result,p.qf4,ro,'Semifinal 2')
-    +'</div>';
+  var gamesH='';
 
-  var sfCol='<div><div class="rh">Semifinals</div><div class="rs">May 23 · Scott Stadium, Charlottesville VA · ESPN2</div>'
-    +'<div style="margin-top:42px">'+matchCard('sf1',sf1t[0],sf1t[1],'Scott Stadium, Charlottesville VA','May 23 · 12pm ET',null,p.sf1,ro,'Championship')+'</div>'
-    +'<div style="margin-top:108px">'+matchCard('sf2',sf2t[0],sf2t[1],'Scott Stadium, Charlottesville VA','May 23 · 3pm ET',null,p.sf2,ro,'Championship')+'</div>'
-    +'</div>';
+  if(ACTIVE_ROUND==='fr'){
+    var cards=FR.map(function(g){
+      return buildCard(g.id,g.a,g.b,g.loc,g.time+' · ESPNU',p[g.id],g.result,lk,'Quarterfinals');
+    });
+    gamesH='<div class="matchup-grid">'+cards.join('')+'</div>';
 
-  var finCol='<div><div class="rh">Championship</div><div class="rs">May 25 · Scott Stadium, Charlottesville VA · ESPN</div>'
-    +'<div style="margin-top:168px">'+matchCard('fin',ft[0],ft[1],'Scott Stadium, Charlottesville VA','May 25 · 1pm ET',null,p.fin,ro,null)+'</div>'
-    +'</div>';
+  }else if(ACTIVE_ROUND==='qf'){
+    var qcards=QF.map(function(g){
+      var tA=p[g.frA]||null,tB=p[g.frB]||null;
+      var canPick=!!(tA&&tB);
+      return buildCard(g.id,tA,tB,g.loc,g.time,p[g.id],g.result,lk||!canPick,'Semifinals');
+    });
+    gamesH='<div class="matchup-grid double">'+qcards.join('')+'</div>';
 
-  // Improved connector SVGs with clear elbow lines and labels
-  var c1='<div class="conn"><svg width="48" height="500" viewBox="0 0 48 500">'
-    // QF1 → SF1
-    +'<path d="M0 72 H16 V190 H40" stroke="#5b9bd5" stroke-width="1.5" fill="none" stroke-dasharray="none"/>'
-    // QF2 → SF1
-    +'<path d="M0 200 H16 V190" stroke="#5b9bd5" stroke-width="1.5" fill="none"/>'
-    // QF3 → SF2
-    +'<path d="M0 316 H16 V432 H40" stroke="#5b9bd5" stroke-width="1.5" fill="none"/>'
-    // QF4 → SF2
-    +'<path d="M0 444 H16 V432" stroke="#5b9bd5" stroke-width="1.5" fill="none"/>'
-    // Arrow tips
-    +'<polygon points="40,187 48,190 40,193" fill="#5b9bd5"/>'
-    +'<polygon points="40,429 48,432 40,435" fill="#5b9bd5"/>'
-    +'</svg></div>';
+  }else if(ACTIVE_ROUND==='sf'){
+    var sfcards=SF.map(function(g){
+      var tA=p[g.qfA]||null,tB=p[g.qfB]||null;
+      var canPick=!!(tA&&tB);
+      return buildCard(g.id,tA,tB,g.loc,g.time,p[g.id],g.result,lk||!canPick,'Championship');
+    });
+    gamesH='<div class="matchup-grid double">'+sfcards.join('')+'</div>';
 
-  var c2='<div class="conn"><svg width="48" height="500" viewBox="0 0 48 500">'
-    // SF1 → Final
-    +'<path d="M0 172 H16 V298 H40" stroke="#5b9bd5" stroke-width="1.5" fill="none"/>'
-    // SF2 → Final
-    +'<path d="M0 424 H16 V298" stroke="#5b9bd5" stroke-width="1.5" fill="none"/>'
-    +'<polygon points="40,295 48,298 40,301" fill="#5b9bd5"/>'
-    +'</svg></div>';
+  }else if(ACTIVE_ROUND==='fin'){
+    var fA=p[FIN.sfA]||null,fB=p[FIN.sfB]||null;
+    var canPickF=!!(fA&&fB);
+    gamesH='<div class="matchup-grid single">'+buildCard('fin',fA,fB,FIN.loc,FIN.time,p.fin,FIN.result,lk||!canPickF,null)+'</div>';
+  }
 
-  var sumHTML='';
+  // Action bar
+  var actionH='';
   if(!vu){
-    if(IS_LOCKED||ro){
-      sumHTML='<div class="locked-banner"><div class="locked-banner-icon">🔒</div><div class="locked-banner-text"><strong>Your bracket is locked.</strong> Results and scores will update automatically as games are played. Check the leaderboard to see how you rank!</div></div>';
-    } else {
-      var qrows=[{id:'qf1',lbl:'QF1 Winner'},{id:'qf2',lbl:'QF2 Winner'},{id:'qf3',lbl:'QF3 Winner'},{id:'qf4',lbl:'QF4 Winner'},{id:'sf1',lbl:'SF1 Winner'},{id:'sf2',lbl:'SF2 Winner'}];
-      sumHTML='<div class="summary"><div class="sum-hdr"><div class="sum-title">My Picks Summary</div></div>'
-        +'<div class="sum-grid">'+qrows.map(function(r){var pk=p[r.id];return'<div class="scard"><div class="sround">'+r.lbl+'</div><div class="steam'+(pk?'':' empty')+'">'+(pk&&T[pk]?T[pk].n:'—')+'</div></div>';}).join('')
-        +'<div class="scard champ"><div class="sround">Champion</div><div class="steam'+(p.fin&&T[p.fin]?'':' empty')+'">'+(p.fin&&T[p.fin]?T[p.fin].n:'— Pick your champion')+'</div><div class="ssub">'+(p.fin&&T[p.fin]?'Implied odds: '+T[p.fin].o+'%':'')+'</div></div>'
-        +'</div>'
-        +'<div class="save-row"><button class="btn-save" id="save-btn" onclick="promptSave()">🔒 Save &amp; Lock My Bracket</button><span class="save-msg" id="save-msg"></span></div>'
-        +'</div>';
+    if(LOCKED||ro){
+      actionH='<div class="locked-banner"><div class="locked-icon">🔒</div><div class="locked-text"><strong>Your bracket is locked</strong>Results update automatically as games are played. Check the leaderboard to track your score!</div></div>';
+    }else if(past()){
+      actionH='<div class="closed-banner"><div class="closed-icon">🚫</div><div class="closed-text"><strong>Submissions Closed</strong>The May 9 · 12pm ET deadline has passed. Picks can no longer be saved.</div></div>';
+    }else{
+      actionH='<div class="save-bar"><button class="btn-save" id="save-btn" onclick="promptSave()">🔒 Save &amp; Lock My Bracket</button><span class="save-hint">Permanent — cannot be undone</span><span class="save-msg" id="save-msg"></span></div>';
     }
   }
 
-  var legendHTML='<div class="legend">'
-    +'<div class="li"><div class="ls" style="background:var(--green-l);border:1px solid var(--green)"></div>Advanced / winner</div>'
-    +'<div class="li"><div class="ls" style="opacity:.3;background:var(--muted)"></div>Eliminated — locked out</div>'
-    +'<div class="li"><div class="ls" style="border-left:4px solid var(--blue);background:var(--blue-l)"></div>Your pick</div>'
-    +'<div class="li">🔗 Team name links to official site</div>'
-    +'<div class="li">→ Arrows show path to next round</div>'
+  var legH='<div class="legend">'
+    +'<div class="li"><div class="ls" style="border:1.5px dashed var(--amber);background:var(--amber-l)"></div>Needs pick</div>'
+    +'<div class="li"><div class="ls" style="border-left:4px solid var(--blue2);background:var(--blue-l)"></div>Your pick</div>'
+    +'<div class="li"><div class="ls" style="background:var(--green-l);border:1px solid var(--green)"></div>Advanced</div>'
+    +'<div class="li"><div class="ls" style="opacity:.28;background:var(--muted)"></div>Eliminated</div>'
+    +'<div class="li">✕ removes pick from this round only</div>'
+    +'<div class="li">🔗 Team name = official site</div>'
     +'</div>';
 
-  c.innerHTML=bannerHTML+statusHTML+earlyHTML
-    +'<div class="bracket-grid">'+qfCol+c1+sfCol+c2+finCol+'</div>'
-    +sumHTML+legendHTML;
+  c.innerHTML=bannerH+dlH+tabsH+progressH+gamesH+actionH+legH;
 
-  loadLogos();
+  loadMascots(p);
+  if(!past()&&!vu)startCD();
 }
 
-function loadLogos(){
+function loadMascots(p){
   Object.keys(T).forEach(function(k){
-    document.querySelectorAll('[id^="lg-"][id$="-'+k+'"]').forEach(function(el){
-      var img=new Image();
-      img.onload=function(){el.innerHTML='';el.appendChild(img);img.style.cssText='width:100%;height:100%;object-fit:contain';};
-      img.src=T[k].logo;
+    var td=T[k];if(!td.mascot)return;
+    document.querySelectorAll('img.t-mascot[alt="'+td.n+' mascot"]').forEach(function(el){
+      if(!el.complete||el.naturalWidth===0){var img=new Image();img.onload=function(){el.src=td.mascot;};img.src=td.mascot;}
     });
   });
 }
 
-function doPick(gid,key){
-  if(VU||IS_LOCKED)return;
-  picks[gid]=key;
-  var sfMap={sf1:['qf1','qf2'],sf2:['qf3','qf4']};
-  Object.keys(sfMap).forEach(function(sfId){
-    if(sfMap[sfId].includes(gid)){
-      var valid=sfMap[sfId].map(function(q){return picks[q];});
-      if(picks[sfId]&&!valid.includes(picks[sfId])){picks[sfId]=null;picks.fin=null;}
-    }
-  });
-  if(gid==='sf1'||gid==='sf2'){if(picks.fin&&picks.fin!==picks.sf1&&picks.fin!==picks.sf2)picks.fin=null;}
-  renderBracket(picks,false,null);
-}
-
-function promptSave(){document.getElementById('modal').style.display='flex';}
+// ── SAVE ──
+function promptSave(){if(past()||LOCKED)return;document.getElementById('modal').style.display='flex';}
 function closeModal(){document.getElementById('modal').style.display='none';}
-
 async function confirmSave(){
-  closeModal();
-  var btn=document.getElementById('save-btn');
-  var msg=document.getElementById('save-msg');
-  if(btn)btn.disabled=true;
-  if(msg){msg.textContent='Locking…';msg.style.color='var(--muted)';}
-  try{
-    var ok=await dbSavePicks(CU,picks,true);
-    if(ok){
-      IS_LOCKED=true;
-      document.getElementById('hdr-user').textContent=CU+' 🔒';
-      if(msg){msg.textContent='';} 
-      renderBracket(picks,true,null);
-    } else {
-      if(msg){msg.textContent='Error saving — please try again.';msg.style.color='var(--red)';}
-      if(btn)btn.disabled=false;
-    }
-  }catch(e){
-    if(msg){msg.textContent='Error: '+e.message;msg.style.color='var(--red)';}
-    if(btn)btn.disabled=false;
-  }
+  closeModal();if(past()){alert('The submission deadline has passed.');return;}
+  var btn=document.getElementById('save-btn'),msg=document.getElementById('save-msg');
+  if(btn)btn.disabled=true;if(msg){msg.textContent='Locking…';msg.style.color='var(--muted)';}
+  try{var ok=await dbSave(CU,picks,true);if(ok){LOCKED=true;clearInterval(cdTimer);document.getElementById('hdr-user').textContent=CU+' 🔒';if(msg)msg.textContent='';redraw();}else{if(msg){msg.textContent='Error — please try again.';msg.style.color='var(--red)';}if(btn)btn.disabled=false;}}
+  catch(e){if(msg){msg.textContent='Error: '+e.message;msg.style.color='var(--red)';}if(btn)btn.disabled=false;}
 }
 
-function backToMine(){VU=null;renderBracket(picks,IS_LOCKED,null);}
+function backToMine(){VU=null;viewPicks=null;ACTIVE_ROUND='fr';redraw();}
 
-function toggleEarly(){
-  var b=document.getElementById('ebody'),ic=document.getElementById('ech');
-  if(!b)return;
-  if(b.style.display==='none'){b.style.display='grid';ic.textContent='▴ Hide';}
-  else{b.style.display='none';ic.textContent='▾ Show';}
-}
-
-function doRefresh(){
-  var el=document.getElementById('status-txt');
-  if(el){el.textContent='Refreshing…';setTimeout(function(){el.textContent='Updated: '+new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})+' · Scores current';},900);}
-}
-
+// ── LEADERBOARD ──
 function calcScore(p){
-  var wins=0,upsets=0;
-  QF.forEach(function(g){
-    if(g.result&&p[g.id]===g.result){
-      wins++;
-      // upset = lower seed (higher seed number) beats higher seed
-      var winner=T[g.result];
-      var loser=g.result===g.a?T[g.b]:T[g.a];
-      if(winner&&loser){
-        var ws=parseInt(winner.s.replace('#',''));
-        var ls=parseInt(loser.s.replace('#',''));
-        if(ws>ls)upsets++; // higher seed number = lower seed = upset
-      }
-    }
-  });
-  return{wins:wins,upsets:upsets,score:wins*10};
+  var w=0,u=0;
+  FR.forEach(function(g){if(g.result&&p[g.id]===g.result){w++;var ws=parseInt((T[g.result]&&T[g.result].s||'').replace('#','')||99),ls=parseInt((T[g.result===g.a?g.b:g.a]&&T[g.result===g.a?g.b:g.a].s||'').replace('#','')||0);if(ws>ls)u++;}});
+  QF.forEach(function(g){if(g.result&&p[g.id]===g.result)w++;});
+  return{wins:w,upsets:u,score:w*10};
 }
 
-async function renderLeaderboard(){
-  var c=document.getElementById('tab-leaderboard');
-  c.innerHTML='<div class="loading">Loading players…</div>';
+async function renderLB(){
+  var c=document.getElementById('apptab-leaderboard');
+  c.innerHTML='<div style="padding:40px;text-align:center;color:var(--muted);font-family:var(--fh);letter-spacing:.06em">LOADING…</div>';
   try{
-    var allPicks=await dbGetAllPicks();
-    // only rank players who have saved (locked) a bracket
-    var entries=allPicks
-      .filter(function(row){return row.locked;})
-      .map(function(row){
-        var sc=calcScore(row.picks||{});
-        var champ=(row.picks||{}).fin;
-        return{u:row.username,p:row.picks||{},wins:sc.wins,upsets:sc.upsets,score:sc.score,champ:champ&&T[champ]?T[champ].n:'—'};
-      });
-    // sort: wins desc, then upsets desc, then alpha
-    entries.sort(function(a,b){
-      if(b.wins!==a.wins)return b.wins-a.wins;
-      if(b.upsets!==a.upsets)return b.upsets-a.upsets;
-      return a.u.localeCompare(b.u);
-    });
-
-    var rows=entries.map(function(e,i){
-      var isMe=e.u===CU;
-      var rankCls='lbrank'+(i===0?' top1':i===1?' top2':i===2?' top3':'');
-      var medal=i===0?'🥇':i===1?'🥈':i===2?'🥉':'';
-      return'<div class="lbrow'+(isMe?' lbme':'')+'" onclick="viewBracket(\''+e.u+'\')">'
-        +'<div class="'+rankCls+'">'+medal+(i+1)+'</div>'
-        +'<div class="lbname">'+e.u+(isMe?' <span style="font-size:9px;color:var(--muted)">(you)</span>':'')+'</div>'
-        +'<div class="lbpick">'+e.champ+'</div>'
-        +'<div class="lbpts">'+e.score+'</div>'
-        +'<div class="lbupset">'+e.upsets+'</div>'
-        +'<div class="lbact2"><button class="vbtn" onclick="event.stopPropagation();viewBracket(\''+e.u+'\')">View</button></div>'
-        +'</div>';
+    var all=await dbAll();
+    var entries=all.filter(function(r){return r.locked;}).map(function(r){var sc=calcScore(r.picks||{});var ch=(r.picks||{}).fin;return{u:r.username,p:r.picks||{},wins:sc.wins,upsets:sc.upsets,score:sc.score,champ:ch&&T[ch]?T[ch].n:'—'};});
+    entries.sort(function(a,b){if(b.wins!==a.wins)return b.wins-a.wins;if(b.upsets!==a.upsets)return b.upsets-a.upsets;return a.u.localeCompare(b.u);});
+    var rows=entries.map(function(e,i){var me=e.u===CU;var rc='lbrank'+(i===0?' gold':i===1?' silver':i===2?' bronze':'');var md=i===0?'🥇 ':i===1?'🥈 ':i===2?'🥉 ':'';
+      return'<div class="lbrow'+(me?' lbme':'')+'" onclick="viewBracket(\''+e.u+'\')">'
+        +'<div class="'+rc+'">'+md+(i+1)+'</div>'
+        +'<div class="lbname">'+e.u+(me?' <span style="font-size:9px;color:var(--muted)">(you)</span>':'')+'</div>'
+        +'<div class="lbpick">'+e.champ+'</div><div class="lbpts">'+e.score+'</div>'
+        +'<div class="lbups">'+e.upsets+'</div>'
+        +'<div class="lbact"><button class="vbtn" onclick="event.stopPropagation();viewBracket(\''+e.u+'\')">View</button></div></div>';
     }).join('');
-
-    c.innerHTML='<div class="lb-hdr"><div class="lb-title">🏆 Leaderboard</div><div class="lb-count">'+entries.length+' locked bracket'+(entries.length!==1?'s':'')+' · 10 pts per correct pick</div></div>'
-      +'<div class="lb-table">'
-      +'<div class="lbrow lbhdr"><div class="lbrank">#</div><div class="lbname">Player</div><div class="lbpick">Champion pick</div><div class="lbpts">Score</div><div class="lbupset">Upsets</div><div class="lbact2"></div></div>'
-      +(entries.length?rows:'<div class="lb-empty">No locked brackets yet — save yours to appear here.</div>')
-      +'</div>'
-      +'<div style="font-size:10px;color:rgba(255,255,255,.4);margin-top:8px;padding:0 4px">Tiebreaker: most correct upset picks (higher seed beating lower seed). Only locked brackets are ranked.</div>';
-  }catch(e){
-    c.innerHTML='<div style="padding:30px;text-align:center;color:var(--red)">Error: '+e.message+'</div>';
-  }
+    c.innerHTML='<div class="lb-wrap"><div class="lb-hdr"><div class="lb-title">🏆 Leaderboard</div><div class="lb-count">'+entries.length+' locked bracket'+(entries.length!==1?'s':'')+' · 10 pts per correct pick</div></div>'
+      +'<div class="lb-table"><div class="lbrow lbhdr"><div class="lbrank">#</div><div class="lbname">Player</div><div class="lbpick">Champion Pick</div><div class="lbpts">Score</div><div class="lbups">Upsets</div><div class="lbact"></div></div>'
+      +(entries.length?rows:'<div class="lb-empty">No locked brackets yet — be the first!</div>')
+      +'</div></div><div class="lb-note">Tiebreaker: most correct upset picks. Only locked brackets ranked.</div>';
+  }catch(e){c.innerHTML='<div style="padding:30px;text-align:center;color:var(--red)">Error: '+e.message+'</div>';}
 }
 
-async function viewBracket(username){
-  VU=username;
-  document.getElementById('nav-my').classList.add('active');
-  document.getElementById('nav-lb').classList.remove('active');
-  document.getElementById('tab-leaderboard').style.display='none';
-  document.getElementById('tab-bracket').style.display='';
-  try{var row=await dbGetPicks(username);renderBracket(row&&row.picks?row.picks:{},true,username);}
-  catch(e){renderBracket({},true,username);}
+async function viewBracket(u){
+  VU=u;
+  document.getElementById('anav-bracket').classList.add('active');document.getElementById('anav-leaderboard').classList.remove('active');
+  document.getElementById('apptab-leaderboard').style.display='none';document.getElementById('apptab-bracket').style.display='';
+  try{var r=await dbGetPicks(u);viewPicks=r&&r.picks?Object.assign(blank(),r.picks):blank();ACTIVE_ROUND='fr';redraw(true,u);}
+  catch(e){viewPicks=blank();redraw(true,u);}
 }
 
-// Supabase: add locked column if not exists — handled via SQL already
-// Keyboard shortcuts
 document.getElementById('li-p').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});
 document.getElementById('re-p2').addEventListener('keydown',function(e){if(e.key==='Enter')doRegister();});
 </script>
