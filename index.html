@@ -181,14 +181,14 @@ body{font-family:var(--fb);color:var(--text);font-size:13px;min-height:100vh;bac
 .comments-hdr-count{font-size:10px;color:var(--blue2);font-family:var(--fh);letter-spacing:.04em}
 .comments-body{display:none}
 .comments-body.open{display:block}
-.comments-input-row{display:flex;gap:8px;padding:12px 14px;border-bottom:1px solid var(--gray);background:var(--off)}
+.comments-input-row{display:flex;gap:8px;padding:12px 14px;border-bottom:1px solid var(--gray);background:var(--off);position:relative}
 .comments-input{flex:1;padding:9px 12px;border:1.5px solid var(--gray2);border-radius:var(--r);font-family:var(--fb);font-size:13px;outline:none;resize:none;color:var(--text);background:var(--white);transition:border .15s}
 .comments-input:focus{border-color:var(--blue2);box-shadow:0 0 0 3px rgba(74,144,217,.12)}
 .comments-input::placeholder{color:var(--gray2);font-style:italic}
 .comments-post-btn{padding:9px 18px;background:var(--blue);color:var(--white);border:none;border-radius:var(--r);font-family:var(--fh);font-size:12px;font-weight:600;cursor:pointer;text-transform:uppercase;letter-spacing:.06em;transition:background .15s;white-space:nowrap;align-self:flex-end}
 .comments-post-btn:hover{background:var(--navy)}
 .comments-post-btn:disabled{opacity:.5;cursor:not-allowed}
-.comments-list{max-height:260px;overflow-y:auto;padding:10px 14px;display:flex;flex-direction:column;gap:8px}
+.comments-list{max-height:280px;overflow-y:auto;padding:10px 14px;display:flex;flex-direction:column;gap:10px}
 .comment-item{display:flex;gap:10px;align-items:flex-start}
 .comment-avatar{width:28px;height:28px;border-radius:50%;background:var(--navy);display:flex;align-items:center;justify-content:center;font-family:var(--fh);font-size:11px;font-weight:700;color:var(--blue2);flex-shrink:0;text-transform:uppercase}
 .comment-bubble{flex:1;min-width:0}
@@ -197,8 +197,25 @@ body{font-family:var(--fb);color:var(--text);font-size:13px;min-height:100vh;bac
 .comment-user.me{color:var(--navy)}
 .comment-time{font-size:9px;color:var(--muted)}
 .comment-text{font-size:12px;color:var(--text);line-height:1.5;word-break:break-word}
+.comment-mention{color:var(--blue);font-weight:600;font-family:var(--fh)}
+.comment-text .comment-mention.me{color:var(--navy);background:rgba(37,99,168,.1);border-radius:3px;padding:0 3px}
+.comment-reactions{display:flex;gap:8px;margin-top:5px}
+.reaction-btn{display:flex;align-items:center;gap:3px;padding:2px 7px;border:1px solid var(--gray);border-radius:10px;background:transparent;cursor:pointer;font-size:11px;color:var(--muted);transition:all .15s;font-family:var(--fb)}
+.reaction-btn:hover{border-color:var(--blue2);color:var(--blue)}
+.reaction-btn.active-up{border-color:var(--blue2);background:var(--blue-l);color:var(--blue);font-weight:600}
+.reaction-btn.active-down{border-color:var(--red);background:var(--red-l);color:var(--red);font-weight:600}
 .comments-empty{padding:20px;text-align:center;color:var(--muted);font-size:12px;font-style:italic}
 .comment-char{font-size:10px;color:var(--muted);text-align:right;padding:2px 14px 6px;background:var(--off)}
+.comment-rate-msg{font-size:10px;color:var(--muted);padding:4px 14px 8px;background:var(--off);font-style:italic}
+/* @ mention dropdown */
+.mention-dropdown{position:absolute;bottom:calc(100% + 4px);left:14px;background:var(--white);border:1.5px solid var(--blue2);border-radius:var(--r);box-shadow:0 4px 16px rgba(0,0,0,.15);z-index:100;min-width:160px;max-height:180px;overflow-y:auto;display:none}
+.mention-dropdown.show{display:block}
+.mention-item{padding:7px 12px;font-family:var(--fh);font-size:12px;color:var(--navy);cursor:pointer;letter-spacing:.02em}
+.mention-item:hover,.mention-item.selected{background:var(--blue-l);color:var(--blue)}
+/* remember me */
+.remember-row{display:flex;align-items:center;gap:8px;margin-top:6px;margin-bottom:12px}
+.remember-row input[type=checkbox]{width:14px;height:14px;cursor:pointer;accent-color:var(--blue)}
+.remember-row label{font-size:11px;color:var(--muted);cursor:pointer;font-family:var(--fb)}
 /* ── SCORES ── */
 .t-score{font-family:var(--fh);font-size:16px;font-weight:700;color:var(--navy);margin-left:auto;flex-shrink:0;min-width:24px;text-align:right}
 .team-row.is-pick .t-score{color:#1a1100}
@@ -290,7 +307,8 @@ body{font-family:var(--fb);color:var(--text);font-size:13px;min-height:100vh;bac
       <div class="auth-body">
         <div id="login-form">
           <label class="fl">Username</label><input class="fi" id="li-u" placeholder="your username" autocomplete="username"/>
-          <label class="fl">Password</label><input class="fi" id="li-p" type="password" placeholder="••••••••" autocomplete="current-password" style="margin-bottom:2px"/>
+          <label class="fl">Password</label><input class="fi" id="li-p" type="password" placeholder="••••••••" autocomplete="current-password" style="margin-bottom:6px"/>
+          <div class="remember-row"><input type="checkbox" id="li-remember"/><label for="li-remember">Remember me on this device</label></div>
           <button class="btn-primary" id="li-btn" onclick="doLogin()">Sign In</button>
           <div class="form-err" id="li-err"></div>
         </div>
@@ -672,7 +690,9 @@ async function doLogin(){
     var sv=await dbGetPicks(u);
     var loaded=sv&&sv.picks?Object.assign(blank(),sv.picks):blank();
     picks=sanitizePicks(loaded);
-    SAVED=!!(sv&&sv.picks); // track whether bracket has been saved to DB
+    SAVED=!!(sv&&sv.picks);
+    var rem=document.getElementById('li-remember');
+    if(rem&&rem.checked)saveSession(u,h);else clearSession();
     launch();
   }
   catch(e){err.textContent='Connection error: '+e.message;}
@@ -689,7 +709,7 @@ async function doRegister(){
   finally{busy('re-btn',false,'Create Account');}
 }
 
-function doLogout(){CU=null;VU=null;SAVED=false;picks=blank();viewPicks=null;SCORES={};SCORE_SRC='';COMMENTS=[];clearInterval(cdTimer);clearInterval(scoreTimer);clearInterval(commentTimer);ACTIVE_ROUND='fr';document.getElementById('auth-screen').style.display='flex';document.getElementById('shell').style.display='none';document.getElementById('li-err').textContent='';document.getElementById('li-u').value='';document.getElementById('li-p').value='';}
+function doLogout(){CU=null;VU=null;SAVED=false;picks=blank();viewPicks=null;SCORES={};SCORE_SRC='';COMMENTS=[];REACTIONS={};LAST_POST_TIME=0;clearInterval(cdTimer);clearInterval(scoreTimer);clearInterval(commentTimer);clearInterval(rateTimer);clearSession();ACTIVE_ROUND='fr';document.getElementById('auth-screen').style.display='flex';document.getElementById('shell').style.display='none';document.getElementById('li-err').textContent='';document.getElementById('li-u').value='';document.getElementById('li-p').value='';}
 
 function launch(){
   document.getElementById('auth-screen').style.display='none';
@@ -1067,10 +1087,294 @@ async function saveAdminScore(gid){
   }
 }
 
-// ── COMMENTS ──
+// ── REMEMBER ME ──
+var LS_KEY='bb_session';
+function saveSession(u,h){try{localStorage.setItem(LS_KEY,JSON.stringify({u:u,h:h}));}catch(e){}}
+function clearSession(){try{localStorage.removeItem(LS_KEY);}catch(e){}}
+function loadSession(){try{var s=localStorage.getItem(LS_KEY);return s?JSON.parse(s):null;}catch(e){return null;}}
+
+// ── COMMENTS & REACTIONS ──
 var COMMENTS=[];
+var REACTIONS={}; // comment_id → {up:N, down:N, mine: +1|-1|0}
 var commentTimer=null;
 var COMMENTS_OPEN=true;
+var LAST_POST_TIME=0; // rate limit: epoch ms of last post
+var RATE_LIMIT_MS=60000;
+var KNOWN_USERS=[]; // usernames of bracket-savers for @ mentions
+var mentionDropdownActive=false;
+var mentionQuery='';
+var mentionStart=-1; // cursor position where @ was typed
+var activePanelId='';
+
+async function fetchKnownUsers(){
+  try{
+    // Only fetch usernames of users who have saved a bracket (picks table)
+    var r=await sb('picks?select=username','GET');
+    if(r.ok&&r.data){KNOWN_USERS=r.data.map(function(row){return row.username;}).filter(function(u){return u!==CU;}).sort();}
+  }catch(e){}
+}
+
+async function fetchComments(){
+  try{
+    var r=await sb('comments?select=id,username,body,created_at&order=created_at.desc&limit=60','GET');
+    if(!r.ok||!r.data)return;
+    COMMENTS=r.data;
+    // Fetch reactions for these comment ids
+    if(COMMENTS.length){
+      var ids=COMMENTS.map(function(c){return c.id;}).join(',');
+      var rr=await sb('comment_reactions?comment_id=in.('+ids+')&select=comment_id,username,vote','GET');
+      REACTIONS={};
+      if(rr.ok&&rr.data){
+        rr.data.forEach(function(row){
+          if(!REACTIONS[row.comment_id])REACTIONS[row.comment_id]={up:0,down:0,mine:0};
+          if(row.vote===1)REACTIONS[row.comment_id].up++;
+          else if(row.vote===-1)REACTIONS[row.comment_id].down++;
+          if(row.username===CU)REACTIONS[row.comment_id].mine=row.vote;
+        });
+      }
+    }
+    updateCommentsDisplay();
+  }catch(e){}
+}
+
+async function toggleReaction(commentId,vote){
+  if(!CU)return;
+  var r=REACTIONS[commentId]||{up:0,down:0,mine:0};
+  var newVote=r.mine===vote?0:vote; // toggle off if same
+  // Optimistic update
+  if(r.mine===1)r.up=Math.max(0,r.up-1);
+  if(r.mine===-1)r.down=Math.max(0,r.down-1);
+  r.mine=newVote;
+  if(newVote===1)r.up++;
+  if(newVote===-1)r.down++;
+  REACTIONS[commentId]=r;
+  updateCommentsDisplay();
+  try{
+    // Upsert: delete existing then insert if non-zero
+    await sb('comment_reactions?comment_id=eq.'+commentId+'&username=eq.'+encodeURIComponent(CU),'DELETE');
+    if(newVote!==0){await sb('comment_reactions','POST',{comment_id:commentId,username:CU,vote:newVote});}
+  }catch(e){}
+}
+
+function startCommentPolling(){
+  fetchComments();
+  fetchKnownUsers();
+  clearInterval(commentTimer);
+  commentTimer=setInterval(fetchComments,30000);
+}
+
+function timeAgo(iso){
+  var d=new Date(iso),now=new Date(),diff=Math.floor((now-d)/1000);
+  if(diff<60)return'just now';
+  if(diff<3600)return Math.floor(diff/60)+'m ago';
+  if(diff<86400)return Math.floor(diff/3600)+'h ago';
+  return Math.floor(diff/86400)+'d ago';
+}
+
+function renderMentions(text){
+  // Highlight @username patterns — bold blue, extra highlight if mentioning current user
+  return escapeHTML(text).replace(/@([a-z0-9_]+)/gi,function(match,name){
+    var isMe=CU&&name.toLowerCase()===CU.toLowerCase();
+    return'<span class="comment-mention'+(isMe?' me':'')+'">@'+name+'</span>';
+  });
+}
+
+function updateCommentsDisplay(){
+  document.querySelectorAll('.comments-hdr-count').forEach(function(el){
+    el.textContent=COMMENTS.length+' comment'+(COMMENTS.length!==1?'s':'');
+  });
+  document.querySelectorAll('.comments-list').forEach(function(list){
+    if(!COMMENTS.length){list.innerHTML='<div class="comments-empty">No comments yet — be the first to talk trash 🏒</div>';return;}
+    list.innerHTML=COMMENTS.map(function(c){
+      var initials=c.username.substring(0,2).toUpperCase();
+      var isMe=c.username===CU;
+      var rx=REACTIONS[c.id]||{up:0,down:0,mine:0};
+      var upCls='reaction-btn'+(rx.mine===1?' active-up':'');
+      var downCls='reaction-btn'+(rx.mine===-1?' active-down':'');
+      return'<div class="comment-item">'
+        +'<div class="comment-avatar">'+initials+'</div>'
+        +'<div class="comment-bubble">'
+        +'<div class="comment-meta"><span class="comment-user'+(isMe?' me':'')+'">'+escapeHTML(c.username)+'</span><span class="comment-time">'+timeAgo(c.created_at)+'</span></div>'
+        +'<div class="comment-text">'+renderMentions(c.body)+'</div>'
+        +'<div class="comment-reactions">'
+        +'<button class="'+upCls+'" onclick="toggleReaction('+c.id+',1)">👍 '+rx.up+'</button>'
+        +'<button class="'+downCls+'" onclick="toggleReaction('+c.id+',-1)">👎 '+rx.down+'</button>'
+        +'</div>'
+        +'</div></div>';
+    }).join('');
+  });
+}
+
+function escapeHTML(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
+
+function toggleComments(){
+  COMMENTS_OPEN=!COMMENTS_OPEN;
+  document.querySelectorAll('.comments-body').forEach(function(el){el.classList.toggle('open',COMMENTS_OPEN);});
+  document.querySelectorAll('.comments-chev').forEach(function(el){el.textContent=COMMENTS_OPEN?'▲':'▼';});
+}
+
+function commentCharCount(el){
+  var remaining=280-el.value.length;
+  var counter=el.closest('.comments-panel').querySelector('.comment-char');
+  if(counter)counter.textContent=remaining<50?remaining+' characters remaining':'';
+  handleMentionTyping(el);
+}
+
+// ── @ MENTION AUTOCOMPLETE ──
+function handleMentionTyping(textarea){
+  var val=textarea.value;
+  var pos=textarea.selectionStart;
+  var dropdown=textarea.closest('.comments-input-row').querySelector('.mention-dropdown');
+  if(!dropdown)return;
+  // Find if cursor is inside an @word
+  var before=val.substring(0,pos);
+  var atMatch=before.match(/@([a-z0-9_]*)$/i);
+  if(!atMatch){dropdown.classList.remove('show');mentionDropdownActive=false;return;}
+  mentionQuery=atMatch[1].toLowerCase();
+  mentionStart=pos-atMatch[0].length;
+  activePanelId=textarea.id.replace('comment-input-','');
+  var matches=KNOWN_USERS.filter(function(u){return u.startsWith(mentionQuery);}).slice(0,6);
+  if(!matches.length){dropdown.classList.remove('show');mentionDropdownActive=false;return;}
+  dropdown.innerHTML=matches.map(function(u,i){
+    return'<div class="mention-item'+(i===0?' selected':'')+'" onmousedown="event.preventDefault();insertMention(\''+u+'\',\''+textarea.id+'\')">@'+u+'</div>';
+  }).join('');
+  dropdown.classList.add('show');
+  mentionDropdownActive=true;
+}
+
+function insertMention(username,inputId){
+  var textarea=document.getElementById(inputId);
+  if(!textarea)return;
+  var val=textarea.value;
+  var pos=textarea.selectionStart;
+  var before=val.substring(0,pos);
+  var after=val.substring(pos);
+  var newBefore=before.replace(/@([a-z0-9_]*)$/i,'@'+username+' ');
+  textarea.value=newBefore+after;
+  textarea.selectionStart=textarea.selectionEnd=newBefore.length;
+  textarea.focus();
+  var dropdown=textarea.closest('.comments-input-row').querySelector('.mention-dropdown');
+  if(dropdown)dropdown.classList.remove('show');
+  mentionDropdownActive=false;
+  commentCharCount(textarea);
+}
+
+// ── RATE LIMIT ──
+var rateTimer=null;
+function startRateCooldown(panelId){
+  var btn=document.getElementById('comment-btn-'+panelId);
+  var msg=document.querySelector('#comment-input-'+panelId+' ~ .comment-rate-msg') ||
+           document.getElementById('rate-msg-'+panelId);
+  var end=LAST_POST_TIME+RATE_LIMIT_MS;
+  clearInterval(rateTimer);
+  rateTimer=setInterval(function(){
+    var remaining=Math.max(0,Math.ceil((end-Date.now())/1000));
+    if(btn)btn.disabled=remaining>0;
+    if(remaining<=0){
+      clearInterval(rateTimer);
+      document.querySelectorAll('.comment-rate-msg').forEach(function(el){el.textContent='';});
+      document.querySelectorAll('.comments-post-btn').forEach(function(el){el.disabled=false;});
+    }else{
+      document.querySelectorAll('.comment-rate-msg').forEach(function(el){el.textContent='Wait '+remaining+'s before posting again';});
+    }
+  },500);
+}
+
+async function postComment(panelId){
+  var input=document.getElementById('comment-input-'+panelId);
+  if(!input||!CU)return;
+  var body=input.value.trim();
+  if(!body||body.length>280)return;
+  // Client-side rate limit
+  var now=Date.now();
+  if(now-LAST_POST_TIME<RATE_LIMIT_MS){startRateCooldown(panelId);return;}
+  var btn=document.getElementById('comment-btn-'+panelId);
+  document.querySelectorAll('.comments-post-btn').forEach(function(el){el.disabled=true;});
+  try{
+    var r=await sb('comments','POST',{username:CU,body:body});
+    if(r.ok){
+      input.value='';
+      commentCharCount(input);
+      LAST_POST_TIME=Date.now();
+      startRateCooldown(panelId);
+      await fetchComments();
+      document.querySelectorAll('.comments-list').forEach(function(el){el.scrollTop=0;});
+    }
+  }catch(e){}
+  finally{/* rate limit controls re-enable */}
+}
+
+function commentsPanel(panelId){
+  var canPost=!!CU;
+  var placeholder=canPost?'Keep it clean. Jesus has wifi too.':'Sign in to comment';
+  var now=Date.now();
+  var rateLocked=now-LAST_POST_TIME<RATE_LIMIT_MS;
+  return'<div class="comments-panel">'
+    +'<div class="comments-hdr" onclick="toggleComments()">'
+    +'<span class="comments-hdr-title">💬 Trash Talk</span>'
+    +'<span style="display:flex;align-items:center;gap:10px"><span class="comments-hdr-count">'+COMMENTS.length+' comment'+(COMMENTS.length!==1?'s':'')+'</span><span class="comments-chev" style="font-size:10px;color:var(--blue2)">'+(COMMENTS_OPEN?'▲':'▼')+'</span></span>'
+    +'</div>'
+    +'<div class="comments-body'+(COMMENTS_OPEN?' open':'')+'">'
+    +'<div class="comments-input-row">'
+    +'<div class="mention-dropdown" id="mention-dd-'+panelId+'"></div>'
+    +'<textarea class="comments-input" id="comment-input-'+panelId+'" rows="2" maxlength="280" placeholder="'+placeholder+'" oninput="commentCharCount(this)" onkeydown="handleCommentKey(event,\''+panelId+'\')" '+(canPost?'':' disabled')+'></textarea>'
+    +'<button class="comments-post-btn" id="comment-btn-'+panelId+'" onclick="postComment(\''+panelId+'\')"'+(canPost&&!rateLocked?'':' disabled')+'>Post</button>'
+    +'</div>'
+    +'<div class="comment-char"></div>'
+    +'<div class="comment-rate-msg" id="rate-msg-'+panelId+'"></div>'
+    +'<div class="comments-list" id="comment-list-'+panelId+'">'
+    +(COMMENTS.length?COMMENTS.map(function(c){
+      var initials=c.username.substring(0,2).toUpperCase();
+      var isMe=c.username===CU;
+      var rx=REACTIONS[c.id]||{up:0,down:0,mine:0};
+      return'<div class="comment-item"><div class="comment-avatar">'+initials+'</div><div class="comment-bubble"><div class="comment-meta"><span class="comment-user'+(isMe?' me':'')+'">'+escapeHTML(c.username)+'</span><span class="comment-time">'+timeAgo(c.created_at)+'</span></div><div class="comment-text">'+renderMentions(c.body)+'</div><div class="comment-reactions"><button class="reaction-btn'+(rx.mine===1?' active-up':'')+'" onclick="toggleReaction('+c.id+',1)">👍 '+rx.up+'</button><button class="reaction-btn'+(rx.mine===-1?' active-down':'')+'" onclick="toggleReaction('+c.id+',-1)">👎 '+rx.down+'</button></div></div></div>';
+    }).join(''):'<div class="comments-empty">No comments yet — be the first to talk trash 🏒</div>')
+    +'</div>'
+    +'</div>'
+    +'</div>';
+}
+
+function handleCommentKey(e,panelId){
+  if(mentionDropdownActive){
+    if(e.key==='ArrowDown'||e.key==='ArrowUp'||e.key==='Enter'||e.key==='Escape'){
+      e.preventDefault();
+      var dd=document.getElementById('mention-dd-'+panelId);
+      if(!dd)return;
+      var items=dd.querySelectorAll('.mention-item');
+      if(!items.length)return;
+      if(e.key==='Escape'){dd.classList.remove('show');mentionDropdownActive=false;return;}
+      var sel=dd.querySelector('.mention-item.selected');
+      if(e.key==='Enter'&&sel){sel.dispatchEvent(new MouseEvent('mousedown'));return;}
+      var idx=Array.from(items).indexOf(sel);
+      if(e.key==='ArrowDown')idx=Math.min(idx+1,items.length-1);
+      if(e.key==='ArrowUp')idx=Math.max(idx-1,0);
+      items.forEach(function(it,i){it.classList.toggle('selected',i===idx);});
+      return;
+    }
+  }
+  if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();postComment(panelId);}
+}
+
+// ── REMEMBER ME & AUTO-LOGIN ──
+async function tryAutoLogin(){
+  var session=loadSession();
+  if(!session||!session.u||!session.h)return;
+  try{
+    var user=await dbUser(session.u);
+    if(!user||user.password_hash!==session.h)return;
+    CU=session.u;
+    var sv=await dbGetPicks(CU);
+    SAVED=!!(sv&&sv.picks);
+    picks=sv&&sv.picks?Object.assign(blank(),sv.picks):blank();
+    launch();
+  }catch(e){clearSession();}
+}
+
+document.getElementById('li-p').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});
+document.getElementById('re-p2').addEventListener('keydown',function(e){if(e.key==='Enter')doRegister();});
+
+// Auto-login on page load
+tryAutoLogin();
 
 async function fetchComments(){
   try{
