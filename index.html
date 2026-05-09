@@ -479,6 +479,7 @@ async function fetchESPNScores(){
     if(found){SCORE_SRC='ncaa';return true;}
     return false;
   }catch(e){return false;}
+}
 async function fetchManualScores(){
   try{
     var r=await sb('scores?select=*','GET');
