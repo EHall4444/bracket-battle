@@ -932,6 +932,21 @@ function redraw(ro, vu){
     var canPickF=!!(fA&&fB);
     gamesH='<div class="matchup-grid single">'+buildCard('fin',fA,fB,FIN.loc,FIN.time,p.fin,FIN.result,lk||!canPickF,null)+'</div>';
   }
+    gamesH='<div class="matchup-grid double">'+qcards.join('')+'</div>';
+
+  }else if(ACTIVE_ROUND==='sf'){
+    var sfcards=SF.map(function(g){
+      var tA=p[g.qfA]||null,tB=p[g.qfB]||null;
+      var canPick=!!(tA&&tB);
+      return buildCard(g.id,tA,tB,g.loc,g.time,p[g.id],g.result,lk||!canPick,'Championship');
+    });
+    gamesH='<div class="matchup-grid double">'+sfcards.join('')+'</div>';
+
+  }else if(ACTIVE_ROUND==='fin'){
+    var fA=p[FIN.sfA]||null,fB=p[FIN.sfB]||null;
+    var canPickF=!!(fA&&fB);
+    gamesH='<div class="matchup-grid single">'+buildCard('fin',fA,fB,FIN.loc,FIN.time,p.fin,FIN.result,lk||!canPickF,null)+'</div>';
+  }
 
   // Action bar
   var actionH='';
