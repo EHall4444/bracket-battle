@@ -429,43 +429,57 @@ function espnStatus(ev){
 
 function gameDateStr(d){var y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),dd=String(d.getDate()).padStart(2,'0');return y+m+dd;}
 
-async function fetchESPNScores(){
+async function async function fetchESPNScores(){
   try{
+    var dates=['20260509','20260510','20260516','20260517','20260523','20260525'];
     var today=new Date();
-    var gameDates=['20260509','20260510','20260516','20260517','20260523','20260525'];
     var toFetch=new Set([gameDateStr(today)]);
-    gameDates.forEach(function(d){var gd=new Date(d.slice(0,4)+'-'+d.slice(4,6)+'-'+d.slice(6,8)+'T12:00:00');if(gd<=today)toFetch.add(d);});
+    dates.forEach(function(d){
+      var gd=new Date(d.slice(0,4)+'-'+d.slice(4,6)+'-'+d.slice(6,8)+'T12:00:00');
+      if(gd<=today)toFetch.add(d);
+    });
     var found=false;
     for(var dateStr of Array.from(toFetch)){
-      var resp=await fetch('https://site.api.espn.com/apis/site/v2/sports/lacrosse/college-men/scoreboard?dates='+dateStr,{signal:AbortSignal.timeout(8000)});
+      var resp=await fetch('https://ncaa-api.henrygd.me/scoreboard/lacrosse-men/d1/'+dateStr.slice(0,4)+'/'+dateStr.slice(4,6)+'/'+dateStr.slice(6,8),{signal:AbortSignal.timeout(8000)});
       if(!resp.ok)continue;
       var data=await resp.json();
-      if(!data||!data.events)continue;
-      data.events.forEach(function(ev){
-        var comp=ev.competitions&&ev.competitions[0];
-        if(!comp||!comp.competitors||comp.competitors.length<2)return;
-        var c0=comp.competitors[0],c1=comp.competitors[1];
-        var kA=espnKey(c0.team&&c0.team.displayName||'');
-        var kB=espnKey(c1.team&&c1.team.displayName||'');
+      if(!data||!data.games)continue;
+      data.games.forEach(function(entry){
+        var g=entry.game;
+        if(!g)return;
+        var awaySeo=g.away&&g.away.names&&g.away.names.seo||'';
+        var homeSeo=g.home&&g.home.names&&g.home.names.seo||'';
+        var kA=ESPN_MAP[awaySeo]||ESPN_MAP[awaySeo.replace(/-/g,' ')]||null;
+        var kB=ESPN_MAP[homeSeo]||ESPN_MAP[homeSeo.replace(/-/g,' ')]||null;
         if(!kA||!kB)return;
-        // Find which FR game this matches
+        var state=g.gameState||'pre';
+        var status=state==='pre'?'scheduled':state==='final'?'Final':g.currentPeriod||'Live';
+        var scoreA=g.away.score!==''?parseInt(g.away.score||0):null;
+        var scoreB=g.home.score!==''?parseInt(g.home.score||0):null;
+        if(state==='pre')return;
+        // Match to FR games
         for(var i=0;i<FR.length;i++){
-          var g=FR[i];
-          var aFirst=(g.a===kA&&g.b===kB);
-          var bFirst=(g.a===kB&&g.b===kA);
+          var fg=FR[i];
+          var aFirst=(fg.a===kA&&fg.b===kB);
+          var bFirst=(fg.a===kB&&fg.b===kA);
           if(aFirst||bFirst){
-            SCORES[g.id]={
-              score_a:aFirst?parseInt(c0.score||0):parseInt(c1.score||0),
-              score_b:aFirst?parseInt(c1.score||0):parseInt(c0.score||0),
-              status:espnStatus(ev)
+            SCORES[fg.id]={
+              score_a:aFirst?scoreA:scoreB,
+              score_b:aFirst?scoreB:scoreA,
+              status:status
             };
-            // Also update game result if Final
-            if(espnStatus(ev)==='Final'){
-              var winnerKey=parseInt(c0.score||0)>parseInt(c1.score||0)?(aFirst?g.a:g.b):(aFirst?g.b:g.a);
-              g.result=winnerKey;
+            if(state==='final'){
+              fg.result=g.away.winner?(aFirst?kA:kB):(aFirst?kB:kA);
             }
             found=true;break;
           }
+        }
+      });
+    }
+    if(found){SCORE_SRC='ncaa';return true;}
+    return false;
+  }catch(e){return false;}
+}
         }
         // QF/SF/Final — match by any two known team keys
         var allGames=[].concat(QF,SF,[FIN]);
