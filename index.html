@@ -1005,7 +1005,20 @@ function calcScore(p){
   QF.forEach(function(g){if(g.result&&p[g.id]===g.result)w++;});
   return{wins:w,upsets:u,score:w*10};
 }
+function tourneyOver(){ return new Date() >= TOURNAMENT_END; }
 
+function chyronHTML(winner, champ){
+  if(!winner || !champ) return '';
+  var name = T[champ] ? T[champ].n.toUpperCase() : champ.toUpperCase();
+  return '<div class="chyron-wrap"><div class="chyron-track">'
+    + '<span class="chyron-text">CONGRATULATIONS <span>' + winner.toUpperCase() + '</span>'
+    + ', AND <span>' + name + '</span>'
+    + ', CHAMPIONS OF THE BRACKET BATTLE!</span>'
+    + '<span class="chyron-text">CONGRATULATIONS <span>' + winner.toUpperCase() + '</span>'
+    + ', AND <span>' + name + '</span>'
+    + ', CHAMPIONS OF THE BRACKET BATTLE!</span>'
+    + '</div></div>';
+}
 async function renderLB(){
   var c=document.getElementById('apptab-leaderboard');
   c.innerHTML='<div style="padding:40px;text-align:center;color:var(--muted);font-family:var(--fh);letter-spacing:.06em">LOADING…</div>';
