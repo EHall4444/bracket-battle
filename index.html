@@ -946,29 +946,7 @@ function redraw(ro, vu){
       var elimB=!!(tB&&frB&&frB.result&&frB.result!==tB);
       return buildCard(g.id,tA,tB,g.loc,g.time,p[g.id],g.result,lk||!canPick,'Semifinals',elimA,elimB);
     });
-    gamesH='<div class="matchup-grid double">'+qcards.join('')+'</div>';
-
-  }else if(ACTIVE_ROUND==='sf'){
-    var sfcards=SF.map(function(g){
-      var tA=p[g.qfA]||null,tB=p[g.qfB]||null;
-      var canPick=!!(tA&&tB);
-      var qfA=QF.find(function(x){return x.id===g.qfA;});
-      var qfB=QF.find(function(x){return x.id===g.qfB;});
-      var elimA=!!(tA&&qfA&&qfA.result&&qfA.result!==tA);
-      var elimB=!!(tB&&qfB&&qfB.result&&qfB.result!==tB);
-      return buildCard(g.id,tA,tB,g.loc,g.time,p[g.id],g.result,lk||!canPick,'Championship',elimA,elimB);
-    });
-    gamesH='<div class="matchup-grid double">'+sfcards.join('')+'</div>';
-
-  }else if(ACTIVE_ROUND==='fin'){
-    var fA=p[FIN.sfA]||null,fB=p[FIN.sfB]||null;
-    var canPickF=!!(fA&&fB);
-    var sfA=SF.find(function(x){return x.id===FIN.sfA;});
-    var sfB=SF.find(function(x){return x.id===FIN.sfB;});
-    var elimA=!!(fA&&sfA&&sfA.result&&sfA.result!==fA);
-    var elimB=!!(fB&&sfB&&sfB.result&&sfB.result!==fB);
-    gamesH='<div class="matchup-grid single">'+buildCard('fin',fA,fB,FIN.loc,FIN.time,p.fin,FIN.result,lk||!canPickF,null,elimA,elimB)+'</div>';
-  }
+    
     gamesH='<div class="matchup-grid double">'+qcards.join('')+'</div>';
 
   }else if(ACTIVE_ROUND==='sf'){
