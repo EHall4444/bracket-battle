@@ -685,7 +685,31 @@ async function sb(path,method,body){var o={method:method||'GET',headers:{'apikey
 async function dbUser(u){var r=await sb('users?username=eq.'+encodeURIComponent(u)+'&select=username,password_hash');return(r.ok&&r.data&&r.data.length)?r.data[0]:null;}
 async function dbCreate(u,h){return(await sb('users','POST',{username:u,password_hash:h})).ok;}
 async function dbGetPicks(u){var r=await sb('picks?username=eq.'+encodeURIComponent(u)+'&select=picks,locked');return(r.ok&&r.data&&r.data.length)?r.data[0]:null;}
-async function dbSave(u,p){var c=await sb('picks?username=eq.'+encodeURIComponent(u),'GET');var pl={picks:p,updated_at:new Date().toISOString(),locked:false};if(c.ok&&c.data&&c.data.length){return(await sb('picks?username=eq.'+encodeURIComponent(u),'PATCH',pl)).ok;}else{pl.username=u;return(await sb('picks','POST',pl)).ok;}}
+async function dbSave(u, p) {
+  const deadline = new Date('2026-05-09T16:00:00Z');
+  const minsLeft = (deadline - new Date()) / 60000;
+
+  // existing logic
+  const c = await sb('picks?username=eq.' + encodeURIComponent(u), 'GET');
+  const pl = { picks: p, updated_at: new Date().toISOString(), locked: false };
+  let ok;
+  if (c.ok && c.data && c.data.length) {
+    ok = (await sb('picks?username=eq.' + encodeURIComponent(u), 'PATCH', pl)).ok;
+  } else {
+    pl.username = u;
+    ok = (await sb('picks', 'POST', pl)).ok;
+  }
+
+  // new: audit insert, non-blocking
+  sb('pick_changes', 'POST', {
+    username: u,
+    picks: p,
+    saved_at: new Date().toISOString(),
+    mins_before_deadline: Math.round(minsLeft * 10) / 10
+  });
+
+  return ok;
+}
 async function dbAll(){var r=await sb('picks?select=username,picks,locked');return(r.ok&&r.data)?r.data:[];}
 
 // ── AUTH ──
