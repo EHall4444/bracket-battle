@@ -1375,7 +1375,7 @@ async function postComment(panelId){
 
 function commentsPanel(panelId){
   var canPost=!!CU;
-  var placeholder=canPost?'Keep it clean. Jesus has wifi too.':'Sign in to comment';
+var placeholder=canPost?'':'Sign in to comment';
   var now=Date.now();
   var rateLocked=now-LAST_POST_TIME<RATE_LIMIT_MS;
   return'<div class="comments-panel">'
