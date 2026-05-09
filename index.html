@@ -1003,7 +1003,8 @@ function calcScore(p){
   var w=0,u=0;
   FR.forEach(function(g){if(g.result&&p[g.id]===g.result){w++;var ws=parseInt((T[g.result]&&T[g.result].s||'').replace('#','')||99),ls=parseInt((T[g.result===g.a?g.b:g.a]&&T[g.result===g.a?g.b:g.a].s||'').replace('#','')||0);if(ws>ls)u++;}});
   QF.forEach(function(g){if(g.result&&p[g.id]===g.result)w++;});
-// 3rd tiebreaker: sum of all winner seeds (higher = bolder picks = wins)
+
+  // 3rd tiebreaker: sum of all winner seeds (higher = bolder picks = wins)
   var boldScore=0;
   var allSlots=['fr1','fr2','fr3','fr4','fr5','fr6','fr7','fr8',
                 'qf1','qf2','qf3','qf4','sf1','sf2','fin'];
@@ -1014,6 +1015,9 @@ function calcScore(p){
       boldScore+=ss?parseInt(ss)||99:99;
     }
   });
+
+  return{wins:w,upsets:u,score:w*10,boldScore:boldScore};
+}
   return{wins:w,upsets:u,score:w*10,boldScore:boldScore};
 }
 function tourneyOver(){ return new Date() >= TOURNAMENT_END; }
