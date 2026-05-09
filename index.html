@@ -1041,7 +1041,8 @@ async function renderLB(){
     }).map(function(r){
       var sc=calcScore(r.picks||{});
       var ch=(r.picks||{}).fin;
-      return{u:r.username,p:r.picks||{},wins:sc.wins,upsets:sc.upsets,score:sc.score,champ:ch&&T[ch]?T[ch].n:'—',champKey:ch||null};
+      return{u:r.username,p:r.picks||{},wins:sc.wins,upsets:sc.upsets,score:sc.score,champ:ch&&T[ch]?T[ch].n:'—',champKey:ch||null,
+        boldScore:sc.boldScore||0};
     });
     entries.sort(function(a,b){
       if(b.wins!==a.wins)return b.wins-a.wins;
