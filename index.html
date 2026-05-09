@@ -480,14 +480,7 @@ async function fetchESPNScores(){
     return false;
   }catch(e){return false;}
 }
-        }
-        // QF/SF/Final — match by any two known team keys
-        var allGames=[].concat(QF,SF,[FIN]);
-        for(var j=0;j<allGames.length;j++){
-          var qg=allGames[j];
-          var qa=SCORES[qg.id]?null:null; // already set?
-          // Just store by team pair for QF/SF/Final
-          var qA=picks[qg.frA||qg.qfA||qg.sfA]||null;
+
           var qB=picks[qg.frB||qg.qfB||qg.sfB]||null;
           if(!qA||!qB)continue;
           var qAFirst=(qA===kA&&qB===kB);
