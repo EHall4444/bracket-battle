@@ -479,27 +479,7 @@ async function fetchESPNScores(){
     if(found){SCORE_SRC='ncaa';return true;}
     return false;
   }catch(e){return false;}
-}
-
-          var qB=picks[qg.frB||qg.qfB||qg.sfB]||null;
-          if(!qA||!qB)continue;
-          var qAFirst=(qA===kA&&qB===kB);
-          var qBFirst=(qA===kB&&qB===kA);
-          if(qAFirst||qBFirst){
-            SCORES[qg.id]={
-              score_a:qAFirst?parseInt(c0.score||0):parseInt(c1.score||0),
-              score_b:qAFirst?parseInt(c1.score||0):parseInt(c0.score||0),
-              status:espnStatus(ev)
-            };
-            found=true;break;
-          }
-        }
-      });
-    }
-    if(found){SCORE_SRC='espn';return true;}
-    return false;
-  }catch(e){return false;}
-}
+Login issue
 
 async function fetchManualScores(){
   try{
