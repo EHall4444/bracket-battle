@@ -772,9 +772,9 @@ function oddsBar(k1,k2){
 }
 
 // ── TEAM ROW ──
-function teamRow(gameId, teamKey, isTeamA, myPick, result, lk){
+function teamRow(gameId, teamKey, isTeamA, myPick, result, lk, forceElim){
   var isW=result===teamKey;
-  var isE=result&&result!==teamKey;
+  var isE=(result&&result!==teamKey)||forceElim;
   var isPick=myPick===teamKey;
   var td=T[teamKey];
   var cls='team-row';
@@ -814,7 +814,7 @@ function emptyLockedRow(){
 }
 
 // ── BUILD CARD ──
-function buildCard(gameId, teamA, teamB, loc, time, myPick, result, lk, advLabel){
+function buildCard(gameId, teamA, teamB, loc, time, myPick, result, lk, advLabel, forceElimA, forceElimB){
   var hasPick=myPick&&(myPick===teamA||myPick===teamB);
   var needsPick=!lk&&teamA&&teamB&&!myPick;
   var unavail=!teamA||!teamB;
@@ -829,8 +829,8 @@ function buildCard(gameId, teamA, teamB, loc, time, myPick, result, lk, advLabel
   var statusH=hasStatus?'<span class="game-status-badge'+statusCls+'" id="sc-st-'+gameId+'">'+sc.status+'</span>':'';
   return'<div class="'+cls+'">'
     +'<div class="card-header"><span class="card-loc">📍 '+loc+'</span><span class="card-time">'+time+'</span>'+statusH+'</div>'
-    +(teamA?teamRow(gameId,teamA,true,myPick,result,lk||unavail):lk?emptyLockedRow():emptyRow(''))
-    +(teamB?teamRow(gameId,teamB,false,myPick,result,lk||unavail):lk?emptyLockedRow():emptyRow(''))
+    +(teamA?teamRow(gameId,teamA,true,myPick,result,lk||unavail,forceElimA):lk?emptyLockedRow():emptyRow(''))
+    +(teamB?teamRow(gameId,teamB,false,myPick,result,lk||unavail,forceElimB):lk?emptyLockedRow():emptyRow(''))
     +(showOdds?oddsBar(teamA,teamB):'')
     +(advLabel?'<div class="card-adv">→ Winner advances to '+advLabel+'</div>':'')
     +'</div>';
@@ -915,7 +915,11 @@ function redraw(ro, vu){
     var qcards=QF.map(function(g){
       var tA=p[g.frA]||null,tB=p[g.frB]||null;
       var canPick=!!(tA&&tB);
-      return buildCard(g.id,tA,tB,g.loc,g.time,p[g.id],g.result,lk||!canPick,'Semifinals');
+      var frA=FR.find(function(x){return x.id===g.frA;});
+      var frB=FR.find(function(x){return x.id===g.frB;});
+      var elimA=!!(tA&&frA&&frA.result&&frA.result!==tA);
+      var elimB=!!(tB&&frB&&frB.result&&frB.result!==tB);
+      return buildCard(g.id,tA,tB,g.loc,g.time,p[g.id],g.result,lk||!canPick,'Semifinals',elimA,elimB);
     });
     gamesH='<div class="matchup-grid double">'+qcards.join('')+'</div>';
 
@@ -923,14 +927,22 @@ function redraw(ro, vu){
     var sfcards=SF.map(function(g){
       var tA=p[g.qfA]||null,tB=p[g.qfB]||null;
       var canPick=!!(tA&&tB);
-      return buildCard(g.id,tA,tB,g.loc,g.time,p[g.id],g.result,lk||!canPick,'Championship');
+      var qfA=QF.find(function(x){return x.id===g.qfA;});
+      var qfB=QF.find(function(x){return x.id===g.qfB;});
+      var elimA=!!(tA&&qfA&&qfA.result&&qfA.result!==tA);
+      var elimB=!!(tB&&qfB&&qfB.result&&qfB.result!==tB);
+      return buildCard(g.id,tA,tB,g.loc,g.time,p[g.id],g.result,lk||!canPick,'Championship',elimA,elimB);
     });
     gamesH='<div class="matchup-grid double">'+sfcards.join('')+'</div>';
 
   }else if(ACTIVE_ROUND==='fin'){
     var fA=p[FIN.sfA]||null,fB=p[FIN.sfB]||null;
     var canPickF=!!(fA&&fB);
-    gamesH='<div class="matchup-grid single">'+buildCard('fin',fA,fB,FIN.loc,FIN.time,p.fin,FIN.result,lk||!canPickF,null)+'</div>';
+    var sfA=SF.find(function(x){return x.id===FIN.sfA;});
+    var sfB=SF.find(function(x){return x.id===FIN.sfB;});
+    var elimA=!!(fA&&sfA&&sfA.result&&sfA.result!==fA);
+    var elimB=!!(fB&&sfB&&sfB.result&&sfB.result!==fB);
+    gamesH='<div class="matchup-grid single">'+buildCard('fin',fA,fB,FIN.loc,FIN.time,p.fin,FIN.result,lk||!canPickF,null,elimA,elimB)+'</div>';
   }
     gamesH='<div class="matchup-grid double">'+qcards.join('')+'</div>';
 
