@@ -820,7 +820,7 @@ function teamRow(gameId, teamKey, isTeamA, myPick, result, lk, forceElim){
     +'<div class="t-info"><span class="t-name">'+td.n+'</span><div class="t-rec">'+td.r+'</div></div>'
     +scoreH
     +(isW&&!isPick?'<div class="t-adv">Adv</div>':'')
-    +(lk&&!isE&&!isPick?'<div class="t-lock-icon">🔒</div>':'')
+    
     +(isPick&&!lk?'<button class="t-clear" onclick="event.stopPropagation();clearOnly(\''+gameId+'\')" title="Remove this pick">✕</button>':'')
     +'</div>';
 }
@@ -854,7 +854,7 @@ function buildCard(gameId, teamA, teamB, loc, time, myPick, result, lk, advLabel
   var statusCls=sc&&sc.status==='Final'?' final':' live';
   var statusH=hasStatus?'<span class="game-status-badge'+statusCls+'" id="sc-st-'+gameId+'">'+sc.status+'</span>':'';
   return'<div class="'+cls+'">'
-    +'<div class="card-header"><span class="card-loc">📍 '+loc+'</span><span class="card-time">'+time+'</span>'+statusH+'</div>'
+    +'<div class="card-header"><span class="card-loc">📍 '+loc+'</span><span class="card-time">'+time+'</span>'+statusH+(lk?' 🔒':'')+'</div>'
     +(teamA?teamRow(gameId,teamA,true,myPick,result,lk||unavail,forceElimA):lk?emptyLockedRow():emptyRow(''))
     +(teamB?teamRow(gameId,teamB,false,myPick,result,lk||unavail,forceElimB):lk?emptyLockedRow():emptyRow(''))
     +(showOdds?oddsBar(teamA,teamB):'')
