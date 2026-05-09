@@ -1082,7 +1082,7 @@ async function renderLB(){
       return'<div class="lbrow'+(me?' lbme':'')+'" onclick="viewBracket(\''+e.u+'\')">'
         +rankCell
         +'<div class="lbname">'+e.u+(me?' <span style="font-size:9px;color:var(--muted)">(you)</span>':'')+'</div>'
-        +'<div class="lbpick">'+e.champ+'</div>'
+     '<div class="lbpick" title="Bold score: '+e.boldScore+' (sum of all winner seeds — higher = bolder picks)">'+e.champ+'</div>'
         +'<div class="lbpts">'+e.score+'</div>'
         +'<div class="lbups">'+e.upsets+'</div>'
         +'<div class="lbact"><button class="vbtn" onclick="event.stopPropagation();viewBracket(\''+e.u+'\')">View</button></div>'
