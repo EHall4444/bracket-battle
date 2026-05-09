@@ -1018,31 +1018,73 @@ function chyronHTML(winner, champ){
     + ', AND <span>' + name + '</span>'
     + ', CHAMPIONS OF THE BRACKET BATTLE!</span>'
     + '</div></div>';
-}
 async function renderLB(){
   var c=document.getElementById('apptab-leaderboard');
   c.innerHTML='<div style="padding:40px;text-align:center;color:var(--muted);font-family:var(--fh);letter-spacing:.06em">LOADING…</div>';
   try{
     var all=await dbAll();
-    // Show all brackets that have been saved (have a picks row), not filtered by locked
     var entries=all.filter(function(r){
       var p=r.picks||{};
-      // Must have at least one pick to show (means they've saved something)
       return Object.keys(p).some(function(k){return p[k]!==null;});
-    }).map(function(r){var sc=calcScore(r.picks||{});var ch=(r.picks||{}).fin;return{u:r.username,p:r.picks||{},wins:sc.wins,upsets:sc.upsets,score:sc.score,champ:ch&&T[ch]?T[ch].n:'—'};});
-    entries.sort(function(a,b){if(b.wins!==a.wins)return b.wins-a.wins;if(b.upsets!==a.upsets)return b.upsets-a.upsets;return a.u.localeCompare(b.u);});
-    var rows=entries.map(function(e,i){var me=e.u===CU;var rc='lbrank'+(i===0?' gold':i===1?' silver':i===2?' bronze':'');var md=i===0?'🥇 ':i===1?'🥈 ':i===2?'🥉 ':'';
+    }).map(function(r){
+      var sc=calcScore(r.picks||{});
+      var ch=(r.picks||{}).fin;
+      return{u:r.username,p:r.picks||{},wins:sc.wins,upsets:sc.upsets,score:sc.score,champ:ch&&T[ch]?T[ch].n:'—',champKey:ch||null};
+    });
+    entries.sort(function(a,b){
+      if(b.wins!==a.wins)return b.wins-a.wins;
+      if(b.upsets!==a.upsets)return b.upsets-a.upsets;
+      return a.u.localeCompare(b.u);
+    });
+
+    var over=tourneyOver();
+    var started=past();
+
+    var chyron='';
+    if(over&&entries.length){
+      var topEntry=entries[0];
+      chyron=chyronHTML(topEntry.u,topEntry.champKey);
+    }
+
+    var rows=entries.map(function(e,i){
+      var me=e.u===CU;
+      var rankCell;
+      if(over){
+        var medalMap=['🥇','🥈','🥉'];
+        var rankCls='lbrank';
+        if(i===0)rankCls+=' gold';
+        else if(i===1)rankCls+=' silver';
+        else if(i===2)rankCls+=' bronze';
+        var display=i<3
+          ?'<span style="font-size:15px;font-weight:700">'+(i+1)+'</span><span style="font-size:11px;margin-left:3px">'+medalMap[i]+'</span>'
+          :'<span style="font-size:15px;font-weight:700">'+(i+1)+'</span>';
+        rankCell='<div class="'+rankCls+'" style="display:flex;align-items:center;gap:2px">'+display+'</div>';
+      }else if(started){
+        rankCell='<div class="lbrank" style="font-size:15px;font-weight:700">'+(i+1)+'</div>';
+      }else{
+        rankCell='<div class="lbrank" style="color:var(--muted);font-size:11px;letter-spacing:.04em">—</div>';
+      }
+
       return'<div class="lbrow'+(me?' lbme':'')+'" onclick="viewBracket(\''+e.u+'\')">'
-        +'<div class="'+rc+'">'+md+(i+1)+'</div>'
+        +rankCell
         +'<div class="lbname">'+e.u+(me?' <span style="font-size:9px;color:var(--muted)">(you)</span>':'')+'</div>'
-        +'<div class="lbpick">'+e.champ+'</div><div class="lbpts">'+e.score+'</div>'
+        +'<div class="lbpick">'+e.champ+'</div>'
+        +'<div class="lbpts">'+e.score+'</div>'
         +'<div class="lbups">'+e.upsets+'</div>'
-        +'<div class="lbact"><button class="vbtn" onclick="event.stopPropagation();viewBracket(\''+e.u+'\')">View</button></div></div>';
+        +'<div class="lbact"><button class="vbtn" onclick="event.stopPropagation();viewBracket(\''+e.u+'\')">View</button></div>'
+        +'</div>';
     }).join('');
-    c.innerHTML='<div class="lb-wrap"><div class="lb-hdr"><div class="lb-title">🏆 Leaderboard</div><div class="lb-count">'+entries.length+' saved bracket'+(entries.length!==1?'s':'')+' · 10 pts per correct pick</div></div>'
-      +'<div class="lb-table"><div class="lbrow lbhdr"><div class="lbrank">#</div><div class="lbname">Player</div><div class="lbpick">Champion Pick</div><div class="lbpts">Score</div><div class="lbups">Upsets</div><div class="lbact"></div></div>'
+
+    c.innerHTML=chyron
+      +'<div class="lb-wrap"><div class="lb-hdr"><div class="lb-title">🏆 Leaderboard</div>'
+      +'<div class="lb-count">'+entries.length+' saved bracket'+(entries.length!==1?'s':'')+' · 10 pts per correct pick</div></div>'
+      +'<div class="lb-table">'
+      +'<div class="lbrow lbhdr"><div class="lbrank">#</div><div class="lbname">Player</div>'
+      +'<div class="lbpick">Champion Pick</div><div class="lbpts">Score</div>'
+      +'<div class="lbups">Upsets</div><div class="lbact"></div></div>'
       +(entries.length?rows:'<div class="lb-empty">No saved brackets yet — make your picks and save to appear here!</div>')
-      +'</div></div><div class="lb-note">Tiebreaker: most correct upset picks. Brackets lock automatically on May 9 at 12pm ET.</div>'
+      +'</div></div>'
+      +'<div class="lb-note">Tiebreaker: most correct upset picks. Brackets lock automatically on May 9 at 12pm ET.</div>'
       +commentsPanel('leaderboard');
   }catch(e){c.innerHTML='<div style="padding:30px;text-align:center;color:var(--red)">Error: '+e.message+'</div>';}
 }
