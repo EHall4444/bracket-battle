@@ -1044,12 +1044,13 @@ async function renderLB(){
       return{u:r.username,p:r.picks||{},wins:sc.wins,upsets:sc.upsets,score:sc.score,champ:ch&&T[ch]?T[ch].n:'—',champKey:ch||null,
         boldScore:sc.boldScore||0};
     });
-    entries.sort(function(a,b){
+   entries.sort(function(a,b){
       if(b.wins!==a.wins)return b.wins-a.wins;
       if(b.upsets!==a.upsets)return b.upsets-a.upsets;
+      // 3rd tiebreaker: sum of all winner seeds — higher = bolder = wins
+      if(b.boldScore!==a.boldScore)return b.boldScore-a.boldScore;
       return a.u.localeCompare(b.u);
     });
-
     var over=tourneyOver();
     var started=past();
 
