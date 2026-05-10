@@ -233,7 +233,8 @@ body{font-family:var(--fb);color:var(--text);font-size:13px;min-height:100vh;bac
 .remember-row input[type=checkbox]{width:14px;height:14px;cursor:pointer;accent-color:var(--blue)}
 .remember-row label{font-size:11px;color:var(--muted);cursor:pointer;font-family:var(--fb)}
 /* ── SCORES ── */
-.t-score{font-family:var(--fh);font-size:16px;font-weight:700;color:var(--navy);margin-left:auto;flex-shrink:0;min-width:24px;text-align:right;margin-right:28px}
+.t-score-col{display:flex;flex-direction:column;align-items:flex-end;gap:2px;flex-shrink:0;margin-left:auto}
+.t-score{font-family:var(--fh);font-size:16px;font-weight:700;color:var(--navy);min-width:24px;text-align:right}
 .team-row.is-pick .t-score{color:#1a1100}
 .team-row.is-winner .t-score{color:var(--green)}
 .game-status-badge{display:inline-flex;align-items:center;font-family:var(--fh);font-size:9px;font-weight:700;color:var(--white);background:var(--navy3);border-radius:3px;padding:2px 7px;letter-spacing:.06em;text-transform:uppercase;margin-left:6px}
@@ -838,13 +839,13 @@ function teamRow(gameId, teamKey, isTeamA, myPick, result, lk, forceElim){
   var sc=SCORES[gameId];
   var hasScore=sc&&sc.status&&sc.status!=='scheduled';
   var scoreVal=hasScore?(isTeamA?sc.score_a:sc.score_b):null;
-  var scoreH=hasScore?'<span class="t-score" id="sc-'+(isTeamA?'a':'b')+'-'+gameId+'">'+scoreVal+'</span>':'';
+  var wlBadge='';
+  if(hasScore){if(isW)wlBadge='<div class="t-adv">W</div>';else if(result)wlBadge='<div class="t-adv" style="background:var(--red-l);color:var(--red)">L</div>';}
+  var scoreCol=hasScore?'<div class="t-score-col"><span class="t-score" id="sc-'+(isTeamA?'a':'b')+'-'+gameId+'">'+scoreVal+'</span>'+wlBadge+'</div>':'';
   return'<div class="'+cls+'" '+oc+' title="'+(lk?'Picks are locked':isPick?'Selected — click ✕ to remove':'Select '+td.n)+'">'
     +(td.s?'<span class="t-seed">'+td.s+'</span>':'<span class="t-seed"></span>')
     +'<div class="t-info"><span class="t-name">'+td.n+'</span><div class="t-rec">'+td.r+'</div></div>'
-    +scoreH
-    +(isW&&!isPick?'<div class="t-adv">W</div>':'')+(isPick&&result&&result!==teamKey?'<div class="t-adv" style="background:var(--red-l);color:var(--red)">L</div>':'')
-    
+    +scoreCol
     +(isPick&&!lk?'<button class="t-clear" onclick="event.stopPropagation();clearOnly(\''+gameId+'\')" title="Remove this pick">✕</button>':'')
     +'</div>';
 }
@@ -872,7 +873,7 @@ function buildCard(gameId, teamA, teamB, loc, time, myPick, result, lk, advLabel
   if(hasPick)cls+=' has-pick';
   else if(needsPick)cls+=' needs-pick';
   else if(unavail&&!lk)cls+=' unavailable';
-  var showOdds=teamA&&teamB&&T[teamA]&&T[teamB];
+  var showOdds=teamA&&teamB&&T[teamA]&&T[teamB]&&!result;
   var sc=SCORES[gameId];
   var hasStatus=sc&&sc.status&&sc.status!=='scheduled';
   var statusCls=sc&&sc.status==='Final'?' final':' live';
