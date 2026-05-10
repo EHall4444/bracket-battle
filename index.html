@@ -398,7 +398,7 @@ body{font-family:var(--fb);color:var(--text);font-size:13px;min-height:100vh;bac
     <div id="apptab-admin" style="display:none"></div>
   </div>
 </div>
-<div class="tt-pill" onclick="document.querySelector('.comments-panel').scrollIntoView({behavior:'smooth'})">💬 Trash Talk ↓</div>
+<div class="tt-pill" id="tt-pill" style="display:none" onclick="document.querySelector('.comments-panel').scrollIntoView({behavior:'smooth'})">💬 Trash Talk ↓</div>
 
 <script>
 var SURL='https://swjajduyuaxsucfligwo.supabase.co';
@@ -780,7 +780,8 @@ async function doRegister(){
   finally{busy('re-btn',false,'Create Account');}
 }
 
-function doLogout(){CU=null;VU=null;SAVED=false;picks=blank();viewPicks=null;SCORES={};SCORE_SRC='';COMMENTS=[];REACTIONS={};LAST_POST_TIME=0;clearInterval(cdTimer);clearInterval(scoreTimer);clearInterval(commentTimer);clearInterval(rateTimer);clearSession();ACTIVE_ROUND='fr';document.getElementById('auth-screen').style.display='flex';document.getElementById('shell').style.display='none';document.getElementById('li-err').textContent='';document.getElementById('li-u').value='';document.getElementById('li-p').value='';}
+function doLogout(){CU=null;VU=null;SAVED=false;picks=blank();viewPicks=null;SCORES={};SCORE_SRC='';COMMENTS=[];REACTIONS={};LAST_POST_TIME=0;clearInterval(cdTimer);clearInterval(scoreTimer);clearInterval(commentTimer);clearInterval(rateTimer);clearSession();ACTIVE_ROUND='fr';document.getElementById('auth-screen').style.display='flex';document.getElementById('shell').style.display='none';document.getElementById('li-err').textContent='';document.getElementById('li-u').value='';document.getElementById('li-p').value='';
+  var ttPill=document.getElementById('tt-pill');if(ttPill)ttPill.style.display='none';}
 
 function launch(){
   document.getElementById('auth-screen').style.display='none';
@@ -793,6 +794,7 @@ function launch(){
   startScorePolling();
   startCommentPolling();
   dbAll().then(function(rows){ALL_PICKS=rows;});
+  var ttPill=document.getElementById('tt-pill');if(ttPill)ttPill.style.display='';
   showAppTab('bracket');
 }
 
