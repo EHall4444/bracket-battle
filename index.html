@@ -169,6 +169,13 @@ body{font-family:var(--fb);color:var(--text);font-size:13px;min-height:100vh;bac
 
 /* adv strip */
 .card-adv{font-family:var(--fh);font-size:8px;color:rgba(74,144,217,.8);text-align:center;padding:4px;background:rgba(37,99,168,.05);border-top:1px solid rgba(37,99,168,.1);letter-spacing:.06em;text-transform:uppercase}
+.info-btn{width:20px;height:20px;border-radius:50%;background:rgba(74,144,217,.12);border:1px solid rgba(74,144,217,.3);color:var(--blue);font-size:10px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;font-family:var(--fb);user-select:none}
+.info-panel{padding:12px 14px;background:var(--off);border-top:1px solid var(--gray);font-size:11px}
+.info-panel-row{display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid var(--gray);color:var(--muted)}
+.info-panel-row:last-child{border-bottom:none}
+.who-label{font-size:9px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:8px 0 4px;font-weight:600;font-family:var(--fh)}
+.picker-pill{font-size:9px;background:var(--blue-l);color:var(--blue);border-radius:10px;padding:2px 7px;display:inline-block;margin:2px}
+.picker-pill.wrong{background:var(--red-l);color:var(--red)}
 .card-pick-footer{padding:7px 14px;border-top:1px solid var(--gray);display:flex;align-items:center;justify-content:space-between;font-family:var(--fh);font-size:10px;letter-spacing:.04em;text-transform:uppercase}
 .card-pick-footer.correct{background:var(--green-l)}
 .card-pick-footer.wrong{background:var(--off)}
@@ -399,6 +406,7 @@ var SKEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6I
 var DEADLINE=new Date('2026-05-09T16:00:00Z');
 var TOURNAMENT_END=new Date('2026-05-25T20:00:00Z');
 var CU=null,VU=null,SAVED=false,cdTimer=null,scoreTimer=null;
+var ALL_PICKS=[];
 var SCORES={}; // game_id → {score_a, score_b, status} e.g. {score_a:5,score_b:3,status:'Final'}
 var SCORE_SRC=''; // 'espn' | 'manual' | ''
 
@@ -784,6 +792,7 @@ function launch(){
   if(adminTab)adminTab.style.display=(CU==='ehall')?'':'none';
   startScorePolling();
   startCommentPolling();
+  dbAll().then(function(rows){ALL_PICKS=rows;});
   showAppTab('bracket');
 }
 
@@ -891,10 +900,13 @@ function buildCard(gameId, teamA, teamB, loc, time, myPick, result, lk, advLabel
       if(teamA&&teamB&&myPick!==teamA&&myPick!==teamB){return'<div class="card-pick-footer wrong"><span style="color:var(--red)">✗ Your pick: '+pName+'</span><span class="card-pick-pts" style="color:var(--red)">-5 pts</span></div>';}
       if(!result)return'';
       var pts=won?'+10':'-5';var ptsColor=won?'var(--green)':'var(--red)';var symbol=won?"✓ ":"✗ ";
+      var roundStarted=Object.values(SCORES).some(function(s){return s&&s.status&&s.status!=='scheduled';});
+      var infoPanel=buildInfoPanel(gameId,teamA,teamB,result,myPick,roundStarted);
       return'<div class="card-pick-footer'+(won?' correct':' wrong')+'">'
         +'<span style="color:'+(won?'var(--green)':'var(--red)')+'">'+symbol+'Your pick: '+pName+'</span>'
-        +'<span class="card-pick-pts" style="color:'+ptsColor+'">'+pts+' pts</span>'
-        +'</div>';
+        +'<span style="display:flex;align-items:center;gap:8px"><span class="card-pick-pts" style="color:'+ptsColor+'">'+pts+' pts</span>'
+        +'<span class="info-btn" onclick="event.stopPropagation();toggleInfo(''+gameId+'')">i</span></span>'
+        +'</div>'+infoPanel;
     })()
     +'</div>';
 }
@@ -949,6 +961,43 @@ function roundTabsHTML(p, lk){
 function switchRound(r){ACTIVE_ROUND=r;if(VU)redraw(true,VU);else redraw();}
 
 // ── MAIN RENDER ──
+function toggleInfo(gameId){
+  var panel=document.getElementById('info-'+gameId);
+  if(!panel)return;
+  panel.style.display=panel.style.display==='none'?'block':'none';
+}
+
+function buildInfoPanel(gameId,teamA,teamB,result,myPick,showWho){
+  var lines='';
+  // Pre-game odds
+  if(teamA&&teamB&&T[teamA]&&T[teamB]){
+    var o1=T[teamA].o,o2=T[teamB].o,tot=o1+o2;
+    var p1=Math.round(o1/tot*100),p2=100-p1;
+    lines+='<div class="info-panel-row"><span>Pre-game odds</span><span>'+T[teamA].n+' '+p1+'% · '+T[teamB].n+' '+p2+'%</span></div>';
+  }
+  // Who picked what — only after round started
+  if(showWho&&teamA&&teamB&&ALL_PICKS.length){
+    var picksA=[],picksB=[],picksOther=[];
+    ALL_PICKS.forEach(function(row){
+      var pk=(row.picks||{})[gameId];
+      if(!pk)return;
+      var uname=row.username.substring(0,10);
+      if(pk===teamA)picksA.push(uname);
+      else if(pk===teamB)picksB.push(uname);
+      else picksOther.push(uname);
+    });
+    function pillList(arr,cls){
+      if(!arr.length)return'<span style="color:var(--muted);font-size:9px">none</span>';
+      var max=arr.slice(0,4).map(function(u){return'<span class="picker-pill '+cls+'">'+u+'</span>';}).join('');
+      return max+(arr.length>4?'<span class="picker-pill">+'+（arr.length-4)+' more</span>':'');
+    }
+    if(teamA)lines+='<div class="who-label">Picked '+T[teamA].n+'</div><div>'+pillList(picksA,result&&result!==teamA?'wrong':'')+'</div>';
+    if(teamB)lines+='<div class="who-label">Picked '+T[teamB].n+'</div><div>'+pillList(picksB,result&&result!==teamB?'wrong':'')+'</div>';
+  }
+  if(!lines)return'';
+  return'<div class="info-panel" id="info-'+gameId+'" style="display:none">'+lines+'</div>';
+}
+
 function redraw(ro, vu){
   ro=ro||false;vu=vu||null;
   var p=vu?viewPicks:picks;
