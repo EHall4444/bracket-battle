@@ -490,6 +490,7 @@ async function fetchESPNScores(){
             if(state==='final'){
               fg.result=g.away.winner?(aFirst?kA:kB):(aFirst?kB:kA);
             }
+            if(g.network)fg.network=g.network;
             found=true;break;
           }
         }
@@ -947,7 +948,7 @@ function redraw(ro, vu){
 
   if(ACTIVE_ROUND==='fr'){
     var cards=FR.map(function(g){
-      return buildCard(g.id,g.a,g.b,g.loc,g.time+' · ESPNU',p[g.id],g.result,lk,'Quarterfinals');
+      return buildCard(g.id,g.a,g.b,g.loc,g.time+(g.network?' · '+g.network:''),p[g.id],g.result,lk,'Quarterfinals');
     });
     gamesH='<div class="matchup-grid">'+cards.join('')+'</div>';
 
