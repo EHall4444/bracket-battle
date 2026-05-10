@@ -976,12 +976,13 @@ function redraw(ro, vu){
 
   }else if(ACTIVE_ROUND==='qf'){
     var qcards=QF.map(function(g){
-      var tA=p[g.frA]||null,tB=p[g.frB]||null;
-      var canPick=!!(tA&&tB);
       var frA=FR.find(function(x){return x.id===g.frA;});
       var frB=FR.find(function(x){return x.id===g.frB;});
-      var elimA=!!(tA&&frA&&frA.result&&frA.result!==tA);
-      var elimB=!!(tB&&frB&&frB.result&&frB.result!==tB);
+      var tA=frA&&frA.result?frA.result:(p[g.frA]||null);
+      var tB=frB&&frB.result?frB.result:(p[g.frB]||null);
+      var canPick=!!(p[g.frA]&&p[g.frB]);
+      var elimA=!!(p[g.frA]&&frA&&frA.result&&frA.result!==p[g.frA]);
+      var elimB=!!(p[g.frB]&&frB&&frB.result&&frB.result!==p[g.frB]);
       return buildCard(g.id,tA,tB,g.loc,g.time,p[g.id],g.result,lk||!canPick,'Semifinals',elimA,elimB);
     });
     
