@@ -133,7 +133,7 @@ body{font-family:var(--fb);color:var(--text);font-size:13px;min-height:100vh;bac
 .team-row.is-pick .t-rec{color:var(--muted)}
 .team-row.is-pick:hover{background:rgba(74,144,217,.08)}
 .team-row.is-winner .t-name{color:var(--green);font-weight:700}
-.team-row.is-elim{opacity:.38;pointer-events:none}
+.team-row.is-elim{opacity:.5;pointer-events:none}
 .team-row.is-wrong-pick{border-left-color:var(--red);border-left-width:5px;background:transparent;cursor:default}
 .team-row.is-wrong-pick .t-name{color:var(--red);font-weight:700}
 .team-row.is-wrong-pick .t-seed{color:var(--red)}
@@ -883,7 +883,7 @@ function buildCard(gameId, teamA, teamB, loc, time, myPick, result, lk, advLabel
       if(!myPick||!result)return'';
       var won=myPick===result;
       var pName=T[myPick]?T[myPick].n:myPick;
-      var pts=won?'+10':'+0';
+      var pts=won?'+10':'-5';
       var ptsColor=won?'var(--green)':'var(--red)';
       var label=won?pName+' ✓':pName+' ✗';
       return'<div class="card-pick-footer'+(won?' correct':' wrong')+'">'
@@ -1064,7 +1064,7 @@ function backToLeaderboard(){VU=null;viewPicks=null;ACTIVE_ROUND='fr';showAppTab
 // ── LEADERBOARD ──
 function calcScore(p){
   var w=0,u=0;
-  FR.forEach(function(g){if(g.result&&p[g.id]===g.result){w++;var ws=parseInt((T[g.result]&&T[g.result].s||'').replace('#','')||99),ls=parseInt((T[g.result===g.a?g.b:g.a]&&T[g.result===g.a?g.b:g.a].s||'').replace('#','')||0);if(ws>ls)u++;}});
+  FR.forEach(function(g){if(g.result&&p[g.id]===g.result){w++;var ws=parseInt((T[g.result]&&T[g.result].s||'').replace('#','')||0),ls=parseInt((T[g.result===g.a?g.b:g.a]&&T[g.result===g.a?g.b:g.a].s||'').replace('#','')||0);if(ws>0&&ls>0&&ws>ls)u++;}});
   QF.forEach(function(g){if(g.result&&p[g.id]===g.result)w++;});
   SF.forEach(function(g){if(g.result&&p[g.id]===g.result)w++;});
   if(FIN.result&&p.fin===FIN.result)w++;
