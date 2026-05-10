@@ -547,7 +547,11 @@ function updateScoreDisplay(){
 function startScorePolling(){
   fetchScores();
   clearInterval(scoreTimer);
-  scoreTimer=setInterval(fetchScores,60000);
+  function smartPoll(){
+    var hasLive=Object.values(SCORES).some(function(s){return s.status&&s.status!=='scheduled'&&s.status.indexOf('FINAL')===-1&&s.status!=='Final';});
+    scoreTimer=setTimeout(function(){fetchScores();smartPoll();},hasLive?15000:60000);
+  }
+  smartPoll();
 }
 
 async function saveScoreToDB(gameId,scoreA,scoreB,status){
