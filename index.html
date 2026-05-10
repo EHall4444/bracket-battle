@@ -489,6 +489,7 @@ async function fetchESPNScores(){
             };
             if(state==='final'){
               fg.result=g.away.winner?(aFirst?kA:kB):(aFirst?kB:kA);
+            if(bFirst)fg.result=g.away.winner?kA:kB;
             }
             if(g.network)fg.network=g.network;
             found=true;break;
