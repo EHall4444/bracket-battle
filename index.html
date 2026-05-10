@@ -615,14 +615,14 @@ var T={
 };
 
 var FR=[
-  {id:'fr1',a:'princeton',    b:'marist',       loc:'Princeton, NJ',        time:'Sun May 10 · 2:30pm',result:null},
-  {id:'fr2',a:'notredame',    b:'jacksonville', loc:'Notre Dame, IN',        time:'Sun May 10 · 12pm',  result:null},
-  {id:'fr3',a:'northcarolina',b:'albany',       loc:'Chapel Hill, NC',      time:'Sat May 9 · 12pm',   result:null},
-  {id:'fr4',a:'pennstate',    b:'army',         loc:'University Park, PA',  time:'Sat May 9 · 2:30pm', result:null},
-  {id:'fr5',a:'cornell',      b:'johnshopkins', loc:'Ithaca, NY',            time:'Sat May 9 · 5pm',    result:null},
-  {id:'fr6',a:'richmond',     b:'duke',         loc:'Richmond, VA',         time:'Sat May 9 · 7:30pm', result:null},
-  {id:'fr7',a:'virginia',     b:'georgetown',   loc:'Charlottesville, VA',  time:'Sun May 10 · 7:30pm',result:null},
-  {id:'fr8',a:'syracuse',     b:'yale',         loc:'Syracuse, NY',         time:'Sun May 10 · 5pm',   result:null}
+  {id:'fr1',a:'princeton',    b:'marist',       loc:'Princeton, NJ',        time:'Sun May 10 · 2:30pm',result:null,sortTime:1746883800},
+  {id:'fr2',a:'notredame',    b:'jacksonville', loc:'Notre Dame, IN',        time:'Sun May 10 · 12pm',  result:null,sortTime:1746874800},
+  {id:'fr3',a:'northcarolina',b:'albany',       loc:'Chapel Hill, NC',      time:'Sat May 9 · 12pm',   result:null,sortTime:1746788400},
+  {id:'fr4',a:'pennstate',    b:'army',         loc:'University Park, PA',  time:'Sat May 9 · 2:30pm', result:null,sortTime:1746797400},
+  {id:'fr5',a:'cornell',      b:'johnshopkins', loc:'Ithaca, NY',            time:'Sat May 9 · 5pm',    result:null,sortTime:1746806400},
+  {id:'fr6',a:'richmond',     b:'duke',         loc:'Richmond, VA',         time:'Sat May 9 · 7:30pm', result:null,sortTime:1746815400},
+  {id:'fr7',a:'virginia',     b:'georgetown',   loc:'Charlottesville, VA',  time:'Sun May 10 · 7:30pm',result:null,sortTime:1746901800},
+  {id:'fr8',a:'syracuse',     b:'yale',         loc:'Syracuse, NY',         time:'Sun May 10 · 5pm',   result:null,sortTime:1746892800}
 ];
 
 var QF=[
@@ -968,7 +968,8 @@ function redraw(ro, vu){
   var gamesH='';
 
   if(ACTIVE_ROUND==='fr'){
-    var cards=FR.map(function(g){
+    var sortedFR=FR.slice().sort(function(a,b){return(a.sortTime||0)-(b.sortTime||0);});
+    var cards=sortedFR.map(function(g){
       return buildCard(g.id,g.a,g.b,g.loc,g.time+(g.network?' · '+g.network:''),p[g.id],g.result,lk,'Quarterfinals');
     });
     gamesH='<div class="matchup-grid">'+cards.join('')+'</div>';
@@ -1074,9 +1075,34 @@ function calcScore(p){
       else if(p[g.id]&&p[g.id]!==g.result)l++;
     }
   });
-  QF.forEach(function(g){if(g.result){if(p[g.id]===g.result)w++;else if(p[g.id]&&p[g.id]!==g.result)l++;}});
-  SF.forEach(function(g){if(g.result){if(p[g.id]===g.result)w++;else if(p[g.id]&&p[g.id]!==g.result)l++;}});
-  if(FIN.result){if(p.fin===FIN.result)w++;else if(p.fin&&p.fin!==FIN.result)l++;}
+  QF.forEach(function(g){
+    var frAResult=FR.find(function(x){return x.id===g.frA;});
+    var frBResult=FR.find(function(x){return x.id===g.frB;});
+    var tA=p[g.frA],tB=p[g.frB];
+    // Implicit loss: pick didn't advance from FR
+    if(p[g.id]&&tA&&tB){
+      var validPicks=[frAResult&&frAResult.result,frBResult&&frBResult.result].filter(Boolean);
+      if(validPicks.length===2&&validPicks.indexOf(p[g.id])===-1){l++;return;}
+    }
+    if(g.result){if(p[g.id]===g.result)w++;else if(p[g.id]&&p[g.id]!==g.result)l++;}
+  });
+  SF.forEach(function(g){
+    var qfAResult=QF.find(function(x){return x.id===g.qfA;});
+    var qfBResult=QF.find(function(x){return x.id===g.qfB;});
+    var tA=p[g.qfA],tB=p[g.qfB];
+    if(p[g.id]&&tA&&tB){
+      var validPicks=[qfAResult&&qfAResult.result,qfBResult&&qfBResult.result].filter(Boolean);
+      if(validPicks.length===2&&validPicks.indexOf(p[g.id])===-1){l++;return;}
+    }
+    if(g.result){if(p[g.id]===g.result)w++;else if(p[g.id]&&p[g.id]!==g.result)l++;}
+  });
+  if(p.fin){
+    var sf1Result=SF.find(function(x){return x.id===FIN.sfA;});
+    var sf2Result=SF.find(function(x){return x.id===FIN.sfB;});
+    var validFin=[sf1Result&&sf1Result.result,sf2Result&&sf2Result.result].filter(Boolean);
+    if(validFin.length===2&&validFin.indexOf(p.fin)===-1){l++;}
+    else if(FIN.result){if(p.fin===FIN.result)w++;else if(p.fin!==FIN.result)l++;}
+  }
   return{wins:w,losses:l,upsets:u,score:(w*10)-(l*5)};
 }
 function tourneyOver(){ return new Date() >= TOURNAMENT_END; }
