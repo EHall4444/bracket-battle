@@ -260,6 +260,9 @@ body{font-family:var(--fb);color:var(--text);font-size:13px;min-height:100vh;bac
 .li{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--muted);font-family:var(--fh);letter-spacing:.03em}
 .ls{width:10px;height:10px;border-radius:2px}
 
+/* sticky trash talk pill */
+.tt-pill{position:fixed;bottom:20px;right:20px;z-index:500;background:var(--navy);color:var(--white);border:2px solid var(--blue2);border-radius:24px;padding:8px 16px;font-family:var(--fh);font-size:12px;font-weight:600;letter-spacing:.06em;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.3);transition:all .2s;text-transform:uppercase}
+.tt-pill:hover{background:var(--blue);transform:translateY(-2px)}
 /* modal */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(6px)}
 .modal{background:var(--white);border-radius:var(--rl);padding:30px 26px;max-width:380px;width:100%;box-shadow:0 32px 80px rgba(0,0,0,.5)}
@@ -387,6 +390,7 @@ body{font-family:var(--fb);color:var(--text);font-size:13px;min-height:100vh;bac
     <div id="apptab-admin" style="display:none"></div>
   </div>
 </div>
+<div class="tt-pill" onclick="document.querySelector('.comments-panel').scrollIntoView({behavior:'smooth'})">💬 Trash Talk ↓</div>
 
 <script>
 var SURL='https://swjajduyuaxsucfligwo.supabase.co';
