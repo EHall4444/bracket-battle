@@ -905,7 +905,7 @@ function buildCard(gameId, teamA, teamB, loc, time, myPick, result, lk, advLabel
         return'<div class="card-pick-footer wrong">'
           +'<span style="color:var(--red)">✗ Your pick: '+pName+'</span>'
           +'<span style="display:flex;align-items:center;gap:8px"><span class="card-pick-pts" style="color:var(--red)">-5 pts</span>'
-          +'<span class="info-btn" onclick="event.stopPropagation();toggleInfo(\'+gameId+\')">i</span></span>'
+          +'<span class="info-btn" onclick="event.stopPropagation();toggleInfo(\''+gameId+'\')" >i</span></span>'
           +'</div>'+iPanel;
       }
       if(!result)return'';
@@ -972,9 +972,10 @@ function switchRound(r){ACTIVE_ROUND=r;if(VU)redraw(true,VU);else redraw();}
 
 // ── MAIN RENDER ──
 function toggleInfo(gameId){
-  var panel=document.getElementById('info-'+gameId);
-  if(!panel)return;
-  panel.style.display=panel.style.display==='none'?'block':'none';
+  var panels=document.querySelectorAll('.info-panel');
+  if(!panels.length)return;
+  var anyVisible=Array.from(panels).some(function(p){return p.style.display!=='none';});
+  panels.forEach(function(p){p.style.display=anyVisible?'none':'block';});
 }
 
 function buildInfoPanel(gameId,teamA,teamB,result,myPick,showWho){
