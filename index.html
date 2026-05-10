@@ -505,7 +505,7 @@ async function fetchManualScores(){
     var r=await sb('scores?select=*','GET');
     if(r.ok&&r.data&&r.data.length){
       r.data.forEach(function(row){
-        if(!SCORES[row.game_id]||SCORE_SRC!=='espn'){
+        if(!SCORES[row.game_id]||SCORE_SRC!=='ncaa'){
           SCORES[row.game_id]={score_a:row.score_a||0,score_b:row.score_b||0,status:row.status||'scheduled'};
           if(row.status==='Final'){
             var allG=[].concat(FR,QF,SF,[FIN]);
@@ -514,7 +514,7 @@ async function fetchManualScores(){
           }
         }
       });
-      if(SCORE_SRC!=='espn')SCORE_SRC='manual';
+      if(SCORE_SRC!=='ncaa')SCORE_SRC='manual';
     }
   }catch(e){}
 }
