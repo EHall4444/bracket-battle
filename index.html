@@ -134,10 +134,10 @@ body{font-family:var(--fb);color:var(--text);font-size:13px;min-height:100vh;bac
 .team-row.is-pick:hover{background:rgba(74,144,217,.08)}
 .team-row.is-winner .t-name{color:var(--green);font-weight:700}
 .team-row.is-elim{opacity:.28;pointer-events:none}
-.team-row.is-wrong-pick{border-left-color:var(--red);border-left-width:5px;background:var(--red-l);cursor:default}
+.team-row.is-wrong-pick{border-left-color:var(--red);border-left-width:5px;background:transparent;cursor:default}
 .team-row.is-wrong-pick .t-name{color:var(--red);font-weight:700}
 .team-row.is-wrong-pick .t-seed{color:var(--red)}
-.team-row.is-wrong-pick:hover{background:var(--red-l)}
+.team-row.is-wrong-pick:hover{background:transparent}
 .team-row.is-locked{cursor:default}
 .team-row.is-empty{cursor:default;background:var(--amber-l)}
 .team-row.is-empty-locked{cursor:default;background:var(--off)}
@@ -835,7 +835,7 @@ function teamRow(gameId, teamKey, isTeamA, myPick, result, lk, forceElim){
     +(td.s?'<span class="t-seed">'+td.s+'</span>':'<span class="t-seed"></span>')
     +'<div class="t-info"><span class="t-name">'+td.n+'</span><div class="t-rec">'+td.r+'</div></div>'
     +scoreH
-    +(isW&&!isPick?'<div class="t-adv">Adv</div>':'')
+    +(isW&&!isPick?'<div class="t-adv">W</div>':'')+(isPick&&result&&result!==teamKey?'<div class="t-adv" style="background:var(--red-l);color:var(--red)">L</div>':'')
     
     +(isPick&&!lk?'<button class="t-clear" onclick="event.stopPropagation();clearOnly(\''+gameId+'\')" title="Remove this pick">✕</button>':'')
     +'</div>';
