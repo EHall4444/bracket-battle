@@ -169,6 +169,10 @@ body{font-family:var(--fb);color:var(--text);font-size:13px;min-height:100vh;bac
 
 /* adv strip */
 .card-adv{font-family:var(--fh);font-size:8px;color:rgba(74,144,217,.8);text-align:center;padding:4px;background:rgba(37,99,168,.05);border-top:1px solid rgba(37,99,168,.1);letter-spacing:.06em;text-transform:uppercase}
+.card-pick-footer{padding:7px 14px;border-top:1px solid var(--gray);display:flex;align-items:center;justify-content:space-between;font-family:var(--fh);font-size:10px;letter-spacing:.04em;text-transform:uppercase}
+.card-pick-footer.correct{background:var(--green-l)}
+.card-pick-footer.wrong{background:var(--off)}
+.card-pick-pts{font-size:13px;font-weight:700}
 
 /* ── SAVE BAR ── */
 .save-bar{margin-top:16px;padding:14px 16px;background:var(--white);border:1.5px solid var(--gray);border-radius:var(--rl);display:flex;align-items:center;gap:14px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
@@ -875,6 +879,18 @@ function buildCard(gameId, teamA, teamB, loc, time, myPick, result, lk, advLabel
     +(teamB?teamRow(gameId,teamB,false,myPick,result,lk||unavail,forceElimB):lk?emptyLockedRow():emptyRow(''))
     +(showOdds?oddsBar(teamA,teamB):'')
     +(advLabel?'<div class="card-adv">→ Winner advances to '+advLabel+'</div>':'')
+    +(function(){
+      if(!myPick||!result)return'';
+      var won=myPick===result;
+      var pName=T[myPick]?T[myPick].n:myPick;
+      var pts=won?'+10':'+0';
+      var ptsColor=won?'var(--green)':'var(--red)';
+      var label=won?pName+' ✓':pName+' ✗';
+      return'<div class="card-pick-footer'+(won?' correct':' wrong')+'">'
+        +'<span style="color:'+(won?'var(--green)':'var(--red)')+'">Your pick: '+label+'</span>'
+        +'<span class="card-pick-pts" style="color:'+ptsColor+'">'+pts+' pts</span>'
+        +'</div>';
+    })()
     +'</div>';
 }
 
