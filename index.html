@@ -574,6 +574,7 @@ function startScorePolling(){
   }
   scoreTimer=setTimeout(smartPoll,15000);
 }
+async function saveScoreToDB(gameId,scoreA,scoreB,status){
   var payload={game_id:gameId,score_a:scoreA,score_b:scoreB,status:status,updated_at:new Date().toISOString()};
   var check=await sb('scores?game_id=eq.'+encodeURIComponent(gameId),'GET');
   if(check.ok&&check.data&&check.data.length){return(await sb('scores?game_id=eq.'+encodeURIComponent(gameId),'PATCH',payload)).ok;}
