@@ -905,7 +905,7 @@ function buildCard(gameId, teamA, teamB, loc, time, myPick, result, lk, advLabel
         return'<div class="card-pick-footer wrong">'
           +'<span style="color:var(--red)">✗ Your pick: '+pName+'</span>'
           +'<span style="display:flex;align-items:center;gap:8px"><span class="card-pick-pts" style="color:var(--red)">-5 pts</span>'
-          +'<span class="info-btn" onclick="event.stopPropagation();toggleInfo(\''+gameId+'\')" >i</span></span>'
+          +'<span class="info-btn" onclick="event.stopPropagation();toggleInfo(\''+gameId+'\')" >ℹ</span></span>'
           +'</div>'+iPanel;
       }
       if(!result)return'';
@@ -915,7 +915,7 @@ function buildCard(gameId, teamA, teamB, loc, time, myPick, result, lk, advLabel
       return'<div class="card-pick-footer'+(won?' correct':' wrong')+'">'
         +'<span style="color:'+(won?'var(--green)':'var(--red)')+'">'+symbol+'Your pick: '+pName+'</span>'
         +'<span style="display:flex;align-items:center;gap:8px"><span class="card-pick-pts" style="color:'+ptsColor+'">'+pts+' pts</span>'
-        +'<span class="info-btn" onclick="event.stopPropagation();toggleInfo(\''+gameId+'\')" >i</span></span>'
+        +'<span class="info-btn" onclick="event.stopPropagation();toggleInfo(\''+gameId+'\')" >ℹ</span></span>'
         +'</div>'+infoPanel;
     })()
     +'</div>';
