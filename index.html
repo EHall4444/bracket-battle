@@ -113,7 +113,7 @@ body{font-family:var(--fb);color:var(--text);font-size:13px;min-height:100vh;bac
 
 /* ── MATCHUP CARD ── */
 .card{background:var(--white);border:1.5px solid var(--gray);border-radius:var(--rl);overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.07);transition:border-color .15s,box-shadow .15s}
-.card.has-pick{border-color:var(--blue2);border-width:2px;box-shadow:0 4px 20px rgba(74,144,217,.18)}
+.card.has-pick{border-color:var(--blue2);border-width:3px;box-shadow:0 0 0 3px rgba(74,144,217,.35),0 4px 20px rgba(74,144,217,.25)}
 .card.needs-pick{border:1.5px dashed var(--amber)}
 .card.unavailable{opacity:.5;pointer-events:none}
 
@@ -127,7 +127,7 @@ body{font-family:var(--fb);color:var(--text);font-size:13px;min-height:100vh;bac
 .team-row.pickable:hover{background:rgba(74,144,217,.09)}
 .team-row.pickable:hover .t-name{color:var(--blue)}
 /* PICKED — ESPN-style: strong left border, subtle tint, bold name. No solid fill. */
-.team-row.is-pick{border-left-color:var(--blue2);border-left-width:5px;background:rgba(74,144,217,.08);cursor:default}
+.team-row.is-pick{border-left-color:var(--blue2);border-left-width:5px;background:transparent;cursor:default}
 .team-row.is-pick .t-name{color:var(--blue);font-weight:700}
 .team-row.is-pick .t-seed{color:var(--blue2)}
 .team-row.is-pick .t-rec{color:var(--muted)}
