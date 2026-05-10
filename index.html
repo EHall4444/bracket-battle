@@ -551,7 +551,7 @@ function updateScoreDisplay(){
 }
 
 function startScorePolling(){
-  fetchScores();
+  fetchScores().then(function(){redraw();});
   clearInterval(scoreTimer);
   function smartPoll(){
     var hasLive=Object.values(SCORES).some(function(s){return s.status&&s.status!=='scheduled'&&s.status.indexOf('FINAL')===-1&&s.status!=='Final';});
