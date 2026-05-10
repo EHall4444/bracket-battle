@@ -884,12 +884,12 @@ function buildCard(gameId, teamA, teamB, loc, time, myPick, result, lk, advLabel
     +(showOdds?oddsBar(teamA,teamB):'')
     +(advLabel?'<div class="card-adv">→ Winner advances to '+advLabel+'</div>':'')
     +(function(){
-      if(!myPick||!result)return'';
+      if(!myPick)return'';
       var won=myPick===result;
       var pName=T[myPick]?T[myPick].n:myPick;
-      var pts=won?'+10':'-5';
-      var ptsColor=won?'var(--green)':'var(--red)';
-      var symbol=won?"✓ ":"✗ ";
+      if(teamA&&teamB&&myPick!==teamA&&myPick!==teamB){return'<div class="card-pick-footer wrong"><span style="color:var(--red)">✗ Your pick: '+pName+'</span><span class="card-pick-pts" style="color:var(--red)">-5 pts</span></div>';}
+      if(!result)return'';
+      var pts=won?'+10':'-5';var ptsColor=won?'var(--green)':'var(--red)';var symbol=won?"✓ ":"✗ ";
       return'<div class="card-pick-footer'+(won?' correct':' wrong')+'">'
         +'<span style="color:'+(won?'var(--green)':'var(--red)')+'">'+symbol+'Your pick: '+pName+'</span>'
         +'<span class="card-pick-pts" style="color:'+ptsColor+'">'+pts+' pts</span>'
