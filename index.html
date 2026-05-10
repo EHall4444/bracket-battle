@@ -459,7 +459,7 @@ async function fetchESPNScores(){
     });
     var found=false;
     for(var dateStr of Array.from(toFetch)){
-      var resp=await fetch('https://ncaa-api.henrygd.me/scoreboard/lacrosse-men/d1/'+dateStr.slice(0,4)+'/'+dateStr.slice(4,6)+'/'+dateStr.slice(6,8),{signal:AbortSignal.timeout(8000)});
+      var resp=await fetch('https://ncaa-lacrosse-proxy.erichall4444.workers.dev/'+dateStr.slice(0,4)+'/'+dateStr.slice(4,6)+'/'+dateStr.slice(6,8),{signal:AbortSignal.timeout(8000)});
       if(!resp.ok)continue;
       var data=await resp.json();
       if(!data||!data.games)continue;
