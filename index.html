@@ -502,6 +502,11 @@ async function fetchManualScores(){
       r.data.forEach(function(row){
         if(!SCORES[row.game_id]||SCORE_SRC!=='espn'){
           SCORES[row.game_id]={score_a:row.score_a||0,score_b:row.score_b||0,status:row.status||'scheduled'};
+          if(row.status==='Final'){
+            var allG=[].concat(FR,QF,SF,[FIN]);
+            var gObj=allG.find(function(g){return g.id===row.game_id;});
+            if(gObj)gObj.result=row.score_a>row.score_b?(gObj.a||gObj.frA||gObj.qfA||gObj.sfA):(gObj.b||gObj.frB||gObj.qfB||gObj.sfB);
+          }
         }
       });
       if(SCORE_SRC!=='espn')SCORE_SRC='manual';
