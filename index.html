@@ -899,7 +899,15 @@ function buildCard(gameId, teamA, teamB, loc, time, myPick, result, lk, advLabel
       if(!myPick)return'';
       var won=myPick===result;
       var pName=T[myPick]?T[myPick].n:myPick;
-      if(teamA&&teamB&&myPick!==teamA&&myPick!==teamB){return'<div class="card-pick-footer wrong"><span style="color:var(--red)">✗ Your pick: '+pName+'</span><span class="card-pick-pts" style="color:var(--red)">-5 pts</span></div>';}
+      if(teamA&&teamB&&myPick!==teamA&&myPick!==teamB){
+        var roundStarted=Object.values(SCORES).some(function(s){return s&&s.status&&s.status!=='scheduled';});
+        var iPanel=buildInfoPanel(gameId,teamA,teamB,result,myPick,roundStarted);
+        return'<div class="card-pick-footer wrong">'
+          +'<span style="color:var(--red)">✗ Your pick: '+pName+'</span>'
+          +'<span style="display:flex;align-items:center;gap:8px"><span class="card-pick-pts" style="color:var(--red)">-5 pts</span>'
+          +'<span class="info-btn" onclick="event.stopPropagation();toggleInfo(\'+gameId+\')">i</span></span>'
+          +'</div>'+iPanel;
+      }
       if(!result)return'';
       var pts=won?'+10':'-5';var ptsColor=won?'var(--green)':'var(--red)';var symbol=won?"✓ ":"✗ ";
       var roundStarted=Object.values(SCORES).some(function(s){return s&&s.status&&s.status!=='scheduled';});
