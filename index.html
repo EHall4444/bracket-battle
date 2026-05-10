@@ -1070,7 +1070,7 @@ function calcScore(p){
   var w=0,l=0,u=0;
   FR.forEach(function(g){
     if(g.result){
-      if(p[g.id]===g.result){w++;var ws=parseInt((T[g.result]&&T[g.result].s||'').replace('#','')||0),ls=parseInt((T[g.result===g.a?g.b:g.a]&&T[g.result===g.a?g.b:g.a].s||'').replace('#','')||0);if(ws>0&&ls>0&&ws>ls)u++;}
+      if(p[g.id]===g.result){w++;var ws=parseInt((T[g.result]&&T[g.result].s||'').replace('#','')||0),ls=parseInt((T[g.result===g.a?g.b:g.a]&&T[g.result===g.a?g.b:g.a].s||'').replace('#','')||0);if((ws>ls&&ls>0)||(ws===0&&ls>0))u++;}
       else if(p[g.id]&&p[g.id]!==g.result)l++;
     }
   });
