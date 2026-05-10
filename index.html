@@ -1181,6 +1181,11 @@ async function saveAdminScore(gid){
   var ok=await saveScoreToDB(gid,sa,sb,st);
   if(ok){
     SCORES[gid]={score_a:sa,score_b:sb,status:st};
+    if(st==="Final"){
+      var allG=[].concat(FR,QF,SF,[FIN]);
+      var gObj=allG.find(function(g){return g.id===gid;});
+      if(gObj)gObj.result=sa>sb?(gObj.a||gObj.frA||gObj.qfA||gObj.sfA):( gObj.b||gObj.frB||gObj.qfB||gObj.sfB);
+    }
     SCORE_SRC='manual';
     btn.textContent='✓ Saved';btn.className='admin-btn ok';
     setTimeout(function(){btn.textContent='Save';btn.className='admin-btn';btn.disabled=false;},2000);
