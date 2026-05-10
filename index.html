@@ -472,7 +472,7 @@ async function fetchESPNScores(){
         var kB=ESPN_MAP[homeSeo]||ESPN_MAP[homeSeo.replace(/-/g,' ')]||null;
         if(!kA||!kB)return;
         var state=g.gameState||'pre';
-        var status=state==='pre'?'scheduled':state==='final'?'Final':g.currentPeriod||'Live';
+        var status=state==='pre'?'scheduled':state==='final'?(g.finalMessage||'Final'):(g.currentPeriod&&g.contestClock&&g.contestClock!=='0:00'?g.currentPeriod+' · '+g.contestClock:g.currentPeriod||'Live');
         var scoreA=g.away.score!==''?parseInt(g.away.score||0):null;
         var scoreB=g.home.score!==''?parseInt(g.home.score||0):null;
         if(state==='pre')return;
