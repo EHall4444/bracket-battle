@@ -1063,12 +1063,17 @@ function backToLeaderboard(){VU=null;viewPicks=null;ACTIVE_ROUND='fr';showAppTab
 
 // ── LEADERBOARD ──
 function calcScore(p){
-  var w=0,u=0;
-  FR.forEach(function(g){if(g.result&&p[g.id]===g.result){w++;var ws=parseInt((T[g.result]&&T[g.result].s||'').replace('#','')||0),ls=parseInt((T[g.result===g.a?g.b:g.a]&&T[g.result===g.a?g.b:g.a].s||'').replace('#','')||0);if(ws>0&&ls>0&&ws>ls)u++;}});
-  QF.forEach(function(g){if(g.result&&p[g.id]===g.result)w++;});
-  SF.forEach(function(g){if(g.result&&p[g.id]===g.result)w++;});
-  if(FIN.result&&p.fin===FIN.result)w++;
-  return{wins:w,upsets:u,score:w*10};
+  var w=0,l=0,u=0;
+  FR.forEach(function(g){
+    if(g.result){
+      if(p[g.id]===g.result){w++;var ws=parseInt((T[g.result]&&T[g.result].s||'').replace('#','')||0),ls=parseInt((T[g.result===g.a?g.b:g.a]&&T[g.result===g.a?g.b:g.a].s||'').replace('#','')||0);if(ws>0&&ls>0&&ws>ls)u++;}
+      else if(p[g.id]&&p[g.id]!==g.result)l++;
+    }
+  });
+  QF.forEach(function(g){if(g.result){if(p[g.id]===g.result)w++;else if(p[g.id]&&p[g.id]!==g.result)l++;}});
+  SF.forEach(function(g){if(g.result){if(p[g.id]===g.result)w++;else if(p[g.id]&&p[g.id]!==g.result)l++;}});
+  if(FIN.result){if(p.fin===FIN.result)w++;else if(p.fin&&p.fin!==FIN.result)l++;}
+  return{wins:w,losses:l,upsets:u,score:(w*10)-(l*5)};
 }
 function tourneyOver(){ return new Date() >= TOURNAMENT_END; }
 
