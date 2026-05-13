@@ -338,19 +338,23 @@ body{font-family:var(--fb);color:var(--text);font-size:13px;min-height:100vh;bac
       </div>
       <div class="auth-body">
         <div id="login-form">
-          <label class="fl">Username</label><input class="fi" id="li-u" placeholder="your username" autocomplete="username"/>
-          <label class="fl">Password</label><input class="fi" id="li-p" type="password" placeholder="••••••••" autocomplete="current-password" style="margin-bottom:6px"/>
+          <form onsubmit="event.preventDefault();doLogin();" autocomplete="on">
+          <label class="fl">Username</label><input class="fi" id="li-u" name="username" placeholder="your username" autocomplete="username"/>
+          <label class="fl">Password</label><input class="fi" id="li-p" name="password" type="password" placeholder="••••••••" autocomplete="current-password" style="margin-bottom:6px"/>
           <div class="remember-row"><input type="checkbox" id="li-remember"/><label for="li-remember">Remember me on this device</label></div>
-          <button class="btn-primary" id="li-btn" onclick="doLogin()">Sign In</button>
+          <button class="btn-primary" id="li-btn" type="submit">Sign In</button>
           <div class="form-err" id="li-err"></div>
+          </form>
         </div>
         <div id="reg-form" style="display:none">
-          <label class="fl">Username</label><input class="fi" id="re-u" placeholder="letters, numbers, underscores"/>
-          <label class="fl">Password</label><input class="fi" id="re-p" type="password" placeholder="at least 6 characters"/>
-          <label class="fl">Confirm Password</label><input class="fi" id="re-p2" type="password" placeholder="same again" style="margin-bottom:2px"/>
-          <button class="btn-primary" id="re-btn" onclick="doRegister()">Create Account</button>
+          <form onsubmit="event.preventDefault();doRegister();" autocomplete="on">
+          <label class="fl">Username</label><input class="fi" id="re-u" name="username" placeholder="letters, numbers, underscores" autocomplete="username"/>
+          <label class="fl">Password</label><input class="fi" id="re-p" name="password" type="password" placeholder="at least 6 characters" autocomplete="new-password"/>
+          <label class="fl">Confirm Password</label><input class="fi" id="re-p2" name="confirm-password" type="password" placeholder="same again" autocomplete="new-password" style="margin-bottom:2px"/>
+          <button class="btn-primary" id="re-btn" type="submit">Create Account</button>
           <div class="form-err" id="re-err"></div>
           <div class="form-info" id="re-info"></div>
+          </form>
         </div>
       </div>
     </div>
@@ -1407,8 +1411,11 @@ function timeAgo(iso){
   var d=new Date(iso),now=new Date(),diff=Math.floor((now-d)/1000);
   if(diff<60)return'just now';
   if(diff<3600)return Math.floor(diff/60)+'m ago';
-  if(diff<86400)return Math.floor(diff/3600)+'h ago';
-  return Math.floor(diff/86400)+'d ago';
+  if(diff<21600)return Math.floor(diff/3600)+'h ago';
+  var mo=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var h=d.getHours(),mn=d.getMinutes(),ampm=h>=12?'pm':'am';
+  h=h%12||12;
+  return mo[d.getMonth()]+' '+d.getDate()+' · '+h+':'+(mn<10?'0':'')+mn+ampm;
 }
 
 function renderMentions(text){
