@@ -640,10 +640,10 @@ var FR=[
 ];
 
 var QF=[
-  {id:'qf1',frA:'fr1',frB:'fr2',loc:'Hofstra Univ., Hempstead NY',   time:'Sat May 16 · 12pm ET · ESPNU',result:null},
-  {id:'qf2',frA:'fr3',frB:'fr4',loc:'Hofstra Univ., Hempstead NY',   time:'Sat May 16 · 2:30pm ET · ESPNU',result:null},
-  {id:'qf3',frA:'fr5',frB:'fr6',loc:'Univ. of Delaware, Newark DE',  time:'Sun May 17 · 12pm ET · ESPNU',result:null},
-  {id:'qf4',frA:'fr7',frB:'fr8',loc:'Univ. of Delaware, Newark DE',  time:'Sun May 17 · 2:30pm ET · ESPNU',result:null}
+  {id:'qf1',frA:'fr2',frB:'fr5',teamA:'notredame',teamB:'johnshopkins',loc:'Hofstra Univ., Hempstead NY',   time:'Sat May 16 · 12pm ET · ESPNU',result:null},
+  {id:'qf2',frA:'fr3',frB:'fr8',teamA:'northcarolina',teamB:'syracuse',loc:'Hofstra Univ., Hempstead NY',   time:'Sat May 16 · 2:30pm ET · ESPNU',result:null},
+  {id:'qf3',frA:'fr1',frB:'fr4',teamA:'princeton',teamB:'pennstate',loc:'Univ. of Delaware, Newark DE',  time:'Sun May 17 · 12pm ET · ESPNU',result:null},
+  {id:'qf4',frA:'fr7',frB:'fr6',teamA:'georgetown',teamB:'duke',loc:'Univ. of Delaware, Newark DE',  time:'Sun May 17 · 2:30pm ET · ESPNU',result:null}
 ];
 
 var SF=[
@@ -1046,13 +1046,11 @@ function redraw(ro, vu){
 
   }else if(ACTIVE_ROUND==='qf'){
     var qcards=QF.map(function(g){
-      var frA=FR.find(function(x){return x.id===g.frA;});
-      var frB=FR.find(function(x){return x.id===g.frB;});
-      var tA=frA&&frA.result?frA.result:(p[g.frA]||null);
-      var tB=frB&&frB.result?frB.result:(p[g.frB]||null);
-      var canPick=!!(p[g.frA]&&p[g.frB]);
-      var elimA=!!(p[g.frA]&&frA&&frA.result&&frA.result!==p[g.frA]);
-      var elimB=!!(p[g.frB]&&frB&&frB.result&&frB.result!==p[g.frB]);
+      var tA=g.teamA||null;
+      var tB=g.teamB||null;
+      var canPick=!!(tA&&tB);
+      var elimA=!!(p[g.id]&&tA&&g.result&&g.result!==tA);
+      var elimB=!!(p[g.id]&&tB&&g.result&&g.result!==tB);
       return buildCard(g.id,tA,tB,g.loc,g.time,p[g.id],g.result,lk||!canPick,'Semifinals',elimA,elimB);
     });
     
