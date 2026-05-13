@@ -985,6 +985,10 @@ function toggleInfo(gameId){
 
 function buildInfoPanel(gameId,teamA,teamB,result,myPick,showWho){
   var lines='';
+  // Actual matchup
+  if(teamA&&teamB&&T[teamA]&&T[teamB]){
+    lines+='<div class="info-panel-row"><span>Matchup</span><span style="font-weight:600">'+T[teamA].n+' vs '+T[teamB].n+'</span></div>';
+  }
   // Pre-game odds
   if(teamA&&teamB&&T[teamA]&&T[teamB]){
     var o1=T[teamA].o,o2=T[teamB].o,tot=o1+o2;
