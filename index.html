@@ -560,7 +560,7 @@ function updateScoreDisplay(){
     if(elSt){
       elSt.textContent=sc.status;
       var cls='game-status-badge';
-      if(sc.status==='Final')cls+=' final';
+      if(sc.status==='Final'||sc.status==='FINAL'||sc.status.indexOf('FINAL')===0)cls+=' final';
       else cls+=' live';
       elSt.className=cls;
     }
@@ -640,10 +640,10 @@ var FR=[
 ];
 
 var QF=[
-  {id:'qf1',frA:'fr1',frB:'fr2',loc:'Hofstra Univ., Hempstead NY',   time:'Sat May 16 · ESPNU',result:null},
-  {id:'qf2',frA:'fr3',frB:'fr4',loc:'Hofstra Univ., Hempstead NY',   time:'Sat May 16 · ESPNU',result:null},
-  {id:'qf3',frA:'fr5',frB:'fr6',loc:'Univ. of Delaware, Newark DE',  time:'Sun May 17 · ESPNU',result:null},
-  {id:'qf4',frA:'fr7',frB:'fr8',loc:'Univ. of Delaware, Newark DE',  time:'Sun May 17 · ESPNU',result:null}
+  {id:'qf1',frA:'fr1',frB:'fr2',loc:'Hofstra Univ., Hempstead NY',   time:'Sat May 16 · 12pm ET · ESPNU',result:null},
+  {id:'qf2',frA:'fr3',frB:'fr4',loc:'Hofstra Univ., Hempstead NY',   time:'Sat May 16 · 2:30pm ET · ESPNU',result:null},
+  {id:'qf3',frA:'fr5',frB:'fr6',loc:'Univ. of Delaware, Newark DE',  time:'Sun May 17 · 12pm ET · ESPNU',result:null},
+  {id:'qf4',frA:'fr7',frB:'fr8',loc:'Univ. of Delaware, Newark DE',  time:'Sun May 17 · 2:30pm ET · ESPNU',result:null}
 ];
 
 var SF=[
@@ -892,7 +892,7 @@ function buildCard(gameId, teamA, teamB, loc, time, myPick, result, lk, advLabel
   var showOdds=teamA&&teamB&&T[teamA]&&T[teamB]&&!result;
   var sc=SCORES[gameId];
   var hasStatus=sc&&sc.status&&sc.status!=='scheduled';
-  var statusCls=sc&&sc.status==='Final'?' final':' live';
+  var statusCls=sc&&(sc.status==='Final'||sc.status==='FINAL'||sc.status.indexOf('FINAL')===0)?' final':' live';
   var statusH=hasStatus?'<span class="game-status-badge'+statusCls+'" id="sc-st-'+gameId+'">'+sc.status+'</span>':'';
   return'<div class="'+cls+'">'
     +'<div class="card-header"><span class="card-loc">📍 '+loc+'</span><span class="card-time">'+time+'</span>'+statusH+(lk?' 🔒':'')+'</div>'
