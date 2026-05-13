@@ -985,8 +985,9 @@ function toggleInfo(gameId){
 
 function buildInfoPanel(gameId,teamA,teamB,result,myPick,showWho){
   var lines='';
-  // Actual matchup
-  if(teamA&&teamB&&T[teamA]&&T[teamB]){
+  // Actual matchup — only for QF and beyond (not FR where teams are already visible)
+  var isFR=gameId.indexOf('fr')===0;
+  if(!isFR&&teamA&&teamB&&T[teamA]&&T[teamB]){
     lines+='<div class="info-panel-row"><span>Matchup</span><span style="font-weight:600">'+T[teamA].n+' vs '+T[teamB].n+'</span></div>';
   }
   // Pre-game odds
