@@ -914,7 +914,7 @@ function buildCard(gameId, teamA, teamB, loc, time, myPick, result, lk, advLabel
           +'</div>'+iPanel;
       }
       if(!result)return'';
-      var pts=won?'+10':'-5';var ptsColor=won?'var(--green)':'var(--red)';var symbol=won?"✓ ":"✗ ";
+      var ROUND_PTS={fr:10,qf:15,sf:20,fin:25};var roundKey=QF.find(function(x){return x.id===gameId;})?'qf':SF.find(function(x){return x.id===gameId;})?'sf':(FIN&&FIN.id===gameId)?'fin':'fr';var winPts=ROUND_PTS[roundKey];var pts=won?'+'+winPts:'-5';var ptsColor=won?'var(--green)':'var(--red)';var symbol=won?"✓ ":"✗ ";
       var roundStarted=Object.values(SCORES).some(function(s){return s&&s.status&&s.status!=='scheduled';});
       var infoPanel=buildInfoPanel(gameId,teamA,teamB,result,myPick,roundStarted);
       return'<div class="card-pick-footer'+(won?' correct':' wrong')+'">'
@@ -1032,7 +1032,7 @@ function redraw(ro, vu){
   var tabsH=roundTabsHTML(p,lk);
 
   var helpH=(!lk&&!vu)?'<div class="pick-help">'
-    +'<div class="pick-help-line">Click a team to make your pick. +10 pts for correct picks · -5 pts for wrong picks.</div>'
+    +'<div class="pick-help-line">Click a team to make your pick. +10/15/20/25 pts per round · -5 pts for wrong picks.</div>'
     +'<div class="pick-help-line">Complete selections on this tab to access the next round.</div>'
     +'<div class="pick-help-line">De-selecting a team will remove it from subsequent rounds.</div>'
     +'</div>':'';
@@ -1139,23 +1139,28 @@ function backToLeaderboard(){VU=null;viewPicks=null;ACTIVE_ROUND='fr';showAppTab
 
 // ── LEADERBOARD ──
 function calcScore(p){
-  var w=0,l=0,u=0;
+  var score=0,wins=0,losses=0,u=0;
+  var PTS={fr:10,qf:15,sf:20,fin:25};
+  var LOSS=5;
   FR.forEach(function(g){
     if(g.result){
-      if(p[g.id]===g.result){w++;var ws=parseInt((T[g.result]&&T[g.result].s||'').replace('#','')||0),ls=parseInt((T[g.result===g.a?g.b:g.a]&&T[g.result===g.a?g.b:g.a].s||'').replace('#','')||0);if((ws>ls&&ls>0)||(ws===0&&ls>0))u++;}
-      else if(p[g.id]&&p[g.id]!==g.result)l++;
+      if(p[g.id]===g.result){
+        wins++;score+=PTS.fr;
+        var ws=parseInt((T[g.result]&&T[g.result].s||'').replace('#','')||0),
+            ls=parseInt((T[g.result===g.a?g.b:g.a]&&T[g.result===g.a?g.b:g.a].s||'').replace('#','')||0);
+        if((ws>ls&&ls>0)||(ws===0&&ls>0))u++;
+      } else if(p[g.id]&&p[g.id]!==g.result){losses++;score-=LOSS;}
     }
   });
   QF.forEach(function(g){
     var frAResult=FR.find(function(x){return x.id===g.frA;});
     var frBResult=FR.find(function(x){return x.id===g.frB;});
     var tA=p[g.frA],tB=p[g.frB];
-    // Implicit loss: pick didn't advance from FR
     if(p[g.id]&&tA&&tB){
       var validPicks=[frAResult&&frAResult.result,frBResult&&frBResult.result].filter(Boolean);
-      if(validPicks.length===2&&validPicks.indexOf(p[g.id])===-1){l++;return;}
+      if(validPicks.length===2&&validPicks.indexOf(p[g.id])===-1){losses++;score-=LOSS;return;}
     }
-    if(g.result){if(p[g.id]===g.result)w++;else if(p[g.id]&&p[g.id]!==g.result)l++;}
+    if(g.result){if(p[g.id]===g.result){wins++;score+=PTS.qf;}else if(p[g.id]&&p[g.id]!==g.result){losses++;score-=LOSS;}}
   });
   SF.forEach(function(g){
     var qfAResult=QF.find(function(x){return x.id===g.qfA;});
@@ -1163,18 +1168,18 @@ function calcScore(p){
     var tA=p[g.qfA],tB=p[g.qfB];
     if(p[g.id]&&tA&&tB){
       var validPicks=[qfAResult&&qfAResult.result,qfBResult&&qfBResult.result].filter(Boolean);
-      if(validPicks.length===2&&validPicks.indexOf(p[g.id])===-1){l++;return;}
+      if(validPicks.length===2&&validPicks.indexOf(p[g.id])===-1){losses++;score-=LOSS;return;}
     }
-    if(g.result){if(p[g.id]===g.result)w++;else if(p[g.id]&&p[g.id]!==g.result)l++;}
+    if(g.result){if(p[g.id]===g.result){wins++;score+=PTS.sf;}else if(p[g.id]&&p[g.id]!==g.result){losses++;score-=LOSS;}}
   });
   if(p.fin){
     var sf1Result=SF.find(function(x){return x.id===FIN.sfA;});
     var sf2Result=SF.find(function(x){return x.id===FIN.sfB;});
     var validFin=[sf1Result&&sf1Result.result,sf2Result&&sf2Result.result].filter(Boolean);
-    if(validFin.length===2&&validFin.indexOf(p.fin)===-1){l++;}
-    else if(FIN.result){if(p.fin===FIN.result)w++;else if(p.fin!==FIN.result)l++;}
+    if(validFin.length===2&&validFin.indexOf(p.fin)===-1){losses++;score-=LOSS;}
+    else if(FIN.result){if(p.fin===FIN.result){wins++;score+=PTS.fin;}else if(p.fin!==FIN.result){losses++;score-=LOSS;}}
   }
-  return{wins:w,losses:l,upsets:u,score:(w*10)-(l*5)};
+  return{wins:wins,losses:losses,upsets:u,score:score};
 }
 function tourneyOver(){ return new Date() >= TOURNAMENT_END; }
 
@@ -1258,7 +1263,7 @@ async function renderLB(){
       +'<div class="lbups">Upsets</div><div class="lbact"></div></div>'
       +(entries.length?rows:'<div class="lb-empty">No saved brackets yet — make your picks and save to appear here!</div>')
       +'</div></div>'
-      +'<div class="lb-note">Scoring: +10 pts per correct pick · -5 pts per wrong pick · Tiebreaker: most correct upset picks.</div>'
+      +'<div class="lb-note">Scoring: +10 pts (1st Rd) · +15 pts (QF) · +20 pts (SF) · +25 pts (Final) · -5 pts wrong pick · Tiebreaker: most upset picks.</div>'
       +commentsPanel('leaderboard');
   }catch(e){c.innerHTML='<div style="padding:30px;text-align:center;color:var(--red)">Error: '+e.message+'</div>';}
 }
