@@ -1116,7 +1116,7 @@ function redraw(ro, vu){
     +'<div class="li"><div class="ls" style="border-left:5px solid var(--blue2);background:rgba(74,144,217,.08)"></div>Your pick</div>'
     +'<div class="li"><div class="ls" style="background:var(--green-l);border:1px solid var(--green)"></div>Advanced</div>'
     +'<div class="li"><div class="ls" style="opacity:.28;background:var(--muted)"></div>Eliminated</div>'
-    +'<div class="li">✕ removes pick from this round only</div>'+'<div class="li">Scoring: +10 correct · -5 wrong · upsets break ties</div>'
+    +'<div class="li">✕ removes pick from this round only</div>'+'<div class="li">Scoring: +10/15/20/25 pts by round · -5 wrong · upsets break ties</div>'
     +'</div>';
 
   c.innerHTML=bannerH+dlH+tabsH+helpH+gamesH+actionH+legH+commentsPanel('bracket');
@@ -1273,7 +1273,7 @@ async function renderLB(){
 
     c.innerHTML=chyron
       +'<div class="lb-wrap"><div class="lb-hdr"><div class="lb-title">🏆 Leaderboard</div>'
-      +'<div class="lb-count">'+entries.length+' saved bracket'+(entries.length!==1?'s':'')+' · +10 correct · -5 wrong · upsets break ties</div></div>'
+      +'<div class="lb-count">'+entries.length+' saved bracket'+(entries.length!==1?'s':'')+' · +10/15/20/25 pts by round · -5 wrong · upsets break ties</div></div>'
      +'<div class="lb-table">'
       +'<div class="lbrow lbhdr"><div class="lbrank">Rank</div><div class="lbname">Player</div>'
       +'<div class="lbpick">Champion Pick</div><div class="lbpts">Score</div>'
