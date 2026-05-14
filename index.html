@@ -315,6 +315,23 @@ body{font-family:var(--fb);color:var(--text);font-size:13px;min-height:100vh;bac
 .chyron-text{font-family:var(--fh);font-size:15px;font-weight:700;color:var(--white);letter-spacing:.18em;text-transform:uppercase;padding-right:120px}
 .chyron-text span{color:var(--gold)}
 @keyframes chyron-scroll{0%{transform:translateX(100vw)}100%{transform:translateX(-100%)}}
+@media(max-width:600px){
+  .main{padding:10px}
+  .matchup-grid{grid-template-columns:1fr!important}
+  .matchup-grid.double{grid-template-columns:1fr!important}
+  .matchup-grid.single{grid-template-columns:1fr!important}
+  .round-tabs{gap:6px}
+  .round-tab{padding:8px 12px;font-size:11px}
+  .hero{height:180px}
+  .t-name{font-size:15px}
+  .lbrow{grid-template-columns:28px 1fr 80px 50px;gap:4px}
+  .lbups,.lbact{display:none}
+  .lbhdr .lbups,.lbhdr .lbact{display:none}
+  .app-nav-tab{padding:10px 12px;font-size:11px}
+  .tt-pill{bottom:12px;right:12px;padding:8px 14px;font-size:11px}
+  .admin-game{grid-template-columns:1fr 60px 24px 60px;gap:6px;font-size:12px}
+  .admin-game>*:nth-child(5),.admin-game>*:nth-child(6),.admin-game>*:nth-child(7){display:none}
+}
 </style>
 </head>
 <body>
