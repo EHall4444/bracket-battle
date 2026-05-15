@@ -1201,25 +1201,45 @@ function calcScore(p){
   });
   QF.forEach(function(g){
     if(p[g.id])totalPicks++;
-    var frAResult=FR.find(function(x){return x.id===g.frA;});
-    var frBResult=FR.find(function(x){return x.id===g.frB;});
-    var tA=p[g.frA],tB=p[g.frB];
-    if(p[g.id]&&tA&&tB){
-      var validPicks=[frAResult&&frAResult.result,frBResult&&frBResult.result].filter(Boolean);
-      if(validPicks.length===2&&validPicks.indexOf(p[g.id])===-1){losses++;score-=LOSS;}
+    if(g.result){
+      if(p[g.id]===g.result){
+        wins++;score+=PTS.qf;
+      } else if(p[g.id]&&p[g.id]!==g.result){
+        losses++;score-=LOSS;
+      }
+    } else {
+      // Game hasn't been played yet - check if pick is valid
+      var frAResult=FR.find(function(x){return x.id===g.frA;});
+      var frBResult=FR.find(function(x){return x.id===g.frB;});
+      var tA=p[g.frA],tB=p[g.frB];
+      if(p[g.id]&&tA&&tB){
+        var validPicks=[frAResult&&frAResult.result,frBResult&&frBResult.result].filter(Boolean);
+        if(validPicks.length===2&&validPicks.indexOf(p[g.id])===-1){
+          losses++;score-=LOSS;
+        }
+      }
     }
-    if(g.result){if(p[g.id]===g.result){wins++;score+=PTS.qf;}else if(p[g.id]&&p[g.id]!==g.result){losses++;score-=LOSS;}}
   });
   SF.forEach(function(g){
     if(p[g.id])totalPicks++;
-    var qfAResult=QF.find(function(x){return x.id===g.qfA;});
-    var qfBResult=QF.find(function(x){return x.id===g.qfB;});
-    var tA=p[g.qfA],tB=p[g.qfB];
-    if(p[g.id]&&tA&&tB){
-      var validPicks=[qfAResult&&qfAResult.result,qfBResult&&qfBResult.result].filter(Boolean);
-      if(validPicks.length===2&&validPicks.indexOf(p[g.id])===-1){losses++;score-=LOSS;}
+    if(g.result){
+      if(p[g.id]===g.result){
+        wins++;score+=PTS.sf;
+      } else if(p[g.id]&&p[g.id]!==g.result){
+        losses++;score-=LOSS;
+      }
+    } else {
+      // Game hasn't been played yet - check if pick is valid
+      var qfAResult=QF.find(function(x){return x.id===g.qfA;});
+      var qfBResult=QF.find(function(x){return x.id===g.qfB;});
+      var tA=p[g.qfA],tB=p[g.qfB];
+      if(p[g.id]&&tA&&tB){
+        var validPicks=[qfAResult&&qfAResult.result,qfBResult&&qfBResult.result].filter(Boolean);
+        if(validPicks.length===2&&validPicks.indexOf(p[g.id])===-1){
+          losses++;score-=LOSS;
+        }
+      }
     }
-    if(g.result){if(p[g.id]===g.result){wins++;score+=PTS.sf;}else if(p[g.id]&&p[g.id]!==g.result){losses++;score-=LOSS;}}
   });
   if(p.fin){
     totalPicks++;
