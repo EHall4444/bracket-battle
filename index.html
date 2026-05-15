@@ -1005,14 +1005,17 @@ function roundTabsHTML(p, lk){
 
   function tab(id,label,unlocked,count,total){
     var isActive=ACTIVE_ROUND===id;
+    var canNav=unlocked||id==='fr';
     var cls='round-tab';
     if(isActive)cls+=' active';
-    else if(unlocked||id==='fr')cls+=' unlocked';
+    else if(canNav)cls+=' unlocked';
     else cls+=' locked';
-    var badge=count>0&&count<total?'<span class="tab-badge">'+count+'/'+total+'</span>':'';
+    // After deadline, suppress partial pick counts — not useful info
+    var badge='';
     if(count===total&&total>0)badge='<span class="tab-badge">✓</span>';
-    var lockIcon=(!deadlinePassed&&!unlocked&&id!=='fr')?'<span class="tab-lock">🔒</span>':'';
-    var onclick=(unlocked||id==='fr')&&!isActive?'onclick="switchRound(\''+id+'\')"':'';
+    else if(!deadlinePassed&&count>0&&count<total)badge='<span class="tab-badge">'+count+'/'+total+'</span>';
+    var lockIcon=(!canNav)?'<span class="tab-lock">🔒</span>':'';
+    var onclick=canNav&&!isActive?'onclick="switchRound(\''+id+'\')"':'';
     return'<div class="'+cls+'" '+onclick+'>'+label+badge+lockIcon+'</div>';
   }
 
