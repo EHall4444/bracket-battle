@@ -7,7 +7,7 @@
 <meta property="og:description" content="16 teams. 15 picks. One champion."/>
 <meta property="og:image" content="https://ehall4444.github.io/bracket-battle/og-image.png"/>
 <meta property="og:image:width" content="1200"/>
-<meta property="og:image:height" content="630"/> 
+<meta property="og:image:height" content="630"/>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Bracket Battle — 2026 NCAA Men's Lacrosse</title>
@@ -1255,9 +1255,9 @@ async function renderLB(){
     }).map(function(r){
       var sc=calcScore(r.picks||{});
       var ch=(r.picks||{}).fin;
-      var pct=sc.totalPicks>0?Math.round((sc.wins/sc.totalPicks)*100):0;
+      var wl=sc.wins+'/'+sc.losses;
       return{u:r.username,p:r.picks||{},wins:sc.wins,upsets:sc.upsets,score:sc.score,champ:ch&&T[ch]?T[ch].n:'—',champKey:ch||null,
-        boldScore:sc.boldScore||0,totalPicks:sc.totalPicks,correctPct:pct};
+        boldScore:sc.boldScore||0,totalPicks:sc.totalPicks,wl:wl};
     });
    entries.sort(function(a,b){
       if(b.score!==a.score)return b.score-a.score;
@@ -1298,7 +1298,7 @@ async function renderLB(){
         +rankCell
         +'<div class="lbname">'+e.u+(me?' <span style="font-size:9px;color:var(--muted)">(you)</span>':'')+'</div>'
         +'<div class="lbpick">'+e.champ+'</div>'
-        +'<div class="lbpct">'+e.correctPct+'%</div>'
+        +'<div class="lbpct">'+e.wl+'</div>'
         +'<div class="lbpts">'+e.score+'</div>'
         +'<div class="lbups">'+e.upsets+'</div>'
         +'<div class="lbact"><button class="vbtn" onclick="event.stopPropagation();viewBracket(\''+e.u+'\')">View</button></div>'
@@ -1310,7 +1310,7 @@ async function renderLB(){
       +'<div class="lb-count">'+entries.length+' saved bracket'+(entries.length!==1?'s':'')+' · +10/15/20/25 pts by round · -5 wrong · upsets break ties</div></div>'
      +'<div class="lb-table">'
       +'<div class="lbrow lbhdr"><div class="lbrank">Rank</div><div class="lbname">Player</div>'
-      +'<div class="lbpick">Champion Pick</div><div class="lbpct">Correct</div><div class="lbpts">Score</div>'
+      +'<div class="lbpick">Champion Pick</div><div class="lbpct">W/L</div><div class="lbpts">Score</div>'
       +'<div class="lbups">Upsets</div><div class="lbact"></div></div>'
       +(entries.length?rows:'<div class="lb-empty">No saved brackets yet — make your picks and save to appear here!</div>')
       +'</div></div>'
@@ -1365,6 +1365,10 @@ function renderResources(){
     +'<div class="res-link-icon">📰</div>'
     +'<div class="res-link-text"><span class="res-link-name">Inside Lacrosse</span>'
     +'<div class="res-link-desc">Rankings, recruiting, and in-depth analysis</div></div></a>'
+    +'<a href="https://www.youtube.com/@CollegeLacrosse" target="_blank" class="res-link">'
+    +'<div class="res-link-icon">🎥</div>'
+    +'<div class="res-link-text"><span class="res-link-name">College Lacrosse (YouTube)</span>'
+    +'<div class="res-link-desc">Game highlights, analysis, and tournament coverage</div></div></a>'
     +'<a href="https://laxallstars.com/" target="_blank" class="res-link">'
     +'<div class="res-link-icon">⭐</div>'
     +'<div class="res-link-text"><span class="res-link-name">LaxAllStars</span>'
