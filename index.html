@@ -434,6 +434,7 @@ body{font-family:var(--fb);color:var(--text);font-size:13px;min-height:100vh;bac
     <div class="app-nav-tab" id="anav-leaderboard" onclick="showAppTab('leaderboard')">Leaderboard</div>
     <div class="app-nav-tab" id="anav-resources" onclick="showAppTab('resources')">Resources</div>
     <div class="app-nav-tab" id="anav-admin" onclick="showAppTab('admin')" style="display:none">⚙ Scores</div>
+    <div id="last-updated" style="margin-left:auto;font-size:10px;color:var(--blue2);font-family:var(--fh);padding:0 16px;display:flex;align-items:center;"></div>
   </div>
 
   <div class="main">
@@ -1153,9 +1154,22 @@ function redraw(ro, vu){
   loadLogos();
   if(!past()&&!vu)startCD();
   updateScoreDisplay();
+  updateTimestamp();
 }
 
 function loadLogos(){/* logos removed — team names are the pick targets */}
+
+function updateTimestamp(){
+  var now=new Date();
+  var h=now.getHours();
+  var m=now.getMinutes();
+  var ampm=h>=12?'PM':'AM';
+  h=h%12||12;
+  m=m<10?'0'+m:m;
+  var el=document.getElementById('last-updated');
+  if(el)el.textContent='Updated '+h+':'+m+' '+ampm+' EST';
+}
+
 
 // ── SAVE (no lock — re-saveable until deadline) ──
 async function doSave(){
@@ -1316,6 +1330,7 @@ async function renderLB(){
       +'<div class="lb-note">Scoring: +10 pts (1st Rd) · +15 pts (QF) · +20 pts (SF) · +25 pts (Final) · -5 pts wrong pick · Tiebreaker: most upset picks.</div>'
       +commentsPanel('leaderboard');
   }catch(e){c.innerHTML='<div style="padding:30px;text-align:center;color:var(--red)">Error: '+e.message+'</div>';}
+  updateTimestamp();
 }
 
 async function viewBracket(u){
