@@ -268,6 +268,24 @@ body{font-family:var(--fb);color:var(--text);font-size:13px;min-height:100vh;bac
 .li{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--muted);font-family:var(--fh);letter-spacing:.03em}
 .ls{width:10px;height:10px;border-radius:2px}
 
+/* ── RESOURCES ── */
+.res-wrap{background:var(--white);border:1px solid var(--gray);border-radius:var(--rl);overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.08)}
+.res-hdr{background:var(--navy);padding:11px 16px;border-bottom:2px solid var(--blue2)}
+.res-title{font-family:var(--fh);font-size:20px;font-weight:700;color:var(--white);text-transform:uppercase;letter-spacing:.06em}
+.res-subtitle{font-size:10px;color:var(--blue2);font-family:var(--fh);margin-top:4px}
+.res-body{padding:18px}
+.res-section{margin-bottom:24px}
+.res-section:last-child{margin-bottom:0}
+.res-section-title{font-family:var(--fh);font-size:14px;font-weight:600;color:var(--navy);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid var(--blue2)}
+.res-links{display:grid;gap:8px}
+.res-link{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--off);border:1.5px solid var(--gray);border-radius:var(--r);text-decoration:none;transition:all .15s}
+.res-link:hover{border-color:var(--blue2);background:var(--blue-l);transform:translateX(3px)}
+.res-link-icon{font-size:18px;flex-shrink:0}
+.res-link-text{flex:1;min-width:0}
+.res-link-name{font-family:var(--fh);font-size:13px;font-weight:600;color:var(--navy);display:block;margin-bottom:2px}
+.res-link-desc{font-size:10px;color:var(--muted)}
+.res-note{font-size:11px;color:var(--muted);margin-top:16px;padding:10px 12px;background:var(--off);border-radius:var(--r);border-left:3px solid var(--blue2)}
+
 /* sticky trash talk pill */
 .tt-pill{position:fixed;bottom:20px;right:20px;z-index:500;background:var(--navy);color:var(--white);border:2px solid var(--blue2);border-radius:24px;padding:10px 18px;font-family:var(--fh);font-size:12px;font-weight:600;letter-spacing:.06em;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,.4);transition:all .2s;text-transform:uppercase}
 .tt-pill:hover{background:var(--blue);transform:translateY(-2px)}
@@ -290,16 +308,17 @@ body{font-family:var(--fb);color:var(--text);font-size:13px;min-height:100vh;bac
 .lb-title{font-family:var(--fh);font-size:20px;font-weight:700;color:var(--white);text-transform:uppercase;letter-spacing:.06em}
 .lb-count{font-size:10px;color:var(--blue2);font-family:var(--fh)}
 .lb-table{background:var(--white);border:1px solid var(--gray);border-top:none}
-.lbrow{display:grid;grid-template-columns:36px 1fr 110px 65px 70px 65px;align-items:center;padding:10px 14px;border-bottom:1px solid var(--gray);cursor:pointer;transition:background .12s}
+.lbrow{display:grid;grid-template-columns:36px 1fr 110px 60px 65px 70px 65px;align-items:center;padding:10px 14px;border-bottom:1px solid var(--gray);cursor:pointer;transition:background .12s}
 .lbrow:last-child{border-bottom:none}
 .lbrow:hover:not(.lbhdr){background:var(--blue-l)}
 .lbrow.lbhdr{background:var(--navy2);cursor:default;padding:7px 14px}
 .lbrow.lbme{background:#eff6ff;border-left:4px solid var(--blue2)}
 .lbrank{font-family:var(--fh);font-size:18px;font-weight:700;color:var(--gray2)}
 .gold{color:#d97706}.silver{color:#94a3b8}.bronze{color:#92400e}
-.lbhdr .lbrank,.lbhdr .lbname,.lbhdr .lbpick,.lbhdr .lbpts,.lbhdr .lbups,.lbhdr .lbact{font-size:9px;color:rgba(255,255,255,.45);font-weight:600;text-transform:uppercase;letter-spacing:.07em;font-family:var(--fh)}
+.lbhdr .lbrank,.lbhdr .lbname,.lbhdr .lbpick,.lbhdr .lbpct,.lbhdr .lbpts,.lbhdr .lbups,.lbhdr .lbact{font-size:9px;color:rgba(255,255,255,.45);font-weight:600;text-transform:uppercase;letter-spacing:.07em;font-family:var(--fh)}
 .lbname{font-size:12px;font-weight:500}
 .lbpick{font-size:10px;color:var(--muted)}
+.lbpct{font-family:var(--fh);font-size:12px;font-weight:600;text-align:right;color:var(--blue2)}
 .lbpts{font-family:var(--fh);font-size:15px;font-weight:700;text-align:right;color:var(--navy)}
 .lbups{font-size:10px;color:var(--muted);text-align:center}
 .lbhdr .lbpts,.lbhdr .lbups{text-align:right}
@@ -410,12 +429,14 @@ body{font-family:var(--fb);color:var(--text);font-size:13px;min-height:100vh;bac
   <div class="app-nav">
     <div class="app-nav-tab active" id="anav-bracket" onclick="showAppTab('bracket')">My Bracket</div>
     <div class="app-nav-tab" id="anav-leaderboard" onclick="showAppTab('leaderboard')">Leaderboard</div>
+    <div class="app-nav-tab" id="anav-resources" onclick="showAppTab('resources')">Resources</div>
     <div class="app-nav-tab" id="anav-admin" onclick="showAppTab('admin')" style="display:none">⚙ Scores</div>
   </div>
 
   <div class="main">
     <div id="apptab-bracket"></div>
     <div id="apptab-leaderboard" style="display:none"></div>
+    <div id="apptab-resources" style="display:none"></div>
     <div id="apptab-admin" style="display:none"></div>
   </div>
 </div>
@@ -823,9 +844,11 @@ function launch(){
 function showAppTab(t){
   document.getElementById('apptab-bracket').style.display=t==='bracket'?'':'none';
   document.getElementById('apptab-leaderboard').style.display=t==='leaderboard'?'':'none';
+  document.getElementById('apptab-resources').style.display=t==='resources'?'':'none';
   document.getElementById('apptab-admin').style.display=t==='admin'?'':'none';
   document.getElementById('anav-bracket').classList.toggle('active',t==='bracket');
   document.getElementById('anav-leaderboard').classList.toggle('active',t==='leaderboard');
+  document.getElementById('anav-resources').classList.toggle('active',t==='resources');
   var adminNav=document.getElementById('anav-admin');
   if(adminNav)adminNav.classList.toggle('active',t==='admin');
   if(t==='bracket'){
@@ -834,6 +857,7 @@ function showAppTab(t){
     else redraw(true,VU);
   }
   if(t==='leaderboard'){VU=null;viewPicks=null;renderLB();}
+  if(t==='resources')renderResources();
   if(t==='admin')renderAdmin();
 }
 
@@ -1156,10 +1180,11 @@ function backToLeaderboard(){VU=null;viewPicks=null;ACTIVE_ROUND='fr';showAppTab
 
 // ── LEADERBOARD ──
 function calcScore(p){
-  var score=0,wins=0,losses=0,u=0;
+  var score=0,wins=0,losses=0,u=0,totalPicks=0;
   var PTS={fr:10,qf:15,sf:20,fin:25};
   var LOSS=5;
   FR.forEach(function(g){
+    if(p[g.id])totalPicks++;
     if(g.result){
       if(p[g.id]===g.result){
         wins++;score+=PTS.fr;
@@ -1170,6 +1195,7 @@ function calcScore(p){
     }
   });
   QF.forEach(function(g){
+    if(p[g.id])totalPicks++;
     var frAResult=FR.find(function(x){return x.id===g.frA;});
     var frBResult=FR.find(function(x){return x.id===g.frB;});
     var tA=p[g.frA],tB=p[g.frB];
@@ -1180,6 +1206,7 @@ function calcScore(p){
     if(g.result){if(p[g.id]===g.result){wins++;score+=PTS.qf;}else if(p[g.id]&&p[g.id]!==g.result){losses++;score-=LOSS;}}
   });
   SF.forEach(function(g){
+    if(p[g.id])totalPicks++;
     var qfAResult=QF.find(function(x){return x.id===g.qfA;});
     var qfBResult=QF.find(function(x){return x.id===g.qfB;});
     var tA=p[g.qfA],tB=p[g.qfB];
@@ -1190,13 +1217,14 @@ function calcScore(p){
     if(g.result){if(p[g.id]===g.result){wins++;score+=PTS.sf;}else if(p[g.id]&&p[g.id]!==g.result){losses++;score-=LOSS;}}
   });
   if(p.fin){
+    totalPicks++;
     var sf1Result=SF.find(function(x){return x.id===FIN.sfA;});
     var sf2Result=SF.find(function(x){return x.id===FIN.sfB;});
     var validFin=[sf1Result&&sf1Result.result,sf2Result&&sf2Result.result].filter(Boolean);
     if(validFin.length===2&&validFin.indexOf(p.fin)===-1){losses++;score-=LOSS;}
     else if(FIN.result){if(p.fin===FIN.result){wins++;score+=PTS.fin;}else if(p.fin!==FIN.result){losses++;score-=LOSS;}}
   }
-  return{wins:wins,losses:losses,upsets:u,score:score};
+  return{wins:wins,losses:losses,upsets:u,score:score,totalPicks:totalPicks};
 }
 function tourneyOver(){ return new Date() >= TOURNAMENT_END; }
 
@@ -1223,8 +1251,9 @@ async function renderLB(){
     }).map(function(r){
       var sc=calcScore(r.picks||{});
       var ch=(r.picks||{}).fin;
+      var pct=sc.totalPicks>0?Math.round((sc.wins/sc.totalPicks)*100):0;
       return{u:r.username,p:r.picks||{},wins:sc.wins,upsets:sc.upsets,score:sc.score,champ:ch&&T[ch]?T[ch].n:'—',champKey:ch||null,
-        boldScore:sc.boldScore||0};
+        boldScore:sc.boldScore||0,totalPicks:sc.totalPicks,correctPct:pct};
     });
    entries.sort(function(a,b){
       if(b.score!==a.score)return b.score-a.score;
@@ -1265,6 +1294,7 @@ async function renderLB(){
         +rankCell
         +'<div class="lbname">'+e.u+(me?' <span style="font-size:9px;color:var(--muted)">(you)</span>':'')+'</div>'
         +'<div class="lbpick">'+e.champ+'</div>'
+        +'<div class="lbpct">'+e.correctPct+'%</div>'
         +'<div class="lbpts">'+e.score+'</div>'
         +'<div class="lbups">'+e.upsets+'</div>'
         +'<div class="lbact"><button class="vbtn" onclick="event.stopPropagation();viewBracket(\''+e.u+'\')">View</button></div>'
@@ -1276,7 +1306,7 @@ async function renderLB(){
       +'<div class="lb-count">'+entries.length+' saved bracket'+(entries.length!==1?'s':'')+' · +10/15/20/25 pts by round · -5 wrong · upsets break ties</div></div>'
      +'<div class="lb-table">'
       +'<div class="lbrow lbhdr"><div class="lbrank">Rank</div><div class="lbname">Player</div>'
-      +'<div class="lbpick">Champion Pick</div><div class="lbpts">Score</div>'
+      +'<div class="lbpick">Champion Pick</div><div class="lbpct">Correct</div><div class="lbpts">Score</div>'
       +'<div class="lbups">Upsets</div><div class="lbact"></div></div>'
       +(entries.length?rows:'<div class="lb-empty">No saved brackets yet — make your picks and save to appear here!</div>')
       +'</div></div>'
@@ -1295,6 +1325,81 @@ async function viewBracket(u){
   catch(e){viewPicks=blank();}
   ACTIVE_ROUND='fr';
   redraw(true,u);
+}
+
+// ── RESOURCES TAB ──
+function renderResources(){
+  var c=document.getElementById('apptab-resources');
+  c.innerHTML='<div class="res-wrap">'
+    +'<div class="res-hdr">'
+    +'<div class="res-title">📚 Lacrosse Resources</div>'
+    +'<div class="res-subtitle">Official sites, live coverage, and team links</div>'
+    +'</div>'
+    +'<div class="res-body">'
+    
+    +'<div class="res-section">'
+    +'<div class="res-section-title">Official Tournament</div>'
+    +'<div class="res-links">'
+    +'<a href="https://www.ncaa.com/sports/lacrosse-men/d1" target="_blank" class="res-link">'
+    +'<div class="res-link-icon">🏆</div>'
+    +'<div class="res-link-text"><span class="res-link-name">NCAA Championship</span>'
+    +'<div class="res-link-desc">Official tournament site, brackets, scores & highlights</div></div></a>'
+    +'<a href="https://www.ncaa.com/sports/lacrosse-men/d1/rules" target="_blank" class="res-link">'
+    +'<div class="res-link-icon">📖</div>'
+    +'<div class="res-link-text"><span class="res-link-name">NCAA Lacrosse Rulebook</span>'
+    +'<div class="res-link-desc">Official rules and regulations for NCAA men\'s lacrosse</div></div></a>'
+    +'</div></div>'
+    
+    +'<div class="res-section">'
+    +'<div class="res-section-title">Coverage & News</div>'
+    +'<div class="res-links">'
+    +'<a href="https://www.espn.com/college-sports/lacrosse/mens/" target="_blank" class="res-link">'
+    +'<div class="res-link-icon">📺</div>'
+    +'<div class="res-link-text"><span class="res-link-name">ESPN College Lacrosse</span>'
+    +'<div class="res-link-desc">Scores, news, and ESPNU live coverage</div></div></a>'
+    +'<a href="https://www.insidelacrosse.com/" target="_blank" class="res-link">'
+    +'<div class="res-link-icon">📰</div>'
+    +'<div class="res-link-text"><span class="res-link-name">Inside Lacrosse</span>'
+    +'<div class="res-link-desc">Rankings, recruiting, and in-depth analysis</div></div></a>'
+    +'<a href="https://laxallstars.com/" target="_blank" class="res-link">'
+    +'<div class="res-link-icon">⭐</div>'
+    +'<div class="res-link-text"><span class="res-link-name">LaxAllStars</span>'
+    +'<div class="res-link-desc">Gear reviews, news, and community content</div></div></a>'
+    +'</div></div>'
+    
+    +'<div class="res-section">'
+    +'<div class="res-section-title">Lacrosse Organizations</div>'
+    +'<div class="res-links">'
+    +'<a href="https://www.usalacrosse.com/" target="_blank" class="res-link">'
+    +'<div class="res-link-icon">🇺🇸</div>'
+    +'<div class="res-link-text"><span class="res-link-name">USA Lacrosse</span>'
+    +'<div class="res-link-desc">National governing body for men\'s & women\'s lacrosse</div></div></a>'
+    +'<a href="https://premierlacrosseleague.com/" target="_blank" class="res-link">'
+    +'<div class="res-link-icon">🥍</div>'
+    +'<div class="res-link-text"><span class="res-link-name">Premier Lacrosse League (PLL)</span>'
+    +'<div class="res-link-desc">Professional outdoor lacrosse league</div></div></a>'
+    +'<a href="https://nll.com/" target="_blank" class="res-link">'
+    +'<div class="res-link-icon">🏟️</div>'
+    +'<div class="res-link-text"><span class="res-link-name">National Lacrosse League (NLL)</span>'
+    +'<div class="res-link-desc">Professional indoor/box lacrosse league</div></div></a>'
+    +'</div></div>'
+    
+    +'<div class="res-section">'
+    +'<div class="res-section-title">Tournament Team Sites</div>'
+    +'<div class="res-links">'
+    +Object.keys(T).map(function(k){
+      var team=T[k];
+      if(!team.url)return'';
+      return'<a href="'+team.url+'" target="_blank" class="res-link">'
+        +'<div class="res-link-icon">'+(team.mascot?'<img src="'+team.mascot+'" style="width:20px;height:20px;object-fit:contain">':'🎓')+'</div>'
+        +'<div class="res-link-text"><span class="res-link-name">'+team.n+'</span>'
+        +'<div class="res-link-desc">'+(team.s||'')+(team.s?' · ':'')+'Record: '+team.r+'</div></div></a>';
+    }).join('')
+    +'</div></div>'
+    
+    +'<div class="res-note">💡 Bookmark this page to stay up to date with the latest lacrosse news, scores, and tournament updates throughout the championship!</div>'
+    +'</div></div>'
+    +commentsPanel('resources');
 }
 
 // ── ADMIN PANEL (EHall only) ──
