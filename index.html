@@ -1206,7 +1206,7 @@ function calcScore(p){
     var tA=p[g.frA],tB=p[g.frB];
     if(p[g.id]&&tA&&tB){
       var validPicks=[frAResult&&frAResult.result,frBResult&&frBResult.result].filter(Boolean);
-      if(validPicks.length===2&&validPicks.indexOf(p[g.id])===-1){losses++;score-=LOSS;return;}
+      if(validPicks.length===2&&validPicks.indexOf(p[g.id])===-1){losses++;score-=LOSS;}
     }
     if(g.result){if(p[g.id]===g.result){wins++;score+=PTS.qf;}else if(p[g.id]&&p[g.id]!==g.result){losses++;score-=LOSS;}}
   });
@@ -1217,7 +1217,7 @@ function calcScore(p){
     var tA=p[g.qfA],tB=p[g.qfB];
     if(p[g.id]&&tA&&tB){
       var validPicks=[qfAResult&&qfAResult.result,qfBResult&&qfBResult.result].filter(Boolean);
-      if(validPicks.length===2&&validPicks.indexOf(p[g.id])===-1){losses++;score-=LOSS;return;}
+      if(validPicks.length===2&&validPicks.indexOf(p[g.id])===-1){losses++;score-=LOSS;}
     }
     if(g.result){if(p[g.id]===g.result){wins++;score+=PTS.sf;}else if(p[g.id]&&p[g.id]!==g.result){losses++;score-=LOSS;}}
   });
