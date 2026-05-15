@@ -143,6 +143,8 @@ body{font-family:var(--fb);color:var(--text);font-size:13px;min-height:100vh;bac
 .team-row.is-empty-locked{cursor:default;background:var(--off)}
 
 .t-seed{font-family:var(--fh);font-size:11px;font-weight:700;color:var(--muted);width:22px;flex-shrink:0;text-align:center}
+.t-mascot{width:28px;height:28px;flex-shrink:0;object-fit:contain;margin-right:6px;opacity:.85;transition:opacity .15s}
+.team-row:hover .t-mascot{opacity:1}
 .t-info{flex:1;min-width:0}
 .t-name{font-family:var(--fh);font-size:14px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block;letter-spacing:.02em;color:inherit;transition:color .12s}
 .t-rec{font-size:9px;color:var(--muted);margin-top:2px}
@@ -630,40 +632,40 @@ var viewPicks=null; // picks we're viewing (other user)
 
 function past(){return new Date()>=DEADLINE;}
 
-// ── TEAM DATA ── mascot logo URLs from Wikimedia
+// ── TEAM DATA ── mascot logos stored locally in /logos/
 var T={
   princeton:    {n:'Princeton',  r:'13–2',s:'#1',o:26,url:'https://goprincetontigers.com/sports/mens-lacrosse',
-    mascot:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Princeton_Tigers_logo.svg/120px-Princeton_Tigers_logo.svg.png'},
+    mascot:'logos/princeton.svg'},
   notredame:    {n:'Notre Dame', r:'10–2',s:'#2',o:18,url:'https://und.com/sports/mens-lacrosse',
-    mascot:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Notre_Dame_Fighting_Irish_logo.svg/120px-Notre_Dame_Fighting_Irish_logo.svg.png'},
+    mascot:'logos/notredame.svg'},
   northcarolina:{n:'N. Carolina',r:'13–4',s:'#3',o:15,url:'https://goheels.com/sports/mens-lacrosse',
-    mascot:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/North_Carolina_Tar_Heels_logo.svg/120px-North_Carolina_Tar_Heels_logo.svg.png'},
+    mascot:'logos/northcarolina.svg'},
   richmond:     {n:'Richmond',   r:'14–1',s:'#4',o:12,url:'https://richmondspiders.com/sports/mens-lacrosse',
-    mascot:'https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Richmond_Spiders_logo.svg/120px-Richmond_Spiders_logo.svg.png'},
+    mascot:'logos/richmond.svg'},
   virginia:     {n:'Virginia',   r:'10–6',s:'#5',o:11,url:'https://virginiasports.com/sports/mlax',
-    mascot:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Virginia_Cavaliers_sabre_logo.svg/120px-Virginia_Cavaliers_sabre_logo.svg.png'},
+    mascot:'logos/virginia.svg'},
   syracuse:     {n:'Syracuse',   r:'11–5',s:'#6',o:6, url:'https://cuse.com/sports/mens-lacrosse',
-    mascot:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Syracuse_Orange_logo.svg/120px-Syracuse_Orange_logo.svg.png'},
+    mascot:'logos/syracuse.svg'},
   cornell:      {n:'Cornell',    r:'11–4',s:'#7',o:13,url:'https://cornellbigred.com/sports/mens-lacrosse',
-    mascot:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Cornell_Big_Red_Athletics_logo.svg/120px-Cornell_Big_Red_Athletics_logo.svg.png'},
+    mascot:'logos/cornell.svg'},
   pennstate:    {n:'Penn State', r:'9–5',s:'#8',o:9, url:'https://gopsusports.com/sports/mens-lacrosse',
-    mascot:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/Penn_State_Nittany_Lions_logo.svg/120px-Penn_State_Nittany_Lions_logo.svg.png'},
+    mascot:'logos/pennstate.svg'},
   marist:       {n:'Marist',     r:'12–4',s:'',o:1,url:'https://goredfoxes.com/sports/mens-lacrosse',
-    mascot:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Marist_Red_Foxes_logo.svg/120px-Marist_Red_Foxes_logo.svg.png'},
+    mascot:'logos/marist.svg'},
   jacksonville: {n:'Jacksonville',r:'11–5',s:'',o:1,url:'https://judolphins.com/sports/mens-lacrosse',
-    mascot:null},
+    mascot:'logos/jacksonville.svg'},
   albany:       {n:'Albany',     r:'11–6',s:'',o:1,url:'https://ualbanyathletics.com/sports/mens-lacrosse',
-    mascot:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Albany_Great_Danes_logo.svg/120px-Albany_Great_Danes_logo.svg.png'},
+    mascot:'logos/albany.svg'},
   army:         {n:'Army',       r:'13–3',s:'',o:1,url:'https://goarmywestpoint.com/sports/mens-lacrosse',
-    mascot:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Army_Black_Knights_logo.svg/120px-Army_Black_Knights_logo.svg.png'},
+    mascot:'logos/army.svg'},
   johnshopkins: {n:'Johns Hopkins',r:'9–5',s:'',o:2,url:'https://hopkinssports.com/sports/mens-lacrosse',
-    mascot:'https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Johns_Hopkins_Blue_Jays_logo.svg/120px-Johns_Hopkins_Blue_Jays_logo.svg.png'},
+    mascot:'logos/johnshopkins.svg'},
   duke:         {n:'Duke',       r:'9–4',s:'',o:2,url:'https://goduke.com/sports/mens-lacrosse',
-    mascot:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Duke_Blue_Devils_logo.svg/120px-Duke_Blue_Devils_logo.svg.png'},
+    mascot:'logos/duke.svg'},
   georgetown:   {n:'Georgetown', r:'10–4',s:'',o:1,url:'https://guhoyas.com/sports/mens-lacrosse',
-    mascot:'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Georgetown_Hoyas_logo.svg/120px-Georgetown_Hoyas_logo.svg.png'},
+    mascot:'logos/georgetown.svg'},
   yale:         {n:'Yale',       r:'9–5',s:'',o:1,url:'https://yalebulldogs.com/sports/mens-lacrosse',
-    mascot:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Yale_Bulldogs_logo.svg/120px-Yale_Bulldogs_logo.svg.png'}
+    mascot:'logos/yale.svg'}
 };
 
 var FR=[
@@ -899,8 +901,10 @@ function teamRow(gameId, teamKey, isTeamA, myPick, result, lk, forceElim){
   var wlBadge='';
   if(hasScore){if(isW)wlBadge='<div class="t-adv">W</div>';else if(result)wlBadge='<div class="t-adv" style="background:var(--red-l);color:var(--red)">L</div>';}
   var scoreCol=hasScore?'<div class="t-score-col"><span class="t-score" id="sc-'+(isTeamA?'a':'b')+'-'+gameId+'">'+scoreVal+'</span>'+wlBadge+'</div>':'';
+  var mascotImg=td.mascot?'<img src="'+td.mascot+'" class="t-mascot" alt="'+td.n+' logo">':'';
   return'<div class="'+cls+'" '+oc+' title="'+(lk?'Picks are locked':isPick?'Selected — click ✕ to remove':'Select '+td.n)+'">'
     +(td.s?'<span class="t-seed">'+td.s+'</span>':'<span class="t-seed"></span>')
+    +mascotImg
     +'<div class="t-info"><span class="t-name">'+td.n+'</span><div class="t-rec">'+td.r+'</div></div>'
     +scoreCol
     +(isPick&&!lk?'<button class="t-clear" onclick="event.stopPropagation();clearOnly(\''+gameId+'\')" title="Remove this pick">✕</button>':'')
