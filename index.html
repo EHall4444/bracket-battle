@@ -996,8 +996,12 @@ function deadlineBanner(){
 
 // ── ROUND TABS ──
 function roundTabsHTML(p, lk){
+  var deadlinePassed=past();
   var frDone=frComplete(p),qfDone=qfComplete(p),sfDone=sfComplete(p);
-  var qfUnlocked=frDone,sfUnlocked=frDone&&qfDone,finUnlocked=frDone&&qfDone&&sfDone;
+  // After deadline, all tabs freely navigable — picks are locked but rounds are accessible
+  var qfUnlocked=deadlinePassed||frDone;
+  var sfUnlocked=deadlinePassed||(frDone&&qfDone);
+  var finUnlocked=deadlinePassed||(frDone&&qfDone&&sfDone);
 
   function tab(id,label,unlocked,count,total){
     var isActive=ACTIVE_ROUND===id;
@@ -1007,7 +1011,7 @@ function roundTabsHTML(p, lk){
     else cls+=' locked';
     var badge=count>0&&count<total?'<span class="tab-badge">'+count+'/'+total+'</span>':'';
     if(count===total&&total>0)badge='<span class="tab-badge">✓</span>';
-    var lockIcon=(!unlocked&&id!=='fr')?'<span class="tab-lock">🔒</span>':'';
+    var lockIcon=(!deadlinePassed&&!unlocked&&id!=='fr')?'<span class="tab-lock">🔒</span>':'';
     var onclick=(unlocked||id==='fr')&&!isActive?'onclick="switchRound(\''+id+'\')"':'';
     return'<div class="'+cls+'" '+onclick+'>'+label+badge+lockIcon+'</div>';
   }
