@@ -954,7 +954,7 @@ function buildCard(gameId, teamA, teamB, loc, time, myPick, result, lk, advLabel
       var SVG='<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="8"/><line x1="12" y1="12" x2="12" y2="16"/></svg>';
       var infoBtn='<span class="info-btn" onclick="event.stopPropagation();toggleInfo(\''+gameId+'\')">'+SVG+'</span>';
 
-      // After deadline: "Your bracket" footer scoring both sides
+      // After deadline: "Your bracket" strip with info button — no pts display
       if(lk&&pickedA&&pickedB){
         var pAName=T[pickedA]?T[pickedA].n:pickedA;
         var pBName=T[pickedB]?T[pickedB].n:pickedB;
@@ -962,40 +962,16 @@ function buildCard(gameId, teamA, teamB, loc, time, myPick, result, lk, advLabel
         var pBAdv=teamA===pickedB||teamB===pickedB;
         var pAColor=pAAdv?'var(--blue)':'var(--red)';
         var pBColor=pBAdv?'var(--blue)':'var(--red)';
-        var bracketLabel='<span style="font-size:11px;color:var(--muted)">Your bracket: </span>'
-          +'<span style="color:'+pAColor+';font-weight:600">'+pAName+'</span>'
-          +' <span style="color:var(--muted)">v.</span> '
-          +'<span style="color:'+pBColor+';font-weight:600">'+pBName+'</span>';
         var roundStarted=Object.values(SCORES).some(function(s){return s&&s.status&&s.status!=='scheduled';});
         var infoPanel=buildInfoPanel(gameId,teamA,teamB,result,myPick,roundStarted);
-        var ROUND_PTS={fr:10,qf:15,sf:20,fin:25};
-        var roundKey=QF.find(function(x){return x.id===gameId;})?'qf':SF.find(function(x){return x.id===gameId;})?'sf':(FIN&&FIN.id===gameId)?'fin':'fr';
-        var rPts=ROUND_PTS[roundKey];
-        if(!result){
-          return'<div class="card-pick-footer" style="background:var(--off)">'
-            +'<div>'+bracketLabel+'</div>'+infoBtn
-            +'</div>'+infoPanel;
-        }
-        // Score both sides independently
-        var aWon=pickedA===result;
-        var bWon=pickedB===result;
-        var netScore=(aWon?rPts:-5)+(bWon?rPts:-5);
-        var netStr=(netScore>0?'+':'')+netScore;
-        var netColor=netScore>0?'var(--green)':netScore===0?'var(--muted)':'var(--red)';
-        var footerCls=netScore>0?' correct':' wrong';
-        return'<div class="card-pick-footer'+footerCls+'">'
-          +'<div>'
-            +bracketLabel
-            +'<div style="font-size:10px;margin-top:2px">'
-              +'<span style="color:'+(aWon?'var(--green)':'var(--red)')+'">'+pAName+' '+(aWon?'+'+rPts:'-5')+'</span>'
-              +' &nbsp;&middot;&nbsp; '
-              +'<span style="color:'+(bWon?'var(--green)':'var(--red)')+'">'+pBName+' '+(bWon?'+'+rPts:'-5')+'</span>'
-            +'</div>'
-          +'</div>'
-          +'<span style="display:flex;align-items:center;gap:8px">'
-            +'<span class="card-pick-pts" style="color:'+netColor+'">'+netStr+' pts</span>'
-            +infoBtn
+        return'<div class="card-pick-footer" style="background:var(--off);justify-content:space-between">'
+          +'<span>'
+            +'<span style="font-size:11px;color:var(--muted)">Your bracket: </span>'
+            +'<span style="color:'+pAColor+';font-weight:600">'+pAName+'</span>'
+            +' <span style="color:var(--muted)">v.</span> '
+            +'<span style="color:'+pBColor+';font-weight:600">'+pBName+'</span>'
           +'</span>'
+          +infoBtn
           +'</div>'+infoPanel;
       }
 
