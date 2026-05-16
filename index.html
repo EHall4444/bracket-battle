@@ -596,6 +596,45 @@ async function fetchESPNScores(){
             found=true;break;
           }
         }
+        // Match to QF games
+        for(var qi=0;qi<QF.length;qi++){
+          var qg=QF[qi];
+          var tA=qg.teamA;var tB=qg.teamB;
+          var aFirst=(tA===kA&&tB===kB);
+          var bFirst=(tA===kB&&tB===kA);
+          if(aFirst||bFirst){
+            SCORES[qg.id]={score_a:aFirst?scoreA:scoreB,score_b:aFirst?scoreB:scoreA,status:status};
+            if(state==='final'){qg.result=g.away.winner?(aFirst?kA:kB):(aFirst?kB:kA);if(bFirst)qg.result=g.away.winner?kA:kB;}
+            found=true;break;
+          }
+        }
+        // Match to SF games (teams resolved from QF results)
+        for(var si=0;si<SF.length;si++){
+          var sg=SF[si];
+          var sqA=QF.find(function(q){return q.id===sg.qfA;});
+          var sqB=QF.find(function(q){return q.id===sg.qfB;});
+          var stA=sqA&&sqA.result||null;var stB=sqB&&sqB.result||null;
+          if(!stA||!stB)continue;
+          var aFirst=(stA===kA&&stB===kB);var bFirst=(stA===kB&&stB===kA);
+          if(aFirst||bFirst){
+            SCORES[sg.id]={score_a:aFirst?scoreA:scoreB,score_b:aFirst?scoreB:scoreA,status:status};
+            if(state==='final'){sg.result=g.away.winner?(aFirst?kA:kB):(aFirst?kB:kA);if(bFirst)sg.result=g.away.winner?kA:kB;}
+            found=true;break;
+          }
+        }
+        // Match to Finals (teams resolved from SF results)
+        (function(){
+          var fsf1=SF.find(function(s){return s.id===FIN.sfA;});
+          var fsf2=SF.find(function(s){return s.id===FIN.sfB;});
+          var ftA=fsf1&&fsf1.result||null;var ftB=fsf2&&fsf2.result||null;
+          if(!ftA||!ftB)return;
+          var aFirst=(ftA===kA&&ftB===kB);var bFirst=(ftA===kB&&ftB===kA);
+          if(aFirst||bFirst){
+            SCORES[FIN.id]={score_a:aFirst?scoreA:scoreB,score_b:aFirst?scoreB:scoreA,status:status};
+            if(state==='final'){FIN.result=g.away.winner?(aFirst?kA:kB):(aFirst?kB:kA);if(bFirst)FIN.result=g.away.winner?kA:kB;}
+            found=true;
+          }
+        })();
       });
     }
     if(found){SCORE_SRC='ncaa';return true;}
