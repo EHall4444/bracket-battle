@@ -88,20 +88,28 @@ On login, picks are loaded from the database and passed through `sanitizePicks()
 
 ### Card Footer — "Your Bracket" Display
 
-After the deadline, each QF, SF, and Final card shows a **"Your bracket: Team A v. Team B"** footer row indicating the two teams the player predicted would meet in that game. Names are color-coded:
+After the deadline, every card across all four rounds shows a **"Your bracket"** footer row:
 
-- **Blue** — that team actually advanced to this round
-- **Red** — that team did not advance
+- **First Round:** `Your bracket: N. Carolina` — single team name, color-coded blue if they won, red if they lost, neutral if game not yet played
+- **Quarterfinals, Semifinals, Championship:** `Your bracket: Team A v. Team B` — both predicted teams shown, each color-coded blue if they advanced to this round, red if they didn't
 
-This replaces the pre-deadline "Your pick: Team" single-name display. Points earned or lost are shown alongside. The display is purely informational — scoring is determined independently by whether each pick won their actual game.
+No points are shown on cards. The leaderboard owns all scoring display. The footer is purely a reference — players can see their predictions at a glance as results come in.
+
+An info button (ⓘ) opens a dropdown showing pre-game odds and who else picked which team (visible after games start).
 
 ### Scoring Engine
 
-Scores are calculated client-side from the picks object and game result fields:
+Scores are calculated client-side from the picks object and game result fields. One pick per game, one score per round — the same model used by ESPN, Yahoo, and CBS:
 
 - **+10/15/20/25 pts** for correct picks by round
 - Wrong picks score nothing
 - **Tiebreaker:** number of correctly called upsets (lower seed or unseeded team winning)
+
+All scoring is displayed exclusively on the leaderboard. Cards show bracket picks and color-coded results only — no point totals.
+
+### How to Play Modal
+
+A **"? How to Play"** link in the app nav opens a modal explaining the scoring system, tiebreaker, and bracket mechanics. Accessible from any tab at any time. Intended for new players or anyone who needs a refresher mid-tournament.
 
 ### Score Ingestion
 
