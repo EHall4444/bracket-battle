@@ -74,9 +74,26 @@ Each value is a team key string (e.g. `"princeton"`, `"notredame"`). The full br
 Games are hardcoded in JavaScript arrays (`FR`, `QF`, `SF`, `FIN`) with:
 - Team matchups for First Round and Quarterfinals (set by the NCAA selection committee)
 - Location, date/time, and broadcast network per game
-- `result` field populated by the admin panel as games complete
+- `result` field hardcoded for completed rounds; populated by the admin panel for rounds in progress
 
-Semifinal and Championship matchups derive from real Quarterfinal/Semifinal results as they come in.
+**QF slot mapping** is sequential by First Round game order — `qf1` = winners of `fr1`+`fr2`, `qf2` = winners of `fr3`+`fr4`, etc. This matches the order players saw when filling out their brackets and must be preserved when updating for future years.
+
+Semifinal and Championship real matchups are only revealed in the UI once the prior round's results are confirmed — both feeding games must have a `result` before their card shows real team names. Until then, cards display "Awaiting results..." placeholders.
+
+### Pick Validation (`sanitizePicks`)
+
+On login, picks are loaded from the database and passed through `sanitizePicks()`, which validates that each round's picks are consistent with the prior round (e.g. your QF pick must be a team you picked to win their FR game). This prevents stale picks from corrupting later rounds during the pre-deadline picking phase.
+
+**After the deadline**, `sanitizePicks` is skipped entirely — picks are loaded exactly as saved. This is critical: running validation post-deadline would incorrectly null out picks that were valid when saved.
+
+### Card Footer — "Your Bracket" Display
+
+After the deadline, each QF, SF, and Final card shows a **"Your bracket: Team A v. Team B"** footer row indicating the two teams the player predicted would meet in that game. Names are color-coded:
+
+- **Blue** — that team actually advanced to this round
+- **Red** — that team did not advance
+
+This replaces the pre-deadline "Your pick: Team" single-name display. Points earned or lost are shown alongside. The display is purely informational — scoring is determined independently by whether each pick won their actual game.
 
 ### Scoring Engine
 
