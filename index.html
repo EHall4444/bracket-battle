@@ -435,6 +435,7 @@ body{font-family:var(--fb);color:var(--text);font-size:13px;min-height:100vh;bac
     <div class="app-nav-tab" id="anav-resources" onclick="showAppTab('resources')">Resources</div>
     <div class="app-nav-tab" id="anav-admin" onclick="showAppTab('admin')" style="display:none">⚙ Scores</div>
     <div id="last-updated" style="margin-left:auto;font-size:10px;color:var(--blue2);font-family:var(--fh);padding:0 16px;display:flex;align-items:center;"></div>
+  <div onclick="showHowToPlay()" style="display:flex;align-items:center;padding:0 14px;cursor:pointer;color:rgba(255,255,255,.5);font-family:var(--fh);font-size:11px;letter-spacing:.06em;text-transform:uppercase;transition:color .15s" onmouseover="this.style.color='rgba(255,255,255,.9)'" onmouseout="this.style.color='rgba(255,255,255,.5)'">? How to Play</div>
   </div>
 
   <div class="main">
@@ -444,6 +445,37 @@ body{font-family:var(--fb);color:var(--text);font-size:13px;min-height:100vh;bac
     <div id="apptab-admin" style="display:none"></div>
   </div>
 </div>
+<!-- HOW TO PLAY MODAL -->
+<div id="howtoplay-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:1000;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(6px)" onclick="if(event.target===this)hideHowToPlay()">
+  <div style="background:var(--white);border-radius:var(--rl);max-width:460px;width:100%;box-shadow:0 32px 80px rgba(0,0,0,.5);overflow:hidden">
+    <div style="background:var(--navy);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:3px solid var(--blue2)">
+      <span style="font-family:var(--fh);font-size:18px;font-weight:700;color:var(--white);text-transform:uppercase;letter-spacing:.06em">How to Play</span>
+      <span onclick="hideHowToPlay()" style="color:rgba(255,255,255,.5);font-size:20px;cursor:pointer;line-height:1;padding:0 4px" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255,255,255,.5)'">&times;</span>
+    </div>
+    <div style="padding:20px 24px;font-size:13px;line-height:1.7;color:var(--text)">
+      <p style="margin-bottom:14px">Bracket Battle is a pick-em competition built around the NCAA Division I Men's Lacrosse Championship. Before a single game is played, you pick the winner of <strong>every game across all four rounds</strong> — all 15 of them. Then you lock in, watch the games, and see how your bracket holds up.</p>
+      <div style="font-family:var(--fh);font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--navy);margin-bottom:8px">Scoring</div>
+      <table style="width:100%;border-collapse:collapse;margin-bottom:16px;font-size:12px">
+        <tr style="background:var(--navy2)">
+          <th style="padding:7px 10px;text-align:left;font-family:var(--fh);font-size:10px;color:rgba(255,255,255,.6);letter-spacing:.06em;font-weight:500">Round</th>
+          <th style="padding:7px 10px;text-align:right;font-family:var(--fh);font-size:10px;color:rgba(255,255,255,.6);letter-spacing:.06em;font-weight:500">Correct Pick</th>
+        </tr>
+        <tr style="border-bottom:1px solid var(--gray)"><td style="padding:7px 10px">First Round</td><td style="padding:7px 10px;text-align:right;font-family:var(--fh);color:var(--green);font-weight:600">+10 pts</td></tr>
+        <tr style="border-bottom:1px solid var(--gray);background:var(--off)"><td style="padding:7px 10px">Quarterfinals</td><td style="padding:7px 10px;text-align:right;font-family:var(--fh);color:var(--green);font-weight:600">+15 pts</td></tr>
+        <tr style="border-bottom:1px solid var(--gray)"><td style="padding:7px 10px">Semifinals</td><td style="padding:7px 10px;text-align:right;font-family:var(--fh);color:var(--green);font-weight:600">+20 pts</td></tr>
+        <tr style="background:var(--off)"><td style="padding:7px 10px">Championship</td><td style="padding:7px 10px;text-align:right;font-family:var(--fh);color:var(--green);font-weight:600">+25 pts</td></tr>
+      </table>
+      <div style="font-family:var(--fh);font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--navy);margin-bottom:8px">Tiebreaker</div>
+      <p style="margin-bottom:14px;font-size:12px">If two players finish with the same score, the player with more correctly called upsets wins. An upset is when a lower-seeded or unseeded team beats a seeded opponent.</p>
+      <div style="font-family:var(--fh);font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--navy);margin-bottom:8px">The Bracket</div>
+      <p style="font-size:12px">Each card shows the real matchup. The <span style="color:var(--blue);font-weight:600">blue</span> bar on a team row means that's who you picked. After the deadline your bracket is locked — no changes. Results and scores update automatically as games are played.</p>
+    </div>
+    <div style="padding:14px 24px;border-top:1px solid var(--gray);text-align:right">
+      <button onclick="hideHowToPlay()" style="padding:10px 24px;background:var(--blue);color:var(--white);border:none;border-radius:var(--r);font-family:var(--fh);font-size:13px;font-weight:600;cursor:pointer;text-transform:uppercase;letter-spacing:.08em">Got it</button>
+    </div>
+  </div>
+</div>
+
 <div class="tt-pill" id="tt-pill" style="display:none" onclick="document.querySelector('.comments-panel').scrollIntoView({behavior:'smooth'})">💬 Trash Talk <span id="tt-count" style="background:var(--blue2);color:white;border-radius:10px;padding:1px 6px;font-size:10px;margin-left:4px">0</span></div>
 
 <script>
@@ -1104,7 +1136,7 @@ function redraw(ro, vu){
   var tabsH=roundTabsHTML(p,lk);
 
   var helpH=(!lk&&!vu)?'<div class="pick-help">'
-    +'<div class="pick-help-line">Click a team to make your pick. +10/15/20/25 pts per round · -5 pts for wrong picks.</div>'
+    +'<div class="pick-help-line">Click a team to make your pick. +10/15/20/25 pts for correct picks per round.</div>'
     +'<div class="pick-help-line">Complete selections on this tab to access the next round.</div>'
     +'<div class="pick-help-line">De-selecting a team will remove it from subsequent rounds.</div>'
     +'</div>':'';
@@ -1187,7 +1219,7 @@ function redraw(ro, vu){
     +'<div class="li"><div class="ls" style="border-left:5px solid var(--blue2);background:rgba(74,144,217,.08)"></div>Your pick</div>'
     +'<div class="li"><div class="ls" style="background:var(--green-l);border:1px solid var(--green)"></div>Advanced</div>'
     +'<div class="li"><div class="ls" style="opacity:.28;background:var(--muted)"></div>Eliminated</div>'
-    +'<div class="li">✕ removes pick from this round only</div>'+'<div class="li">Scoring: +10/15/20/25 pts by round · -5 wrong · upsets break ties</div>'
+    +'<div class="li">✕ removes pick from this round only</div>'+'<div class="li">Scoring: +10/15/20/25 pts by round · upsets break ties</div>'
     +'</div>';
 
   c.innerHTML=bannerH+dlH+tabsH+helpH+gamesH+actionH+legH+commentsPanel('bracket');
@@ -1236,6 +1268,9 @@ async function doSave(){
   }
 }
 
+function showHowToPlay(){var el=document.getElementById('howtoplay-overlay');if(el){el.style.display='flex';}}
+function hideHowToPlay(){var el=document.getElementById('howtoplay-overlay');if(el){el.style.display='none';}}
+
 function backToLeaderboard(){VU=null;viewPicks=null;ACTIVE_ROUND='fr';showAppTab('leaderboard');}
 
 // ── LEADERBOARD ──
@@ -1244,7 +1279,7 @@ function calcScore(p){
   var PTS={fr:10,qf:15,sf:20,fin:25};
   var LOSS=5;
 
-  // FR: one pick per game
+  // FR: one pick per game, correct picks only — no penalty for wrong picks
   FR.forEach(function(g){
     if(p[g.id])totalPicks++;
     if(g.result){
@@ -1253,16 +1288,16 @@ function calcScore(p){
         var ws=parseInt((T[g.result]&&T[g.result].s||'').replace('#','')||0),
             ls=parseInt((T[g.result===g.a?g.b:g.a]&&T[g.result===g.a?g.b:g.a].s||'').replace('#','')||0);
         if((ws>ls&&ls>0)||(ws===0&&ls>0))u++;
-      } else if(p[g.id]){losses++;score-=LOSS;}
+      } else if(p[g.id]){losses++;}
     }
   });
 
-  // QF: one pick per game (p[qf1] etc.)
+  // QF: one pick per game
   QF.forEach(function(g){
     if(p[g.id])totalPicks++;
     if(g.result){
       if(p[g.id]===g.result){wins++;score+=PTS.qf;}
-      else if(p[g.id]){losses++;score-=LOSS;}
+      else if(p[g.id]){losses++;}
     }
   });
 
@@ -1271,7 +1306,7 @@ function calcScore(p){
     if(p[g.id])totalPicks++;
     if(g.result){
       if(p[g.id]===g.result){wins++;score+=PTS.sf;}
-      else if(p[g.id]){losses++;score-=LOSS;}
+      else if(p[g.id]){losses++;}
     }
   });
 
@@ -1279,7 +1314,7 @@ function calcScore(p){
   if(p.fin)totalPicks++;
   if(p.fin&&FIN.result){
     if(p.fin===FIN.result){wins++;score+=PTS.fin;}
-    else{losses++;score-=LOSS;}
+    else{losses++;}
   }
 
   return{wins:wins,losses:losses,upsets:u,score:score,totalPicks:totalPicks};
@@ -1361,14 +1396,14 @@ async function renderLB(){
 
     c.innerHTML=chyron
       +'<div class="lb-wrap"><div class="lb-hdr"><div class="lb-title">🏆 Leaderboard</div>'
-      +'<div class="lb-count">'+entries.length+' saved bracket'+(entries.length!==1?'s':'')+' · +10/15/20/25 pts by round · -5 wrong · upsets break ties</div></div>'
+      +'<div class="lb-count">'+entries.length+' saved bracket'+(entries.length!==1?'s':'')+' · +10/15/20/25 pts by round · upsets break ties</div></div>'
      +'<div class="lb-table">'
       +'<div class="lbrow lbhdr"><div class="lbrank">Rank</div><div class="lbname">Player</div>'
       +'<div class="lbpick">Champion Pick</div><div class="lbpct">W/L</div><div class="lbpts">Score</div>'
       +'<div class="lbups">Upsets</div><div class="lbact"></div></div>'
       +(entries.length?rows:'<div class="lb-empty">No saved brackets yet — make your picks and save to appear here!</div>')
       +'</div></div>'
-      +'<div class="lb-note">Scoring: +10 pts (1st Rd) · +15 pts (QF) · +20 pts (SF) · +25 pts (Final) · -5 pts wrong pick · Tiebreaker: most upset picks.</div>'
+      +'<div class="lb-note">Scoring: +10 pts (1st Rd) · +15 pts (QF) · +20 pts (SF) · +25 pts (Final) · Tiebreaker: most upset picks correctly called.</div>'
       +commentsPanel('leaderboard');
   }catch(e){c.innerHTML='<div style="padding:30px;text-align:center;color:var(--red)">Error: '+e.message+'</div>';}
   updateTimestamp();
