@@ -919,11 +919,15 @@ function launch(){
   startCommentPolling();
   dbAll().then(function(rows){ALL_PICKS=rows;});
   var ttPill=document.getElementById('tt-pill');if(ttPill)ttPill.style.display='';
-  showAppTab('bracket');
+  var savedTab=null;try{savedTab=sessionStorage.getItem('bb_tab');}catch(e){}
+  var savedRound=null;try{savedRound=sessionStorage.getItem('bb_round');}catch(e){}
+  if(savedRound)ACTIVE_ROUND=savedRound;
+  showAppTab(savedTab&&savedTab!=='admin'?savedTab:'bracket');
 }
 
 function showAppTab(t){
   plausible('Tab View',{props:{tab:t}});
+  try{sessionStorage.setItem('bb_tab',t);}catch(e){}
   document.getElementById('apptab-bracket').style.display=t==='bracket'?'':'none';
   document.getElementById('apptab-leaderboard').style.display=t==='leaderboard'?'':'none';
   document.getElementById('apptab-resources').style.display=t==='resources'?'':'none';
@@ -1145,7 +1149,7 @@ function roundTabsHTML(p, lk){
     +'</div>';
 }
 
-function switchRound(r){ACTIVE_ROUND=r;plausible('Round View',{props:{round:r}});if(VU)redraw(true,VU);else redraw();}
+function switchRound(r){ACTIVE_ROUND=r;try{sessionStorage.setItem('bb_round',r);}catch(e){}plausible('Round View',{props:{round:r}});if(VU)redraw(true,VU);else redraw();}
 
 // ── MAIN RENDER ──
 function toggleInfo(gameId){
