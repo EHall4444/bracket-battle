@@ -97,6 +97,8 @@ No points are shown on cards. The leaderboard owns all scoring display. The foot
 
 An info button (ⓘ) opens a dropdown showing pre-game odds and who else picked which team (visible after games start).
 
+A single line below the round tabs reads **"→ Winner advances to [Next Round]"** (e.g. "→ Winner advances to Semifinals"). This replaces the old per-card advance label. It does not appear on the Championship tab.
+
 ### Scoring Engine
 
 Scores are calculated client-side from the picks object and game result fields. One pick per game, one score per round — the same model used by ESPN, Yahoo, and CBS:

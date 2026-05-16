@@ -77,6 +77,7 @@ Once the deadline passes, navigate freely between all four round tabs to see:
 - Your picks highlighted against the actual teams playing
 - Which of your picks advanced and which didn't
 - Your running score updated as results come in
+- A single line below the round tabs indicating where the round's winners advance to (e.g. "→ Winner advances to Semifinals")
 
 Check the **Leaderboard** at any time to see where you stand against the group.
 
