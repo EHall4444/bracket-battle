@@ -980,7 +980,20 @@ function buildCard(gameId, teamA, teamB, loc, time, myPick, result, lk, advLabel
     +(advLabel&&teamA&&teamB?'<div class="card-adv">→ Winner advances to '+advLabel+'</div>':'')
     +(function(){
       if(!myPick)return'';
-      if(!teamA||!teamB)return''; // teams not yet known - awaiting prior round results
+      if(!teamA||!teamB){
+        // Teams not yet known — show user's predicted matchup as a neutral reference row
+        if(lk&&pickedA&&pickedB){
+          var pAName=T[pickedA]?T[pickedA].n:pickedA;
+          var pBName=T[pickedB]?T[pickedB].n:pickedB;
+          return'<div class="card-pick-footer" style="background:var(--off)">'
+            +'<span style="font-size:11px;color:var(--muted)">Your bracket: </span>'
+            +'<span style="font-weight:600;color:var(--text)">'+pAName+'</span>'
+            +' <span style="color:var(--muted)">v.</span> '
+            +'<span style="font-weight:600;color:var(--text)">'+pBName+'</span>'
+            +'</div>';
+        }
+        return'';
+      }
       var won=myPick===result;
       var pName=T[myPick]?T[myPick].n:myPick;
       var SVG='<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="8"/><line x1="12" y1="12" x2="12" y2="16"/></svg>';
