@@ -100,7 +100,7 @@ This replaces the pre-deadline "Your pick: Team" single-name display. Points ear
 Scores are calculated client-side from the picks object and game result fields:
 
 - **+10/15/20/25 pts** for correct picks by round
-- **−5 pts** for any wrong pick
+- Wrong picks score nothing
 - **Tiebreaker:** number of correctly called upsets (lower seed or unseeded team winning)
 
 ### Score Ingestion

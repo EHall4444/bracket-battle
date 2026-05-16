@@ -47,16 +47,16 @@ The deadline is posted on the bracket page and counts down in real time. Once it
 
 ## Scoring
 
-Points are awarded (or deducted) as each game result is confirmed:
+Points are awarded for correct picks as each game result is confirmed:
 
-| Round | Correct Pick | Wrong Pick |
-|---|---|---|
-| First Round | +10 pts | −5 pts |
-| Quarterfinals | +15 pts | −5 pts |
-| Semifinals | +20 pts | −5 pts |
-| Championship | +25 pts | −5 pts |
+| Round | Correct Pick |
+|---|---|
+| First Round | +10 pts |
+| Quarterfinals | +15 pts |
+| Semifinals | +20 pts |
+| Championship | +25 pts |
 
-**Wrong picks hurt.** Picking boldly can pay off big — but whiffing costs you either way.
+Wrong picks score nothing. Only correct picks move you up the leaderboard.
 
 ---
 
