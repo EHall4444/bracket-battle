@@ -945,9 +945,10 @@ function buildCard(gameId, teamA, teamB, loc, time, myPick, result, lk, advLabel
     +(teamA?teamRow(gameId,teamA,true,myPick,result,lk||unavail,forceElimA):lk?emptyLockedRow():emptyRow(''))
     +(teamB?teamRow(gameId,teamB,false,myPick,result,lk||unavail,forceElimB):lk?emptyLockedRow():emptyRow(''))
     +(showOdds?oddsBar(teamA,teamB):'')
-    +(advLabel?'<div class="card-adv">→ Winner advances to '+advLabel+'</div>':'')
+    +(advLabel&&teamA&&teamB?'<div class="card-adv">→ Winner advances to '+advLabel+'</div>':'')
     +(function(){
       if(!myPick)return'';
+      if(!teamA||!teamB)return''; // teams not yet known — awaiting prior round results
       var won=myPick===result;
       var pName=T[myPick]?T[myPick].n:myPick;
 
