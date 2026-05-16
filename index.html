@@ -983,7 +983,7 @@ function buildCard(gameId, teamA, teamB, loc, time, myPick, result, lk, advLabel
     +(teamA?teamRow(gameId,teamA,true,myPick,result,lk||unavail,forceElimA):lk?emptyLockedRow():emptyRow(''))
     +(teamB?teamRow(gameId,teamB,false,myPick,result,lk||unavail,forceElimB):lk?emptyLockedRow():emptyRow(''))
     +(showOdds?oddsBar(teamA,teamB):'')
-    +(advLabel&&teamA&&teamB?'<div class="card-adv">→ Winner advances to '+advLabel+'</div>':'')
+    +''
     +(function(){
       if(!myPick)return'';
       if(!teamA||!teamB){
@@ -1157,6 +1157,10 @@ function redraw(ro, vu){
   var dlH=!vu?deadlineBanner():'';
   var tabsH=roundTabsHTML(p,lk);
 
+  var advMap={fr:'Quarterfinals',qf:'Semifinals',sf:'Championship',fin:null};
+  var advNext=advMap[ACTIVE_ROUND];
+  var advH=advNext?'<div class="round-progress">\u2192 Winner advances to '+advNext+'</div>':'';
+
   var helpH=(!lk&&!vu)?'<div class="pick-help">'
     +'<div class="pick-help-line">Click a team to make your pick. +10/15/20/25 pts for correct picks per round.</div>'
     +'<div class="pick-help-line">Complete selections on this tab to access the next round.</div>'
@@ -1244,7 +1248,7 @@ function redraw(ro, vu){
     +'<div class="li">✕ removes pick from this round only</div>'+'<div class="li">Scoring: +10/15/20/25 pts by round · upsets break ties</div>'
     +'</div>';
 
-  c.innerHTML=bannerH+dlH+tabsH+helpH+gamesH+actionH+legH+commentsPanel('bracket');
+  c.innerHTML=bannerH+dlH+tabsH+advH+helpH+gamesH+actionH+legH+commentsPanel('bracket');
 
   loadLogos();
   if(!past()&&!vu)startCD();
