@@ -807,7 +807,7 @@ async function doLogin(){
     CU=u;
     var sv=await dbGetPicks(u);
     var loaded=sv&&sv.picks?Object.assign(blank(),sv.picks):blank();
-    picks=sanitizePicks(loaded);
+    picks=past()?loaded:sanitizePicks(loaded);
     SAVED=!!(sv&&sv.picks);
     var rem=document.getElementById('li-remember');
     if(rem&&rem.checked)saveSession(u,h);else clearSession();
@@ -928,7 +928,7 @@ function emptyLockedRow(){
 }
 
 // ── BUILD CARD ──
-function buildCard(gameId, teamA, teamB, loc, time, myPick, result, lk, advLabel, forceElimA, forceElimB){
+function buildCard(gameId, teamA, teamB, loc, time, myPick, result, lk, advLabel, forceElimA, forceElimB, pickedA, pickedB){
   var hasPick=myPick&&(myPick===teamA||myPick===teamB);
   var needsPick=!lk&&teamA&&teamB&&!myPick;
   var unavail=!teamA||!teamB;
@@ -954,8 +954,23 @@ function buildCard(gameId, teamA, teamB, loc, time, myPick, result, lk, advLabel
       if(teamA&&teamB&&myPick!==teamA&&myPick!==teamB){
         var roundStarted=Object.values(SCORES).some(function(s){return s&&s.status&&s.status!=='scheduled';});
         var iPanel=buildInfoPanel(gameId,teamA,teamB,result,myPick,roundStarted);
+        // After deadline, show both bracket picks if available
+        var bracketLine='';
+        if(lk&&pickedA&&pickedB){
+          var pAName=T[pickedA]?T[pickedA].n:pickedA;
+          var pBName=T[pickedB]?T[pickedB].n:pickedB;
+          var pAAdv=teamA===pickedA||teamB===pickedA;
+          var pBAdv=teamA===pickedB||teamB===pickedB;
+          var pAColor=pAAdv?'var(--blue)':'var(--red)';
+          var pBColor=pBAdv?'var(--blue)':'var(--red)';
+          bracketLine='<div style="font-size:10px;color:var(--muted);margin-top:3px">Your bracket: '
+            +'<span style="color:'+pAColor+';font-weight:600">'+pAName+'</span>'
+            +' v. '
+            +'<span style="color:'+pBColor+';font-weight:600">'+pBName+'</span>'
+            +'</div>';
+        }
         return'<div class="card-pick-footer wrong">'
-          +'<span style="color:var(--red)">✗ Your pick: '+pName+'</span>'
+          +'<div><span style="color:var(--red)">✗ Your pick: '+pName+'</span>'+bracketLine+'</div>'
           +'<span style="display:flex;align-items:center;gap:8px"><span class="card-pick-pts" style="color:var(--red)">-5 pts</span>'
           +'<span class="info-btn" onclick="event.stopPropagation();toggleInfo(\''+gameId+'\')" ><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="8"/><line x1="12" y1="12" x2="12" y2="16"/></svg></span></span>'
           +'</div>'+iPanel;
@@ -1107,23 +1122,39 @@ function redraw(ro, vu){
       var canPick=!!(tA&&tB);
       var elimA=!!(p[g.id]&&tA&&g.result&&g.result!==tA);
       var elimB=!!(p[g.id]&&tB&&g.result&&g.result!==tB);
-      return buildCard(g.id,tA,tB,g.loc,g.time,p[g.id],g.result,lk||!canPick,'Semifinals',elimA,elimB);
+      // The user's predicted matchup: who they picked from each FR feeder game
+      var pickedA=p[g.frA]||null;
+      var pickedB=p[g.frB]||null;
+      return buildCard(g.id,tA,tB,g.loc,g.time,p[g.id],g.result,lk||!canPick,'Semifinals',elimA,elimB,pickedA,pickedB);
     });
-    
     gamesH='<div class="matchup-grid double">'+qcards.join('')+'</div>';
 
   }else if(ACTIVE_ROUND==='sf'){
     var sfcards=SF.map(function(g){
-      var tA=p[g.qfA]||null,tB=p[g.qfB]||null;
+      var qfGameA=QF.find(function(q){return q.id===g.qfA;});
+      var qfGameB=QF.find(function(q){return q.id===g.qfB;});
+      // Real teams: use actual QF result if available, else user's QF pick
+      var tA=(qfGameA&&qfGameA.result)||p[g.qfA]||null;
+      var tB=(qfGameB&&qfGameB.result)||p[g.qfB]||null;
       var canPick=!!(tA&&tB);
-      return buildCard(g.id,tA,tB,g.loc,g.time,p[g.id],g.result,lk||!canPick,'Championship');
+      // User's predicted matchup for this SF slot
+      var pickedA=p[g.qfA]||null;
+      var pickedB=p[g.qfB]||null;
+      return buildCard(g.id,tA,tB,g.loc,g.time,p[g.id],g.result,lk||!canPick,'Championship',false,false,pickedA,pickedB);
     });
     gamesH='<div class="matchup-grid double">'+sfcards.join('')+'</div>';
 
   }else if(ACTIVE_ROUND==='fin'){
-    var fA=p[FIN.sfA]||null,fB=p[FIN.sfB]||null;
+    var sf1Game=SF.find(function(g){return g.id===FIN.sfA;});
+    var sf2Game=SF.find(function(g){return g.id===FIN.sfB;});
+    // Real finalists: use actual SF result if available, else user's SF pick
+    var fA=(sf1Game&&sf1Game.result)||p[FIN.sfA]||null;
+    var fB=(sf2Game&&sf2Game.result)||p[FIN.sfB]||null;
     var canPickF=!!(fA&&fB);
-    gamesH='<div class="matchup-grid single">'+buildCard('fin',fA,fB,FIN.loc,FIN.time,p.fin,FIN.result,lk||!canPickF,null)+'</div>';
+    // User's predicted finalists
+    var finPickedA=p[FIN.sfA]||null;
+    var finPickedB=p[FIN.sfB]||null;
+    gamesH='<div class="matchup-grid single">'+buildCard('fin',fA,fB,FIN.loc,FIN.time,p.fin,FIN.result,lk||!canPickF,null,false,false,finPickedA,finPickedB)+'</div>';
   }
 
   // Action bar
@@ -1773,7 +1804,8 @@ async function tryAutoLogin(){
     CU=session.u;
     var sv=await dbGetPicks(CU);
     SAVED=!!(sv&&sv.picks);
-    picks=sv&&sv.picks?Object.assign(blank(),sv.picks):blank();
+    var loaded=sv&&sv.picks?Object.assign(blank(),sv.picks):blank();
+    picks=past()?loaded:sanitizePicks(loaded);
     launch();
   }catch(e){clearSession();}
 }
