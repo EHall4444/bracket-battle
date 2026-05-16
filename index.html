@@ -948,11 +948,13 @@ function buildCard(gameId, teamA, teamB, loc, time, myPick, result, lk, advLabel
     +(advLabel&&teamA&&teamB?'<div class="card-adv">→ Winner advances to '+advLabel+'</div>':'')
     +(function(){
       if(!myPick)return'';
-      if(!teamA||!teamB)return''; // teams not yet known — awaiting prior round results
+      if(!teamA||!teamB)return''; // teams not yet known - awaiting prior round results
       var won=myPick===result;
       var pName=T[myPick]?T[myPick].n:myPick;
+      var SVG='<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="8"/><line x1="12" y1="12" x2="12" y2="16"/></svg>';
+      var infoBtn='<span class="info-btn" onclick="event.stopPropagation();toggleInfo(\''+gameId+'\')">'+SVG+'</span>';
 
-      // After deadline: replace "Your pick" with "Your bracket: TeamA v. TeamB"
+      // After deadline: "Your bracket" footer scoring both sides
       if(lk&&pickedA&&pickedB){
         var pAName=T[pickedA]?T[pickedA].n:pickedA;
         var pBName=T[pickedB]?T[pickedB].n:pickedB;
@@ -964,55 +966,55 @@ function buildCard(gameId, teamA, teamB, loc, time, myPick, result, lk, advLabel
           +'<span style="color:'+pAColor+';font-weight:600">'+pAName+'</span>'
           +' <span style="color:var(--muted)">v.</span> '
           +'<span style="color:'+pBColor+';font-weight:600">'+pBName+'</span>';
-
-        // Scoring footer
         var roundStarted=Object.values(SCORES).some(function(s){return s&&s.status&&s.status!=='scheduled';});
         var infoPanel=buildInfoPanel(gameId,teamA,teamB,result,myPick,roundStarted);
-        if(myPick!==teamA&&myPick!==teamB){
-          // Pick didn't make it to this round
-          return'<div class="card-pick-footer wrong">'
-            +'<div>'+bracketLabel+'</div>'
-            +'<span style="display:flex;align-items:center;gap:8px"><span class="card-pick-pts" style="color:var(--red)">-5 pts</span>'
-            +'<span class="info-btn" onclick="event.stopPropagation();toggleInfo(\''+gameId+'\')" ><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="8"/><line x1="12" y1="12" x2="12" y2="16"/></svg></span></span>'
-            +'</div>'+infoPanel;
-        }
-        if(!result){
-          // Game not yet played — show bracket picks, no score yet
-          return'<div class="card-pick-footer" style="background:var(--off)">'
-            +'<div>'+bracketLabel+'</div>'
-            +'<span class="info-btn" onclick="event.stopPropagation();toggleInfo(\''+gameId+'\')" ><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="8"/><line x1="12" y1="12" x2="12" y2="16"/></svg></span>'
-            +'</div>'+infoPanel;
-        }
-        // Game played — show result
         var ROUND_PTS={fr:10,qf:15,sf:20,fin:25};
         var roundKey=QF.find(function(x){return x.id===gameId;})?'qf':SF.find(function(x){return x.id===gameId;})?'sf':(FIN&&FIN.id===gameId)?'fin':'fr';
-        var pts=won?'+'+ROUND_PTS[roundKey]:'-5';
-        var ptsColor=won?'var(--green)':'var(--red)';
-        return'<div class="card-pick-footer'+(won?' correct':' wrong')+'">'
-          +'<div>'+bracketLabel+'</div>'
-          +'<span style="display:flex;align-items:center;gap:8px"><span class="card-pick-pts" style="color:'+ptsColor+'">'+pts+' pts</span>'
-          +'<span class="info-btn" onclick="event.stopPropagation();toggleInfo(\''+gameId+'\')" ><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="8"/><line x1="12" y1="12" x2="12" y2="16"/></svg></span></span>'
+        var rPts=ROUND_PTS[roundKey];
+        if(!result){
+          return'<div class="card-pick-footer" style="background:var(--off)">'
+            +'<div>'+bracketLabel+'</div>'+infoBtn
+            +'</div>'+infoPanel;
+        }
+        // Score both sides independently
+        var aWon=pickedA===result;
+        var bWon=pickedB===result;
+        var netScore=(aWon?rPts:-5)+(bWon?rPts:-5);
+        var netStr=(netScore>0?'+':'')+netScore;
+        var netColor=netScore>0?'var(--green)':netScore===0?'var(--muted)':'var(--red)';
+        var footerCls=netScore>0?' correct':' wrong';
+        return'<div class="card-pick-footer'+footerCls+'">'
+          +'<div>'
+            +bracketLabel
+            +'<div style="font-size:10px;margin-top:2px">'
+              +'<span style="color:'+(aWon?'var(--green)':'var(--red)')+'">'+pAName+' '+(aWon?'+'+rPts:'-5')+'</span>'
+              +' &nbsp;&middot;&nbsp; '
+              +'<span style="color:'+(bWon?'var(--green)':'var(--red)')+'">'+pBName+' '+(bWon?'+'+rPts:'-5')+'</span>'
+            +'</div>'
+          +'</div>'
+          +'<span style="display:flex;align-items:center;gap:8px">'
+            +'<span class="card-pick-pts" style="color:'+netColor+'">'+netStr+' pts</span>'
+            +infoBtn
+          +'</span>'
           +'</div>'+infoPanel;
       }
 
-      // Pre-deadline or FR: original "Your pick" behaviour
+      // Pre-deadline or FR: original single-pick behaviour
       if(teamA&&teamB&&myPick!==teamA&&myPick!==teamB){
         var roundStarted=Object.values(SCORES).some(function(s){return s&&s.status&&s.status!=='scheduled';});
         var iPanel=buildInfoPanel(gameId,teamA,teamB,result,myPick,roundStarted);
         return'<div class="card-pick-footer wrong">'
           +'<span style="color:var(--red)">✗ Your pick: '+pName+'</span>'
-          +'<span style="display:flex;align-items:center;gap:8px"><span class="card-pick-pts" style="color:var(--red)">-5 pts</span>'
-          +'<span class="info-btn" onclick="event.stopPropagation();toggleInfo(\''+gameId+'\')" ><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="8"/><line x1="12" y1="12" x2="12" y2="16"/></svg></span></span>'
+          +'<span style="display:flex;align-items:center;gap:8px"><span class="card-pick-pts" style="color:var(--red)">-5 pts</span>'+infoBtn+'</span>'
           +'</div>'+iPanel;
       }
       if(!result)return'';
-      var ROUND_PTS={fr:10,qf:15,sf:20,fin:25};var roundKey=QF.find(function(x){return x.id===gameId;})?'qf':SF.find(function(x){return x.id===gameId;})?'sf':(FIN&&FIN.id===gameId)?'fin':'fr';var winPts=ROUND_PTS[roundKey];var pts=won?'+'+winPts:'-5';var ptsColor=won?'var(--green)':'var(--red)';var symbol=won?"✓ ":"✗ ";
+      var ROUND_PTS={fr:10,qf:15,sf:20,fin:25};var roundKey=QF.find(function(x){return x.id===gameId;})?'qf':SF.find(function(x){return x.id===gameId;})?'sf':(FIN&&FIN.id===gameId)?'fin':'fr';var winPts=ROUND_PTS[roundKey];var pts=won?'+'+winPts:'-5';var ptsColor=won?'var(--green)':'var(--red)';var symbol=won?'✓ ':'✗ ';
       var roundStarted=Object.values(SCORES).some(function(s){return s&&s.status&&s.status!=='scheduled';});
       var infoPanel=buildInfoPanel(gameId,teamA,teamB,result,myPick,roundStarted);
       return'<div class="card-pick-footer'+(won?' correct':' wrong')+'">'
         +'<span style="color:'+(won?'var(--green)':'var(--red)')+'">'+symbol+'Your pick: '+pName+'</span>'
-        +'<span style="display:flex;align-items:center;gap:8px"><span class="card-pick-pts" style="color:'+ptsColor+'">'+pts+' pts</span>'
-        +'<span class="info-btn" onclick="event.stopPropagation();toggleInfo(\''+gameId+'\')" ><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="8"/><line x1="12" y1="12" x2="12" y2="16"/></svg></span></span>'
+        +'<span style="display:flex;align-items:center;gap:8px"><span class="card-pick-pts" style="color:'+ptsColor+'">'+pts+' pts</span>'+infoBtn+'</span>'
         +'</div>'+infoPanel;
     })()
     +'</div>';
@@ -1265,6 +1267,8 @@ function calcScore(p){
   var score=0,wins=0,losses=0,u=0,totalPicks=0;
   var PTS={fr:10,qf:15,sf:20,fin:25};
   var LOSS=5;
+
+  // FR: one pick per game, scored independently
   FR.forEach(function(g){
     if(p[g.id])totalPicks++;
     if(g.result){
@@ -1276,34 +1280,61 @@ function calcScore(p){
       } else if(p[g.id]&&p[g.id]!==g.result){losses++;score-=LOSS;}
     }
   });
+
+  // QF: score both sides — pickedA=p[frA], pickedB=p[frB]
   QF.forEach(function(g){
-    if(p[g.id])totalPicks++;
+    var pickedA=p[g.frA]||null;
+    var pickedB=p[g.frB]||null;
+    if(pickedA)totalPicks++;
+    if(pickedB)totalPicks++;
     if(g.result){
-      if(p[g.id]===g.result){
-        wins++;score+=PTS.qf;
-      } else if(p[g.id]){
-        losses++;score-=LOSS;
+      // A side
+      if(pickedA){
+        if(pickedA===g.result){wins++;score+=PTS.qf;}
+        else{losses++;score-=LOSS;}
+      }
+      // B side
+      if(pickedB){
+        if(pickedB===g.result){wins++;score+=PTS.qf;}
+        else{losses++;score-=LOSS;}
       }
     }
   });
+
+  // SF: score both sides — pickedA=p[qfA], pickedB=p[qfB]
   SF.forEach(function(g){
-    if(p[g.id])totalPicks++;
+    var pickedA=p[g.qfA]||null;
+    var pickedB=p[g.qfB]||null;
+    if(pickedA)totalPicks++;
+    if(pickedB)totalPicks++;
     if(g.result){
-      if(p[g.id]===g.result){
-        wins++;score+=PTS.sf;
-      } else if(p[g.id]){
-        losses++;score-=LOSS;
+      if(pickedA){
+        if(pickedA===g.result){wins++;score+=PTS.sf;}
+        else{losses++;score-=LOSS;}
+      }
+      if(pickedB){
+        if(pickedB===g.result){wins++;score+=PTS.sf;}
+        else{losses++;score-=LOSS;}
       }
     }
   });
-  if(p.fin){
-    totalPicks++;
-    var sf1Result=SF.find(function(x){return x.id===FIN.sfA;});
-    var sf2Result=SF.find(function(x){return x.id===FIN.sfB;});
-    var validFin=[sf1Result&&sf1Result.result,sf2Result&&sf2Result.result].filter(Boolean);
-    if(validFin.length===2&&validFin.indexOf(p.fin)===-1){losses++;score-=LOSS;}
-    else if(FIN.result){if(p.fin===FIN.result){wins++;score+=PTS.fin;}else if(p.fin!==FIN.result){losses++;score-=LOSS;}}
+
+  // Final: score both sides — pickedA=p[sfA], pickedB=p[sfB]
+  var finPickedA=p[FIN.sfA]||null;
+  var finPickedB=p[FIN.sfB]||null;
+  if(finPickedA)totalPicks++;
+  if(finPickedB)totalPicks++;
+  if(FIN.result){
+    if(finPickedA){
+      if(finPickedA===FIN.result){wins++;score+=PTS.fin;}
+      else{losses++;score-=LOSS;}
+    }
+    if(finPickedB){
+      if(finPickedB===FIN.result){wins++;score+=PTS.fin;}
+      else{losses++;score-=LOSS;}
+    }
   }
+
   return{wins:wins,losses:losses,upsets:u,score:score,totalPicks:totalPicks};
 }
 function tourneyOver(){ return new Date() >= TOURNAMENT_END; }
