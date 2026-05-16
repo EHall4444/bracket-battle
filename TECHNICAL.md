@@ -117,13 +117,13 @@ The app is designed to be revived each May for the same event. Items that requir
 - Deadline and tournament end dates (`DEADLINE`, `TOURNAMENT_END` constants)
 - Hero and auth background photos (optional)
 
-The database requires manual archiving or a schema addition (e.g. a `season` column) before reuse to preserve prior year data.
+The database has a `season` INTEGER column on all tables. Each year, ensure new rows are written with the correct season value, and update the frontend queries to filter by season. Existing years' data remains intact and queryable.
 
 ---
 
 ## Known Limitations & Future Considerations
 
-- **No season/year partitioning** in the database — prior year data must be archived manually before each new tournament
+- **Season partitioning** — all tables have a `season` INTEGER column (e.g. `2026`). App-level filtering by season is groundwork for next year; queries are not yet season-scoped in the frontend
 - **Single admin user** — hardcoded, no admin management UI
 - **No password reset** — intentional for this use case, but worth addressing if the player pool grows
 - **SHA-256 auth** — adequate for a low-stakes friends competition; not suitable for sensitive applications
