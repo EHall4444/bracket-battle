@@ -951,26 +951,56 @@ function buildCard(gameId, teamA, teamB, loc, time, myPick, result, lk, advLabel
       if(!myPick)return'';
       var won=myPick===result;
       var pName=T[myPick]?T[myPick].n:myPick;
+
+      // After deadline: replace "Your pick" with "Your bracket: TeamA v. TeamB"
+      if(lk&&pickedA&&pickedB){
+        var pAName=T[pickedA]?T[pickedA].n:pickedA;
+        var pBName=T[pickedB]?T[pickedB].n:pickedB;
+        var pAAdv=teamA===pickedA||teamB===pickedA;
+        var pBAdv=teamA===pickedB||teamB===pickedB;
+        var pAColor=pAAdv?'var(--blue)':'var(--red)';
+        var pBColor=pBAdv?'var(--blue)':'var(--red)';
+        var bracketLabel='<span style="font-size:11px;color:var(--muted)">Your bracket: </span>'
+          +'<span style="color:'+pAColor+';font-weight:600">'+pAName+'</span>'
+          +' <span style="color:var(--muted)">v.</span> '
+          +'<span style="color:'+pBColor+';font-weight:600">'+pBName+'</span>';
+
+        // Scoring footer
+        var roundStarted=Object.values(SCORES).some(function(s){return s&&s.status&&s.status!=='scheduled';});
+        var infoPanel=buildInfoPanel(gameId,teamA,teamB,result,myPick,roundStarted);
+        if(myPick!==teamA&&myPick!==teamB){
+          // Pick didn't make it to this round
+          return'<div class="card-pick-footer wrong">'
+            +'<div>'+bracketLabel+'</div>'
+            +'<span style="display:flex;align-items:center;gap:8px"><span class="card-pick-pts" style="color:var(--red)">-5 pts</span>'
+            +'<span class="info-btn" onclick="event.stopPropagation();toggleInfo(\''+gameId+'\')" ><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="8"/><line x1="12" y1="12" x2="12" y2="16"/></svg></span></span>'
+            +'</div>'+infoPanel;
+        }
+        if(!result){
+          // Game not yet played — show bracket picks, no score yet
+          return'<div class="card-pick-footer" style="background:var(--off)">'
+            +'<div>'+bracketLabel+'</div>'
+            +'<span class="info-btn" onclick="event.stopPropagation();toggleInfo(\''+gameId+'\')" ><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="8"/><line x1="12" y1="12" x2="12" y2="16"/></svg></span>'
+            +'</div>'+infoPanel;
+        }
+        // Game played — show result
+        var ROUND_PTS={fr:10,qf:15,sf:20,fin:25};
+        var roundKey=QF.find(function(x){return x.id===gameId;})?'qf':SF.find(function(x){return x.id===gameId;})?'sf':(FIN&&FIN.id===gameId)?'fin':'fr';
+        var pts=won?'+'+ROUND_PTS[roundKey]:'-5';
+        var ptsColor=won?'var(--green)':'var(--red)';
+        return'<div class="card-pick-footer'+(won?' correct':' wrong')+'">'
+          +'<div>'+bracketLabel+'</div>'
+          +'<span style="display:flex;align-items:center;gap:8px"><span class="card-pick-pts" style="color:'+ptsColor+'">'+pts+' pts</span>'
+          +'<span class="info-btn" onclick="event.stopPropagation();toggleInfo(\''+gameId+'\')" ><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="8"/><line x1="12" y1="12" x2="12" y2="16"/></svg></span></span>'
+          +'</div>'+infoPanel;
+      }
+
+      // Pre-deadline or FR: original "Your pick" behaviour
       if(teamA&&teamB&&myPick!==teamA&&myPick!==teamB){
         var roundStarted=Object.values(SCORES).some(function(s){return s&&s.status&&s.status!=='scheduled';});
         var iPanel=buildInfoPanel(gameId,teamA,teamB,result,myPick,roundStarted);
-        // After deadline, show both bracket picks if available
-        var bracketLine='';
-        if(lk&&pickedA&&pickedB){
-          var pAName=T[pickedA]?T[pickedA].n:pickedA;
-          var pBName=T[pickedB]?T[pickedB].n:pickedB;
-          var pAAdv=teamA===pickedA||teamB===pickedA;
-          var pBAdv=teamA===pickedB||teamB===pickedB;
-          var pAColor=pAAdv?'var(--blue)':'var(--red)';
-          var pBColor=pBAdv?'var(--blue)':'var(--red)';
-          bracketLine='<div style="font-size:10px;color:var(--muted);margin-top:3px">Your bracket: '
-            +'<span style="color:'+pAColor+';font-weight:600">'+pAName+'</span>'
-            +' v. '
-            +'<span style="color:'+pBColor+';font-weight:600">'+pBName+'</span>'
-            +'</div>';
-        }
         return'<div class="card-pick-footer wrong">'
-          +'<div><span style="color:var(--red)">✗ Your pick: '+pName+'</span>'+bracketLine+'</div>'
+          +'<span style="color:var(--red)">✗ Your pick: '+pName+'</span>'
           +'<span style="display:flex;align-items:center;gap:8px"><span class="card-pick-pts" style="color:var(--red)">-5 pts</span>'
           +'<span class="info-btn" onclick="event.stopPropagation();toggleInfo(\''+gameId+'\')" ><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="8"/><line x1="12" y1="12" x2="12" y2="16"/></svg></span></span>'
           +'</div>'+iPanel;
@@ -1054,11 +1084,6 @@ function toggleInfo(gameId){
 
 function buildInfoPanel(gameId,teamA,teamB,result,myPick,showWho){
   var lines='';
-  // Actual matchup — only for QF and beyond (not FR where teams are already visible)
-  var isFR=gameId.indexOf('fr')===0;
-  if(!isFR&&teamA&&teamB&&T[teamA]&&T[teamB]){
-    lines+='<div class="info-panel-row"><span>Matchup</span><span style="font-weight:600">'+T[teamA].n+' vs '+T[teamB].n+'</span></div>';
-  }
   // Pre-game odds
   if(teamA&&teamB&&T[teamA]&&T[teamB]){
     var o1=T[teamA].o,o2=T[teamB].o,tot=o1+o2;
