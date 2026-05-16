@@ -1130,9 +1130,8 @@ function buildInfoPanel(gameId,teamA,teamB,result,myPick,showWho){
     });
     function pillList(arr,cls){
       if(!arr.length)return'<span style="color:var(--muted);font-size:9px">none</span>';
-      var max=arr.slice(0,4).map(function(u){return'<span class="picker-pill '+cls+'">'+u+'</span>';}).join('');
-      var rest=arr.length>4?arr.slice(4).join(', '):'';
-      return max+(rest?'<span class="picker-pill" title="'+rest+'">+'+(arr.length-4)+' more</span>':'');
+      var max=arr.map(function(u){return'<span class="picker-pill '+cls+'">'+u+'</span>';}).join('');      var rest=arr.length>4?arr.slice(4).join(', '):'';
+      return max;
     }
     if(teamA)lines+='<div class="who-label">Picked '+T[teamA].n+'</div><div>'+pillList(picksA,result&&result!==teamA?'wrong':'')+'</div>';
     if(teamB)lines+='<div class="who-label">Picked '+T[teamB].n+'</div><div>'+pillList(picksB,result&&result!==teamB?'wrong':'')+'</div>';
