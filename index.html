@@ -1244,7 +1244,7 @@ function calcScore(p){
   var PTS={fr:10,qf:15,sf:20,fin:25};
   var LOSS=5;
 
-  // FR: one pick per game, scored independently
+  // FR: one pick per game
   FR.forEach(function(g){
     if(p[g.id])totalPicks++;
     if(g.result){
@@ -1253,62 +1253,33 @@ function calcScore(p){
         var ws=parseInt((T[g.result]&&T[g.result].s||'').replace('#','')||0),
             ls=parseInt((T[g.result===g.a?g.b:g.a]&&T[g.result===g.a?g.b:g.a].s||'').replace('#','')||0);
         if((ws>ls&&ls>0)||(ws===0&&ls>0))u++;
-      } else if(p[g.id]&&p[g.id]!==g.result){losses++;score-=LOSS;}
+      } else if(p[g.id]){losses++;score-=LOSS;}
     }
   });
 
-  // QF: score both sides — pickedA=p[frA], pickedB=p[frB]
+  // QF: one pick per game (p[qf1] etc.)
   QF.forEach(function(g){
-    var pickedA=p[g.frA]||null;
-    var pickedB=p[g.frB]||null;
-    if(pickedA)totalPicks++;
-    if(pickedB)totalPicks++;
+    if(p[g.id])totalPicks++;
     if(g.result){
-      // A side
-      if(pickedA){
-        if(pickedA===g.result){wins++;score+=PTS.qf;}
-        else{losses++;score-=LOSS;}
-      }
-      // B side
-      if(pickedB){
-        if(pickedB===g.result){wins++;score+=PTS.qf;}
-        else{losses++;score-=LOSS;}
-      }
+      if(p[g.id]===g.result){wins++;score+=PTS.qf;}
+      else if(p[g.id]){losses++;score-=LOSS;}
     }
   });
 
-  // SF: score both sides — pickedA=p[qfA], pickedB=p[qfB]
+  // SF: one pick per game
   SF.forEach(function(g){
-    var pickedA=p[g.qfA]||null;
-    var pickedB=p[g.qfB]||null;
-    if(pickedA)totalPicks++;
-    if(pickedB)totalPicks++;
+    if(p[g.id])totalPicks++;
     if(g.result){
-      if(pickedA){
-        if(pickedA===g.result){wins++;score+=PTS.sf;}
-        else{losses++;score-=LOSS;}
-      }
-      if(pickedB){
-        if(pickedB===g.result){wins++;score+=PTS.sf;}
-        else{losses++;score-=LOSS;}
-      }
+      if(p[g.id]===g.result){wins++;score+=PTS.sf;}
+      else if(p[g.id]){losses++;score-=LOSS;}
     }
   });
 
-  // Final: score both sides — pickedA=p[sfA], pickedB=p[sfB]
-  var finPickedA=p[FIN.sfA]||null;
-  var finPickedB=p[FIN.sfB]||null;
-  if(finPickedA)totalPicks++;
-  if(finPickedB)totalPicks++;
-  if(FIN.result){
-    if(finPickedA){
-      if(finPickedA===FIN.result){wins++;score+=PTS.fin;}
-      else{losses++;score-=LOSS;}
-    }
-    if(finPickedB){
-      if(finPickedB===FIN.result){wins++;score+=PTS.fin;}
-      else{losses++;score-=LOSS;}
-    }
+  // Final: one pick
+  if(p.fin)totalPicks++;
+  if(p.fin&&FIN.result){
+    if(p.fin===FIN.result){wins++;score+=PTS.fin;}
+    else{losses++;score-=LOSS;}
   }
 
   return{wins:wins,losses:losses,upsets:u,score:score,totalPicks:totalPicks};
