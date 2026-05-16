@@ -127,17 +127,17 @@ body{font-family:var(--fb);color:var(--text);font-size:13px;min-height:100vh;bac
 .team-row.pickable:hover{background:rgba(74,144,217,.09)}
 .team-row.pickable:hover .t-name{color:var(--blue)}
 /* PICKED — ESPN-style: strong left border, subtle tint, bold name. No solid fill. */
-.team-row.is-pick{border-left-color:var(--blue2);border-left-width:5px;background:transparent;cursor:default}
-.team-row.is-pick .t-name{color:var(--blue);font-weight:700}
-.team-row.is-pick .t-seed{color:var(--blue2)}
+.team-row.is-pick{border-left-color:var(--blue2);border-left-width:6px;background:rgba(74,144,217,.06);cursor:default}
+.team-row.is-pick .t-name{color:var(--text);font-weight:600}
+.team-row.is-pick .t-seed{color:var(--muted)}
 .team-row.is-pick .t-rec{color:var(--muted)}
 .team-row.is-pick:hover{background:rgba(74,144,217,.08)}
-.team-row.is-winner .t-name{color:var(--green);font-weight:700}
-.team-row.is-elim{opacity:.5;pointer-events:none}
-.team-row.is-wrong-pick{border-left-color:var(--red);border-left-width:5px;background:transparent;cursor:default}
-.team-row.is-wrong-pick .t-name{color:var(--red);font-weight:700}
-.team-row.is-wrong-pick .t-seed{color:var(--red)}
-.team-row.is-wrong-pick:hover{background:transparent}
+.team-row.is-winner .t-name{color:var(--text);font-weight:600}
+.team-row.is-elim{opacity:.35;pointer-events:none}
+.team-row.is-wrong-pick{border-left-color:var(--blue2);border-left-width:6px;background:rgba(74,144,217,.06);cursor:default}
+.team-row.is-wrong-pick .t-name{color:var(--text);font-weight:600}
+.team-row.is-wrong-pick .t-seed{color:var(--muted)}
+.team-row.is-wrong-pick:hover{background:rgba(74,144,217,.06)}
 .team-row.is-locked{cursor:default}
 .team-row.is-empty{cursor:default;background:var(--amber-l)}
 .team-row.is-empty-locked{cursor:default;background:var(--off)}
@@ -148,7 +148,7 @@ body{font-family:var(--fb);color:var(--text);font-size:13px;min-height:100vh;bac
 .t-info{flex:1;min-width:0}
 .t-name{font-family:var(--fh);font-size:14px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block;letter-spacing:.02em;color:inherit;transition:color .12s}
 .t-rec{font-size:9px;color:var(--muted);margin-top:2px}
-.t-adv{font-family:var(--fh);font-size:8px;background:var(--green-l);color:var(--green);border-radius:3px;padding:2px 6px;letter-spacing:.04em;flex-shrink:0}
+.t-adv{font-family:var(--fh);font-size:11px;font-weight:700;background:var(--green-l);color:var(--green);border-radius:4px;padding:3px 8px;letter-spacing:.06em;flex-shrink:0;border:1.5px solid var(--green)}
 .t-lock-icon{font-size:10px;opacity:.2;flex-shrink:0}
 
 /* empty row */
@@ -244,8 +244,8 @@ body{font-family:var(--fb);color:var(--text);font-size:13px;min-height:100vh;bac
 /* ── SCORES ── */
 .t-score-col{display:flex;flex-direction:column;align-items:flex-end;gap:2px;flex-shrink:0;margin-left:auto}
 .t-score{font-family:var(--fh);font-size:16px;font-weight:700;color:var(--navy);min-width:24px;text-align:right}
-.team-row.is-pick .t-score{color:#1a1100}
-.team-row.is-winner .t-score{color:var(--green)}
+.team-row.is-pick .t-score{color:var(--navy)}
+.team-row.is-winner .t-score{color:var(--navy)}
 .game-status-badge{display:inline-flex;align-items:center;font-family:var(--fh);font-size:9px;font-weight:700;color:var(--white);background:var(--navy3);border-radius:3px;padding:2px 7px;letter-spacing:.06em;text-transform:uppercase;margin-left:6px}
 .game-status-badge.final{background:transparent;color:#f87171;font-weight:800;letter-spacing:.08em}
 .game-status-badge.live{background:#dc2626;color:var(--white);animation:livepulse 1.4s ease-in-out infinite}
@@ -1020,23 +1020,26 @@ function buildCard(gameId, teamA, teamB, loc, time, myPick, result, lk, advLabel
           +'</div>'+infoPanel;
       }
 
-      // Pre-deadline or FR: original single-pick behaviour
-      if(teamA&&teamB&&myPick!==teamA&&myPick!==teamB){
+      // Pre-deadline: stale pick not in this game
+      if(teamA&&teamB&&myPick!==teamA&&myPick!==teamB&&!lk){
         var roundStarted=Object.values(SCORES).some(function(s){return s&&s.status&&s.status!=='scheduled';});
         var iPanel=buildInfoPanel(gameId,teamA,teamB,result,myPick,roundStarted);
         return'<div class="card-pick-footer wrong">'
           +'<span style="color:var(--red)">✗ Your pick: '+pName+'</span>'
-          +'<span style="display:flex;align-items:center;gap:8px"><span class="card-pick-pts" style="color:var(--red)">-5 pts</span>'+infoBtn+'</span>'
+          +infoBtn
           +'</div>'+iPanel;
       }
+      // Post-deadline FR: show "Your bracket: Team" neutral strip
+      if(lk){
+        var roundStarted=Object.values(SCORES).some(function(s){return s&&s.status&&s.status!=='scheduled';});
+        var infoPanel=buildInfoPanel(gameId,teamA,teamB,result,myPick,roundStarted);
+        return'<div class="card-pick-footer" style="background:var(--off);justify-content:flex-start;gap:4px">'
+          +'<span style="font-size:11px;color:var(--muted)">Your bracket: </span>'
+          +'<span style="font-weight:600;color:var(--text)">'+pName+'</span>'
+          +'<span style="margin-left:auto">'+infoBtn+'</span>'
+          +'</div>'+infoPanel;
+      }
       if(!result)return'';
-      var ROUND_PTS={fr:10,qf:15,sf:20,fin:25};var roundKey=QF.find(function(x){return x.id===gameId;})?'qf':SF.find(function(x){return x.id===gameId;})?'sf':(FIN&&FIN.id===gameId)?'fin':'fr';var winPts=ROUND_PTS[roundKey];var pts=won?'+'+winPts:'-5';var ptsColor=won?'var(--green)':'var(--red)';var symbol=won?'✓ ':'✗ ';
-      var roundStarted=Object.values(SCORES).some(function(s){return s&&s.status&&s.status!=='scheduled';});
-      var infoPanel=buildInfoPanel(gameId,teamA,teamB,result,myPick,roundStarted);
-      return'<div class="card-pick-footer'+(won?' correct':' wrong')+'">'
-        +'<span style="color:'+(won?'var(--green)':'var(--red)')+'">'+symbol+'Your pick: '+pName+'</span>'
-        +'<span style="display:flex;align-items:center;gap:8px"><span class="card-pick-pts" style="color:'+ptsColor+'">'+pts+' pts</span>'+infoBtn+'</span>'
-        +'</div>'+infoPanel;
     })()
     +'</div>';
 }
