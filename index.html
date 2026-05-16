@@ -1158,28 +1158,28 @@ function redraw(ro, vu){
     var sfcards=SF.map(function(g){
       var qfGameA=QF.find(function(q){return q.id===g.qfA;});
       var qfGameB=QF.find(function(q){return q.id===g.qfB;});
-      // Real teams: use actual QF result if available, else user's QF pick
-      var tA=(qfGameA&&qfGameA.result)||p[g.qfA]||null;
-      var tB=(qfGameB&&qfGameB.result)||p[g.qfB]||null;
-      var canPick=!!(tA&&tB);
+      // Only show real teams once that QF game has a result
+      var tA=(qfGameA&&qfGameA.result)||null;
+      var tB=(qfGameB&&qfGameB.result)||null;
+      var bothKnown=!!(tA&&tB);
       // User's predicted matchup for this SF slot
       var pickedA=p[g.qfA]||null;
       var pickedB=p[g.qfB]||null;
-      return buildCard(g.id,tA,tB,g.loc,g.time,p[g.id],g.result,lk||!canPick,'Championship',false,false,pickedA,pickedB);
+      return buildCard(g.id,tA,tB,g.loc,g.time,p[g.id],g.result,lk||!bothKnown,'Championship',false,false,pickedA,pickedB);
     });
     gamesH='<div class="matchup-grid double">'+sfcards.join('')+'</div>';
 
   }else if(ACTIVE_ROUND==='fin'){
     var sf1Game=SF.find(function(g){return g.id===FIN.sfA;});
     var sf2Game=SF.find(function(g){return g.id===FIN.sfB;});
-    // Real finalists: use actual SF result if available, else user's SF pick
-    var fA=(sf1Game&&sf1Game.result)||p[FIN.sfA]||null;
-    var fB=(sf2Game&&sf2Game.result)||p[FIN.sfB]||null;
-    var canPickF=!!(fA&&fB);
+    // Only show real finalists once SF results are in
+    var fA=(sf1Game&&sf1Game.result)||null;
+    var fB=(sf2Game&&sf2Game.result)||null;
+    var bothKnown=!!(fA&&fB);
     // User's predicted finalists
     var finPickedA=p[FIN.sfA]||null;
     var finPickedB=p[FIN.sfB]||null;
-    gamesH='<div class="matchup-grid single">'+buildCard('fin',fA,fB,FIN.loc,FIN.time,p.fin,FIN.result,lk||!canPickF,null,false,false,finPickedA,finPickedB)+'</div>';
+    gamesH='<div class="matchup-grid single">'+buildCard('fin',fA,fB,FIN.loc,FIN.time,p.fin,FIN.result,lk||!bothKnown,null,false,false,finPickedA,finPickedB)+'</div>';
   }
 
   // Action bar
