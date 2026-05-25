@@ -1031,6 +1031,17 @@ function buildCard(gameId, teamA, teamB, loc, time, myPick, result, lk, advLabel
     +(function(){
       if(!myPick)return'';
       if(!teamA||!teamB){
+        // For Championship: show just the single championship pick
+        if(gameId==='fin'){
+          if(myPick){
+            var champName=T[myPick]?T[myPick].n:myPick;
+            return'<div class="card-pick-footer" style="background:var(--off);justify-content:flex-start;gap:4px">'
+              +'<span style="font-size:11px;color:var(--muted)">Your pick: </span>'
+              +'<span style="font-weight:600;color:var(--text)">'+champName+'</span>'
+              +'</div>';
+          }
+          return'';
+        }
         // Teams not yet known — show user's predicted matchup as a neutral reference row
         if(lk&&pickedA&&pickedB){
           var pAName=T[pickedA]?T[pickedA].n:pickedA;
@@ -1591,10 +1602,13 @@ function renderAdmin(){
   var srcNote=SCORE_SRC?'<div class="admin-note">📡 Scores currently sourced from: <strong>'+(SCORE_SRC==='espn'?'ESPN (auto)':'Manual entry')+'</strong>. ESPN updates every 60s — manual entries fill gaps.</div>':'<div class="admin-note">No scores loaded yet. ESPN will auto-fetch every 60s. Enter scores manually as backup.</div>';
   var frRows=FR.map(function(g){return gameRow(g.id,T[g.a].n,T[g.b].n);}).join('');
   var qfRows=QF.map(function(g){var tA=picks[g.frA],tB=picks[g.frB];return gameRow(g.id,tA&&T[tA]?T[tA].n:'TBD',tB&&T[tB]?T[tB].n:'TBD');}).join('');
-  var sf1A=picks.qf1,sf1B=picks.qf2,sf2A=picks.qf3,sf2B=picks.qf4;
-  var sfRows=''
-    +gameRow('sf1',sf1A&&T[sf1A]?T[sf1A].n:'TBD',sf1B&&T[sf1B]?T[sf1B].n:'TBD')
-    +gameRow('sf2',sf2A&&T[sf2A]?T[sf2A].n:'TBD',sf2B&&T[sf2B]?T[sf2B].n:'TBD');
+  var sfRows=SF.map(function(g){
+    var qgA=QF.find(function(q){return q.id===g.qfA;});
+    var qgB=QF.find(function(q){return q.id===g.qfB;});
+    var tA=qgA&&qgA.result||null;
+    var tB=qgB&&qgB.result||null;
+    return gameRow(g.id,tA&&T[tA]?T[tA].n:'TBD',tB&&T[tB]?T[tB].n:'TBD');
+  }).join('');
   var finA=picks.sf1,finB=picks.sf2;
   var finRow=gameRow('fin',finA&&T[finA]?T[finA].n:'TBD',finB&&T[finB]?T[finB].n:'TBD');
   c.innerHTML=srcNote
